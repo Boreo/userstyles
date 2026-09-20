@@ -13,7 +13,7 @@
 @var select lightFlavor "Light Flavor" ["latte:Latte*", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha"]
 @var select darkFlavor "Dark Flavor" ["latte:Latte", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha*"]
 @var select accentColor "Accent" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve*", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
-@var checkbox flairColors "Theme flair and user tag colours" 1
+@var checkbox flairColors "Theme subreddit flair colours" 1
 ==/UserStyle== */
 
 @import "https://userstyles.catppuccin.com/lib/std/v1.less";
@@ -398,10 +398,10 @@
       color: @sticky !important;
     }
 
-    /* Flair and user tags carry colours their author chose, and those colours
-       often mean something, so they are behind a switch. @subtext1 is 4.05:1
-       on Latte's @surface0, so flair text takes @text there for 5.17:1; the
-       dark flavors keep the quieter @subtext1. */
+    /* Subreddit flair carries colours the subreddit chose, and those colours
+       often mean something, so it is behind a switch. @subtext1 is 4.05:1 on
+       Latte's @surface0, so flair text takes @text there for 5.17:1; the dark
+       flavors keep the quieter @subtext1. */
     & when (@flairColors = 1) {
       .linkflairlabel,
       .flair,
@@ -410,11 +410,11 @@
         border-color: @surface1 !important;
         color: if(@flavor = latte, @text, @subtext1) !important;
       }
+    }
 
-      .RESUserTag,
-      .RESUserTag a {
-        color: @accent !important;
-      }
+    .RESUserTag,
+    .RESUserTag a {
+      color: @accent !important;
     }
 
     .flat-list.buttons li a {
@@ -1070,6 +1070,16 @@
       color: @text !important;
     }
 
+    /* Reddit's own hover bubbles: the multireddit picker on an author, and
+       the subreddit card. */
+    .hover-bubble,
+    .hover-bubble .title,
+    .hovercard {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
+      color: @text !important;
+    }
+
     /* The user tag dialog and the hover card behind it. Its colour picker is
        left alone: those swatches are the tag colours themselves. */
     .RESHover,
@@ -1084,6 +1094,30 @@
 
     .res-icon {
       color: @accent !important;
+    }
+
+    /* The dialog's close glyph is drawn entirely in a pseudo-element. */
+    .RESCloseButton::after {
+      background-color: @surface0 !important;
+      border-color: @surface1 !important;
+      color: @text !important;
+    }
+
+    .RESCloseButton:hover::after {
+      background-color: @red !important;
+      color: @crust !important;
+    }
+
+    .RESDialogSmall > h3 {
+      background-color: @surface0 !important;
+      border-bottom-color: @surface1 !important;
+      color: @text !important;
+    }
+
+    #userTaggerToolTip input[type="submit"] {
+      background-color: @surface0 !important;
+      border-color: @surface1 !important;
+      color: @text !important;
     }
 
     #userTaggerIgnoreContainer .toggleThumb {
