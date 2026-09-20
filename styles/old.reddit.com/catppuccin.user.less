@@ -14,6 +14,11 @@
 @var select darkFlavor "Dark Flavor" ["latte:Latte", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha*"]
 @var select accentColor "Accent" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve*", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
 @var checkbox flairColors "Theme subreddit flair colours" 1
+@var checkbox threadColors "Colour comment threads by depth" 1
+@var select threadColor1 "Thread colour, depth 1" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve", "red:Red*", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
+@var select threadColor2 "Thread colour, depth 2" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow*", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
+@var select threadColor3 "Thread colour, depth 3" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green*", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
+@var select threadColor4 "Thread colour, depth 4" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue*", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
 ==/UserStyle== */
 
 @import "https://userstyles.catppuccin.com/lib/std/v1.less";
@@ -386,6 +391,19 @@
     @read: if(@flavor = latte, @subtext0, @overlay1);
     @band: if(@flavor = latte, mix(@crust, @base, 50%), mix(@mantle, @base,
       60%));
+
+    /* A comment's nesting level is only expressible as a selector chain, so
+       the four thread colours repeat every fourth level. With the switch off
+       each one is the border colour every other box on the page carries, so
+       the chain emits the border it would have had anyway. */
+    @thread1: if(@threadColors = 1, @catppuccin[@@flavor][@@threadColor1],
+      @surface1);
+    @thread2: if(@threadColors = 1, @catppuccin[@@flavor][@@threadColor2],
+      @surface1);
+    @thread3: if(@threadColors = 1, @catppuccin[@@flavor][@@threadColor3],
+      @surface1);
+    @thread4: if(@threadColors = 1, @catppuccin[@@flavor][@@threadColor4],
+      @surface1);
 
     .link,
     .thing {
@@ -764,23 +782,46 @@
        the page. The band steps away from @base towards the darker surface
        behind it on every flavor, which is the direction RES draws it and the
        only direction Latte has — @base is its lightest colour. */
-    .comment-band-on(@depth; @sel) when (@depth < 10) {
+    /* The background alternates every level so that a reply is told from its
+       parent; the thread colour repeats every fourth, which is why the chain
+       has four steps rather than two. */
+    .comment-level-1(@depth; @sel) when (@depth < 12) {
       @{sel} {
         background-color: @band !important;
+        border-left-color: @thread1 !important;
       }
 
-      .comment-band-off(@depth + 1; ~"@{sel} > .child > .listing > .comment");
+      .comment-level-2(@depth + 1; ~"@{sel} > .child > .listing > .comment");
     }
 
-    .comment-band-off(@depth; @sel) when (@depth < 10) {
+    .comment-level-2(@depth; @sel) when (@depth < 12) {
       @{sel} {
         background-color: @base !important;
+        border-left-color: @thread2 !important;
       }
 
-      .comment-band-on(@depth + 1; ~"@{sel} > .child > .listing > .comment");
+      .comment-level-3(@depth + 1; ~"@{sel} > .child > .listing > .comment");
     }
 
-    .comment-band-on(0; ~".nestedlisting > .comment");
+    .comment-level-3(@depth; @sel) when (@depth < 12) {
+      @{sel} {
+        background-color: @band !important;
+        border-left-color: @thread3 !important;
+      }
+
+      .comment-level-4(@depth + 1; ~"@{sel} > .child > .listing > .comment");
+    }
+
+    .comment-level-4(@depth; @sel) when (@depth < 12) {
+      @{sel} {
+        background-color: @base !important;
+        border-left-color: @thread4 !important;
+      }
+
+      .comment-level-1(@depth + 1; ~"@{sel} > .child > .listing > .comment");
+    }
+
+    .comment-level-1(0; ~".nestedlisting > .comment");
 
     .comment.spam,
     .comment.deleted {
@@ -792,6 +833,15 @@
       background-color: @mantle !important;
       border-color: @surface1 !important;
       color: @text !important;
+    }
+
+    /* The focus ring is drawn outside the box, and reddit's comment form
+       scrolls, so the ring is clipped along the edge the field is flush
+       with. Colouring the border as well marks the focused field on every
+       side, since a border is inside the box and cannot be clipped. */
+    .usertext-edit textarea:focus {
+      border-color: @accent !important;
+      outline-color: @accent !important;
     }
 
     /* Each formatting button is a black glyph on a transparent sprite, drawn
@@ -827,6 +877,21 @@
     .RESMacroDropdownList li a {
       border-color: @surface0 !important;
       color: @text !important;
+
+      &:hover {
+        background-color: @surface0 !important;
+      }
+    }
+
+    /* Reddit and RES both mark a dropdown with a grey triangle drawn as the
+       label's background image. The label carries text, which a filter would
+       flatten along with the triangle, so the triangle is redrawn. Both
+       images are the same size and sit where their own rule puts them. */
+    .dropdown .selected,
+    .RESMacroDropdownTitle {
+      @svg-drop: escape('<svg xmlns="http://www.w3.org/2000/svg" width="21" height="16" viewBox="0 0 21 16"><path fill="@{dim}" d="M5,5 h11 l-5.5,7z"/></svg>');
+
+      background-image: url("data:image/svg+xml,@{svg-drop}") !important;
     }
 
     .morecomments a {
@@ -1179,6 +1244,69 @@
 
       .file-drop-label {
         color: @muted !important;
+      }
+    }
+
+    /* The submit form's required marker. */
+    .title.required-roundfield::before {
+      color: @red !important;
+    }
+
+    .new-stamp {
+      color: @stamp !important;
+    }
+
+    /* The media uploader, which reddit builds only once a file or a video is
+       attached, so none of it is on the page the audit walks. */
+    #new-link-preview,
+    #image-name,
+    #sr-drop-down {
+      background-color: @mantle !important;
+    }
+
+    #new-link-media-progress {
+      border-color: @surface0 !important;
+
+      .media-uploading-label {
+        color: @muted !important;
+      }
+    }
+
+    #media-progress-bar-container {
+      background-color: @surface0 !important;
+    }
+
+    #media-progress-bar {
+      background-color: @accent !important;
+      color: @base !important;
+    }
+
+    .video-preview.reddit-video-player-root {
+      background-color: @crust !important;
+      border-color: @surface1 !important;
+    }
+
+    .clear-input-button,
+    .video-cancel-button,
+    .media-file-cancel-upload-btn {
+      background-color: @surface1 !important;
+      color: @text !important;
+    }
+
+    .thumbnail-navigator {
+      border-color: @accent !important;
+    }
+
+    /* The flair chooser is fetched when its button is clicked, so it is not
+       in the DOM for either audit pass. */
+    .flairselector {
+      h2 {
+        background-color: @surface0 !important;
+        color: @text !important;
+      }
+
+      li.selected {
+        border-color: @accent !important;
       }
     }
 
