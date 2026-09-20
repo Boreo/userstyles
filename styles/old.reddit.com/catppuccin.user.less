@@ -1324,6 +1324,23 @@
       background-image: url("data:image/svg+xml,@{svg-mail}") !important;
     }
 
+    /* RES's tips-and-tricks guider. Its buttons are painted with a gradient
+       that covers any fill set under it, and its close control is a JPEG of
+       a dark cross on white, which has no transparency to filter. */
+    .guiders_button {
+      background-image: none !important;
+      background-color: @op !important;
+      border-color: @op !important;
+      color: @base !important;
+    }
+
+    .guiders_x_button {
+      @svg-guider-close: escape('<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13"><g stroke="@{text}" stroke-width="2" stroke-linecap="round"><line x1="3" y1="3" x2="10" y2="10"/><line x1="10" y1="3" x2="3" y2="10"/></g></svg>');
+
+      background-image: url("data:image/svg+xml,@{svg-guider-close}")
+        !important;
+    }
+
     /* The comment navigator's fly-out. Its rows are built on hover, so
        neither the visible nor the hidden audit pass reaches them. */
     .res-commentNavToggle-type {
@@ -1470,6 +1487,46 @@
       background-color: @mantle !important;
       border-color: @surface0 !important;
       color: @text !important;
+    }
+
+    /* Reddit's author card fills the bubble with sections of its own, each
+       carrying its own fill and text colour. It is built on demand and is
+       absent from this development profile, so the selectors come from the
+       card's markup rather than from a computed-style reading of it. */
+    .author-tooltip {
+      .author-tooltip__head,
+      .author-tooltip__credentials-list,
+      .author-tooltip__credential,
+      .author-tooltip__link-list,
+      .author-tooltip__follow-container {
+        background-color: transparent !important;
+        border-color: @surface0 !important;
+      }
+
+      .author-tooltip__title,
+      strong {
+        color: @text !important;
+      }
+
+      .author-tooltip__profile-link {
+        color: @accent-text !important;
+      }
+
+      .author-tooltip__karma-details,
+      .author-tooltip__description,
+      span {
+        color: @muted !important;
+      }
+
+      .author-tooltip__follow-button {
+        background-color: @surface0 !important;
+        border-color: @surface1 !important;
+        color: @text !important;
+      }
+
+      .author-tooltip__icon {
+        filter: @dim-filter !important;
+      }
     }
 
     /* The bubble's pointer is two stacked triangles drawn as borders: the
