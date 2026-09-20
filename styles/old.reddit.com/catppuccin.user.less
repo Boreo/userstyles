@@ -1,0 +1,50 @@
+/* ==UserStyle==
+@name Old Reddit Catppuccin
+@namespace github.com/catppuccin/userstyles/styles/old.reddit.com
+@homepageURL https://github.com/catppuccin/userstyles/tree/main/styles/old.reddit.com
+@version 2000.01.01
+@updateURL https://github.com/catppuccin/userstyles/raw/main/styles/old.reddit.com/catppuccin.user.less
+@supportURL https://github.com/catppuccin/userstyles/issues?q=is%3Aopen+is%3Aissue+label%3Aold.reddit.com
+@description Soothing pastel theme for Old Reddit
+@author Catppuccin
+@license MIT
+
+@preprocessor less
+@var select lightFlavor "Light Flavor" ["latte:Latte*", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha"]
+@var select darkFlavor "Dark Flavor" ["latte:Latte", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha*"]
+@var select accentColor "Accent" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve*", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
+==/UserStyle== */
+
+@import "https://userstyles.catppuccin.com/lib/std/v1.less";
+
+@-moz-document domain("reddit.com") {
+  /* Old reddit is served from old.reddit.com and, for accounts with the
+     "use old reddit" preference, from www.reddit.com with no redirect, so the
+     domain cannot identify the interface. `body > #header` exists only on old
+     reddit; new reddit's shreddit markup has no such element, so the style
+     emits nothing there. */
+  body:has(> #header) {
+    @media (prefers-color-scheme: light) {
+      #catppuccin(@lightFlavor);
+    }
+    @media (prefers-color-scheme: dark) {
+      #catppuccin(@darkFlavor);
+    }
+  }
+
+  /* Reddit Enhancement Suite's night mode. RES applies its classes to both
+     documentElement and body, so this body-scoped form matches. It follows the
+     media queries above and carries an extra class, so it wins on both order
+     and specificity when RES and the system preference disagree. */
+  body.res-nightmode:has(> #header) {
+    #catppuccin(@darkFlavor);
+  }
+
+  #catppuccin(@flavor) {
+    #lib.palette();
+    #lib.defaults();
+
+    background-color: @base !important;
+    color: @text !important;
+  }
+}
