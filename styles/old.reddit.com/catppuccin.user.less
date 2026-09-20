@@ -431,6 +431,10 @@
     }
 
     /* Tier 1 — comments */
+    .menuarea {
+      border-color: @surface0 !important;
+    }
+
     .commentarea .menuarea {
       background-color: transparent !important;
       border-bottom-color: @surface0 !important;
@@ -487,6 +491,11 @@
     .md {
       background-color: transparent !important;
       color: @text !important;
+
+      p,
+      li {
+        color: inherit !important;
+      }
 
       a {
         color: @blue !important;
@@ -645,6 +654,12 @@
       &.recipient {
         background-color: fade(@accent, 8%) !important;
       }
+
+      /* Reddit sets a literal black on a message you sent. */
+      &.recipient > .entry,
+      &.recipient > .entry .head {
+        color: @text !important;
+      }
     }
 
     .was-comment .subject {
@@ -763,9 +778,35 @@
       color: @muted !important;
     }
 
-    .wiki-page-content .wiki > .toc > ul {
+    .wiki-page-content .wiki > .toc > ul,
+    .wiki-page-content .toc ul {
       background-color: @mantle !important;
       border-color: @surface0 !important;
+    }
+
+    .wiki-page-content > hr {
+      background-color: @surface0 !important;
+      border-color: @surface0 !important;
+      color: @surface0 !important;
+    }
+
+    .icon-menu a {
+      background-color: transparent !important;
+    }
+
+    .pageactions {
+      border-color: @surface0 !important;
+    }
+
+    .pageactions .wikiaction-current {
+      background-color: @surface0 !important;
+      color: @text !important;
+    }
+
+    .collapse-button {
+      background-color: @surface0 !important;
+      border-color: @surface1 !important;
+      color: @text !important;
     }
 
     .diff .diff_add {
@@ -851,6 +892,13 @@
     .RES-keyNav-activeElement .md-container,
     .entry.res-selected {
       background-color: @mantle !important;
+    }
+
+    /* RES paints every node inside the selected entry's body, which defeats
+       inheritance from the markdown colours themed above. */
+    .entry.res-selected .md-container,
+    .entry.res-selected .md-container * {
+      color: inherit !important;
     }
 
     #REScommentSubToggle {
