@@ -108,5 +108,75 @@
       color: @accent !important;
       border-color: @accent !important;
     }
+
+    /* Tier 1 — sidebar */
+    .side {
+      background-color: transparent !important;
+
+      .spacer > .titlebox,
+      .sidecontentbox .content {
+        background-color: @mantle !important;
+        border-color: @surface0 !important;
+      }
+
+      .titlebox h1.redditname a {
+        color: @text !important;
+      }
+
+      .titlebox .subscribers .word,
+      .titlebox .users-online .word,
+      .titlebox .bottom {
+        color: @subtext0 !important;
+      }
+
+      .titlebox .subscribers .number,
+      .titlebox .users-online .number {
+        color: @text !important;
+      }
+
+      .sidecontentbox .title h1 {
+        color: @subtext1 !important;
+      }
+    }
+
+    .morelink {
+      background-color: @surface0 !important;
+      border-color: @surface1 !important;
+
+      a {
+        color: @text !important;
+      }
+
+      &:hover {
+        background-color: @surface1 !important;
+      }
+
+      /* A raster sprite corner, so it is recoloured with the palette's filter
+         variables rather than a colour property. */
+      .nub {
+        filter: @surface0-filter !important;
+      }
+    }
+
+    .fancy-toggle-button .option {
+      color: @text !important;
+
+      &.active {
+        background-color: @surface0 !important;
+        border-color: @surface1 !important;
+      }
+
+      &.remove {
+        background-color: @red !important;
+        color: @crust !important;
+        border-color: @red !important;
+      }
+
+      &.add {
+        background-color: @green !important;
+        color: @crust !important;
+        border-color: @green !important;
+      }
+    }
   }
 }
