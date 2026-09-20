@@ -70,8 +70,10 @@
     /* Tier 1 — page chrome */
 
     /* A floor for links that no more specific rule below reaches. Every rule
-       in this file outranks it, so it only ever fills gaps. */
-    a {
+       in this file outranks it, so it only ever fills gaps. An author is
+       excluded because its own rule below deliberately carries no
+       `!important`, which this would otherwise outrank. */
+    a:not(.author) {
       color: @accent-text !important;
     }
 
@@ -540,7 +542,7 @@
        @inactive are consecutive steps below it on the dark flavors. Latte
        runs out of room — @subtext0 is 4.37:1 on its @base — so the domain
        takes @subtext1 there and only the action row steps away. */
-    .tagline a,
+    .tagline a:not(.author),
     .domain a {
       color: @dim !important;
     }
@@ -557,8 +559,17 @@
       color: @accent-text !important;
     }
 
+    /* The one rule in this file with no `!important`. Reddit Enhancement
+       Suite's userHighlight paints a background on an author it has been
+       told to mark — a tagged user, a friend, the submitter — and sets a
+       foreground to read against it, both `!important` and selected by
+       username. The gate's `:has(> #header)` carries an id's specificity, so
+       an `!important` here outranks that and strands RES's background under
+       this colour: white becomes @text on a dark tag colour at 1.2:1.
+       Without it, RES's `!important` wins wherever RES paints and this still
+       beats reddit's own unprefixed rules on specificity. */
     .tagline .author {
-      color: @text !important;
+      color: @text;
     }
 
     /* Reddit Enhancement Suite paints these author pills in colours of its
