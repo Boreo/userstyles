@@ -296,10 +296,13 @@
     }
 
     /* Tier 1 — link listing */
-    /* @overlay1 is only 2.83:1 on Latte's @base, and @subtext0 only 4.37:1,
-       so inactive affordances step up to @subtext1 there for 5.53:1. The dark
-       flavors clear 4.4:1 with @overlay1 and keep the dimmer value. */
-    @inactive: if(@flavor = latte, @subtext1, @overlay1);
+    /* Inactive affordances sit one step below @dim, which is what puts the
+       author and the domain above the action row beneath them. On the dark
+       flavors that is @overlay1 against @dim's @overlay2. Latte has no step
+       below @subtext1 that holds 4.5:1 — @subtext0 reaches only 4.37:1 — so
+       it takes the step in the other direction, towards @text, and keeps the
+       same ordering at 6.24:1. */
+    @inactive: if(@flavor = latte, mix(@text, @subtext1, 50%), @overlay1);
     @inactive-filter: if(@flavor = latte, @subtext1-filter, @overlay1-filter);
 
     /* @peach is only 2.45:1 on Latte's @mantle; @red reaches 4.46:1 and keeps
@@ -328,8 +331,6 @@
     /* Latte's saturated colours sit mid-tone, so several of them cannot reach
        4.5:1 on its @base at full strength and are darkened instead. The dark
        flavors have the opposite problem and are damped towards @base. */
-    @tagline-link: if(@flavor = latte, darken(@sapphire, 15%), mix(@sapphire,
-      @base, 80%));
     @op: if(@flavor = latte, darken(@blue, 5%), @blue);
     @stamp: if(@flavor = latte, darken(@peach, 15%), @peach);
     @sticky: if(@flavor = latte, darken(@green, 10%), @green);
@@ -379,14 +380,23 @@
       color: @dim !important;
     }
 
+    /* The author and the domain sit one step lighter than the action row
+       below them, which is @inactive, so the reading order runs title, then
+       these, then the actions. The subreddit is the one navigational target
+       in the line and takes the accent. */
     .tagline a,
-    .domain a,
-    .tagline .subreddit {
-      color: @tagline-link !important;
+    .domain a {
+      color: @dim !important;
+    }
+
+    .tagline .subreddit,
+    .thing .subreddit,
+    a.subreddit {
+      color: @accent-text !important;
     }
 
     .tagline .author {
-      color: @tagline-link !important;
+      color: @dim !important;
 
       /* Reddit Enhancement Suite gives these authors a background of its own,
          which the reader chooses, so it is left alone. Only the name on top
