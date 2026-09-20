@@ -649,5 +649,20 @@
       border-top-color: @surface0 !important;
       color: @text !important;
     }
+
+    /* Reddit's row highlight is the literal #e5efff, which leaves @text at
+       1.25:1 on the dark flavors. @mantle is one step from the @base the table
+       sits on and keeps @text past 6:1 on both. */
+    .usertable tr:hover {
+      background-color: @mantle !important;
+    }
+
+    /* Reddit marks banned rows with the literal `red`, 3.54:1 on Latte and
+       4.10:1 on Mocha. @red reaches 4.80:1 and 7.08:1 at rest. */
+    .usertable tr.banned-user,
+    .usertable tr.banned-user a,
+    .usertable tr.banned-user .user {
+      color: @red !important;
+    }
   }
 }
