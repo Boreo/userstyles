@@ -206,6 +206,41 @@
       }
     }
 
+    /* The left rail on /r/all and the front page. */
+    .listing-chooser {
+      background-color: @mantle !important;
+      color: @text !important;
+
+      .grippy,
+      .grippy::after {
+        background-color: @surface0 !important;
+      }
+
+      li {
+        background-color: @mantle !important;
+        border-color: @surface0 !important;
+        color: @text !important;
+      }
+
+      li.selected {
+        background-color: @surface0 !important;
+      }
+
+      li a {
+        color: @accent-text !important;
+      }
+
+      .intro {
+        background-color: @surface0 !important;
+        border-color: @surface1 !important;
+        color: @text !important;
+      }
+
+      h3 {
+        color: @muted !important;
+      }
+    }
+
     /* Section headings such as "discover more music subreddits". */
     .flat-vert.title {
       color: @subtext1 !important;
@@ -337,9 +372,11 @@
 
     /* Thirteen of the fifteen accent choices fall below 4.5:1 on Latte's
        @base — yellow reaches only 2.31:1 — so an accent that carries text is
-       darkened there. 25% is the least that clears all fifteen, the worst
-       being pink at 4.70:1. The dark flavors already clear it. */
-    @accent-text: if(@flavor = latte, darken(@accent, 25%), @accent);
+       darkened there. It has to clear @surface0 as well as @base, since the
+       dropdowns and the tab strip put accent text on it: 35% leaves the worst
+       of the fifteen, pink, at 5.09:1 there and 7.01:1 on @base. The dark
+       flavors clear both already. */
+    @accent-text: if(@flavor = latte, darken(@accent, 35%), @accent);
 
     .link,
     .thing {
