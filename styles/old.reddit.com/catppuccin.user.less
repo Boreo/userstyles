@@ -153,9 +153,44 @@
         color: @muted !important;
       }
 
+      /* "show my flair on this subreddit" and the moderator controls sit
+         inside the themed titlebox but carry a literal white of their own. */
+      .titlebox form.toggle,
+      .titlebox form.flairtoggle,
+      .leavemoderator {
+        background-color: transparent !important;
+        color: @muted !important;
+      }
+
+      /* Sidebar lists are painted by Reddit Enhancement Suite's night mode,
+         which would break up the titlebox they sit in. */
+      .md ol,
+      .md ul {
+        background-color: transparent !important;
+      }
+
       .sidecontentbox .title h1 {
         color: @subtext1 !important;
       }
+    }
+
+    /* "this post was submitted on ..." */
+    .linkinfo {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
+      color: @text !important;
+    }
+
+    /* The subscribe toggle's states are a sprite gradient rather than a
+       colour, so the image is cleared to let a palette colour through. The
+       two states stay apart by their labels, "subscribe" and "unsubscribe". */
+    .fancy-toggle-button .add,
+    .fancy-toggle-button .remove,
+    .fancy-toggle-button .active {
+      background-color: @surface0 !important;
+      background-image: none !important;
+      border-color: @surface1 !important;
+      color: @text !important;
     }
 
     /* Reddit paints the create-a-subreddit box a literal white. */
