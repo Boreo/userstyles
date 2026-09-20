@@ -13,6 +13,7 @@
 @var select lightFlavor "Light Flavor" ["latte:Latte*", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha"]
 @var select darkFlavor "Dark Flavor" ["latte:Latte", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha*"]
 @var select accentColor "Accent" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve*", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
+@var checkbox flairColors "Theme flair and user tag colours" 1
 ==/UserStyle== */
 
 @import "https://userstyles.catppuccin.com/lib/std/v1.less";
@@ -378,35 +379,18 @@
       color: @tagline-link !important;
     }
 
-    /* Reddit Enhancement Suite marks these authors with a solid background of
-       its own — a literal green behind a moderator, for instance, which its
-       own green text then sits on. The tint carries the distinction and @text
-       carries the name, which clears 5:1 on every flavor. */
     .tagline .author {
-      background-color: transparent !important;
       color: @tagline-link !important;
 
+      /* Reddit Enhancement Suite gives these authors a background of its own,
+         which the reader chooses, so it is left alone. Only the name on top
+         of it is lightened, since RES's own colour for it sits low against
+         the backgrounds it picks. */
       &.submitter,
       &.moderator,
       &.admin,
       &.friend {
-        color: @text !important;
-      }
-
-      &.submitter {
-        background-color: fade(@blue, 20%) !important;
-      }
-
-      &.moderator {
-        background-color: fade(@green, 20%) !important;
-      }
-
-      &.admin {
-        background-color: fade(@red, 20%) !important;
-      }
-
-      &.friend {
-        background-color: fade(@peach, 20%) !important;
+        color: if(@flavor = latte, @base, @text) !important;
       }
     }
 
@@ -414,13 +398,23 @@
       color: @sticky !important;
     }
 
-    /* @subtext1 is 4.05:1 on Latte's @surface0, so flair text takes @text
-       there for 5.17:1; the dark flavors keep the quieter @subtext1. */
-    .linkflairlabel,
-    .flair {
-      background-color: @surface0 !important;
-      border-color: @surface1 !important;
-      color: if(@flavor = latte, @text, @subtext1) !important;
+    /* Flair and user tags carry colours their author chose, and those colours
+       often mean something, so they are behind a switch. @subtext1 is 4.05:1
+       on Latte's @surface0, so flair text takes @text there for 5.17:1; the
+       dark flavors keep the quieter @subtext1. */
+    & when (@flairColors = 1) {
+      .linkflairlabel,
+      .flair,
+      .flairrichtext {
+        background-color: @surface0 !important;
+        border-color: @surface1 !important;
+        color: if(@flavor = latte, @text, @subtext1) !important;
+      }
+
+      .RESUserTag,
+      .RESUserTag a {
+        color: @accent !important;
+      }
     }
 
     .flat-list.buttons li a {
@@ -470,16 +464,17 @@
       border-color: @surface0 !important;
     }
 
-    .expando,
-    .expando-button {
+    .expando {
       background-color: @mantle !important;
       border-color: @surface0 !important;
     }
 
-    /* The camera, play and text glyphs are sprite images, so they take a
-       palette filter rather than a colour. */
-    .expando-button .expando-button-icon,
+    /* The camera, play and text glyphs are this element's own background
+       image, so the filter that recolours them recolours its background with
+       them. It carries no background colour for that reason. */
     .expando-button {
+      background-color: transparent !important;
+      border-color: @surface0 !important;
       filter: @dim-filter !important;
     }
 
@@ -1059,16 +1054,45 @@
       color: @text !important;
     }
 
-    .RESUserTag,
-    .RESUserTag a,
     .voteWeight {
       color: @accent !important;
     }
 
-    .res-fancy-toggle-button {
-      background-color: @surface0 !important;
-      border-color: @surface1 !important;
+    /* These sit on @base with nothing around them, so @surface0 alone reads
+       as flat. An accent tint and an accent border separate them at any
+       accent: 20% is the strongest tint that keeps @text above 4.5:1 for all
+       fifteen choices, the worst being Frappé's rosewater at 4.83:1. */
+    .res-fancy-toggle-button,
+    .RESshortcutside,
+    .RESDashboardToggle {
+      background-color: fade(@accent, 20%) !important;
+      border-color: @accent !important;
       color: @text !important;
+    }
+
+    /* The user tag dialog and the hover card behind it. Its colour picker is
+       left alone: those swatches are the tag colours themselves. */
+    .RESHover,
+    .RESDialog,
+    .RESDialogSmall,
+    .RESDialogContents,
+    .RESHoverTitle {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
+      color: @text !important;
+    }
+
+    .res-icon {
+      color: @accent !important;
+    }
+
+    #userTaggerIgnoreContainer .toggleThumb {
+      background-color: @surface2 !important;
+    }
+
+    .RESNotificationButtonBlue {
+      background-color: @accent !important;
+      color: @crust !important;
     }
 
     /* The floating controls at the corner of a comments page, and the comment
