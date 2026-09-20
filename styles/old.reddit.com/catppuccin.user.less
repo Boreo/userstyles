@@ -1400,6 +1400,31 @@
       background-color: @mantle !important;
     }
 
+    .res-search-options {
+      background-color: @mantle !important;
+
+      dd {
+        color: @muted !important;
+      }
+    }
+
+    /* Each of these is a single-colour glyph on a transparent tile, drawn on
+       an element that paints nothing else, so a filter is all they need. */
+    .search-icon,
+    .search-result-icon-score {
+      filter: @dim-filter !important;
+    }
+
+    .search-result-icon-external,
+    .search-result-icon-filter {
+      filter: @accent-filter !important;
+    }
+
+    /* Reddit's status line after a preference is saved. */
+    .info-icon::before {
+      filter: @blue-filter !important;
+    }
+
     #searchexpando,
     #moresearchinfo {
       background-color: @mantle !important;
