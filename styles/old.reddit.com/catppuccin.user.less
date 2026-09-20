@@ -647,28 +647,32 @@
       background-image: url("data:image/svg+xml,@{svg-locked}") !important;
     }
 
-    /* These are sprite tiles rather than whole images: the button keeps
-       reddit's background-position and scrolls to an offset inside the
-       sheet, and hover scrolls to a second one. Each replacement is a sheet
-       of its own carrying the tile at both offsets, so one rule covers the
-       resting and hovered states. */
+    /* These are sprite tiles: the button scrolls to an offset inside a
+       sheet, and to a second one on hover. The replacement is a single
+       tile, so the rule resets the offset with it — the one non-colour
+       declaration in this style, and the alternative is carrying reddit's
+       sprite geometry in every rule and re-deriving it whenever reddit
+       rebuilds the sheet, which has already happened once. */
     .expando-button.collapsed.selftext {
-      @svg-text: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="572" viewBox="0 0 23 572"><g transform="translate(0 520)"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M4,5 h15 v2 h-15z M4,9 h15 v2 h-15z M4,13 h15 v2 h-15z M4,17 h9 v2 h-9z"/></g><g transform="translate(0 549)"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M4,5 h15 v2 h-15z M4,9 h15 v2 h-15z M4,13 h15 v2 h-15z M4,17 h9 v2 h-9z"/></g></svg>');
+      @svg-text: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M4,5 h15 v2 h-15z M4,9 h15 v2 h-15z M4,13 h15 v2 h-15z M4,17 h9 v2 h-9z"/></svg>');
 
       background-image: url("data:image/svg+xml,@{svg-text}") !important;
+      background-position: 0 0 !important;
     }
 
     .expando-button.collapsed.video {
-      @svg-play: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="514" viewBox="0 0 23 514"><g transform="translate(0 462)"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M8,5 l10,6.5 l-10,6.5z"/></g><g transform="translate(0 491)"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M8,5 l10,6.5 l-10,6.5z"/></g></svg>');
+      @svg-play: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M8,5 l10,6.5 l-10,6.5z"/></svg>');
 
       background-image: url("data:image/svg+xml,@{svg-play}") !important;
+      background-position: 0 0 !important;
     }
 
     .expando-button.expanded.selftext,
     .expando-button.expanded.video {
-      @svg-sprite-open: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="456" viewBox="0 0 23 456"><g transform="translate(0 404)"><circle cx="11.5" cy="11.5" r="11.5" fill="@{surface0}"/><g stroke="@{text}" stroke-width="3.25" stroke-linecap="round"><line x1="7.5" y1="7.5" x2="15.5" y2="15.5"/><line x1="15.5" y1="7.5" x2="7.5" y2="15.5"/></g></g><g transform="translate(0 433)"><circle cx="11.5" cy="11.5" r="11.5" fill="@{surface0}"/><g stroke="@{text}" stroke-width="3.25" stroke-linecap="round"><line x1="7.5" y1="7.5" x2="15.5" y2="15.5"/><line x1="15.5" y1="7.5" x2="7.5" y2="15.5"/></g></g></svg>');
+      @svg-sprite-open: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><circle cx="11.5" cy="11.5" r="11.5" fill="@{surface0}"/><g stroke="@{text}" stroke-width="3.25" stroke-linecap="round"><line x1="7.5" y1="7.5" x2="15.5" y2="15.5"/><line x1="15.5" y1="7.5" x2="7.5" y2="15.5"/></g></svg>');
 
       background-image: url("data:image/svg+xml,@{svg-sprite-open}") !important;
+      background-position: 0 0 !important;
     }
 
     .expando-button.expanded.image,
@@ -1314,31 +1318,26 @@
 
     /* Tier 4 — Reddit Enhancement Suite chrome */
     /* The envelope is a sprite tile drawn in two colours — white with an
-       orange flap when there is mail — so a single-colour filter flattens it
-       into a block. It is rebuilt as an outline at each of the three offsets
-       the icon scrolls to, unread in @red and read in the tagline's grey, so
-       one rule covers every state. */
-    #mail {
-      @svg-mail: escape('<svg xmlns="http://www.w3.org/2000/svg" width="130" height="1728" viewBox="0 0 130 1728"><g transform="translate(73 1718)"><g fill="none" stroke="@{red}"><rect x=".5" y=".5" width="14" height="9"/><path d="M.5 .5 L7.5 6 L14.5 .5"/></g></g><g transform="translate(94 1718)"><g fill="none" stroke="@{red}"><rect x=".5" y=".5" width="14" height="9"/><path d="M.5 .5 L7.5 6 L14.5 .5"/></g></g><g transform="translate(115 1718)"><g fill="none" stroke="@{dim}"><rect x=".5" y=".5" width="14" height="9"/><path d="M.5 .5 L7.5 6 L14.5 .5"/></g></g></svg>');
+       orange flap when there is mail — so a single-colour filter flattens
+       it into a block. It is redrawn as an outline, unread in @red and
+       read in the tagline's grey, and the sprite offset is reset with it.
+       RES draws its own envelope in the bar that follows a scrolled page,
+       from images of its own; it shares these rules so that both are one
+       image, already painted by the time the bar appears. */
+    #mail.havemail,
+    #NREMail.havemail {
+      @svg-mail: escape('<svg xmlns="http://www.w3.org/2000/svg" width="15" height="10" viewBox="0 0 15 10"><g fill="none" stroke="@{red}"><rect x=".5" y=".5" width="14" height="9"/><path d="M.5 .5 L7.5 6 L14.5 .5"/></g></svg>');
 
       background-image: url("data:image/svg+xml,@{svg-mail}") !important;
+      background-position: 0 0 !important;
     }
 
-    /* RES's tips-and-tricks guider. Its buttons are painted with a gradient
-       that covers any fill set under it, and its close control is a JPEG of
-       a dark cross on white, which has no transparency to filter. */
-    .guiders_button {
-      background-image: none !important;
-      background-color: @op !important;
-      border-color: @op !important;
-      color: @base !important;
-    }
+    #mail.nohavemail,
+    #NREMail.nohavemail {
+      @svg-nomail: escape('<svg xmlns="http://www.w3.org/2000/svg" width="15" height="10" viewBox="0 0 15 10"><g fill="none" stroke="@{dim}"><rect x=".5" y=".5" width="14" height="9"/><path d="M.5 .5 L7.5 6 L14.5 .5"/></g></svg>');
 
-    .guiders_x_button {
-      @svg-guider-close: escape('<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13"><g stroke="@{text}" stroke-width="2" stroke-linecap="round"><line x1="3" y1="3" x2="10" y2="10"/><line x1="10" y1="3" x2="3" y2="10"/></g></svg>');
-
-      background-image: url("data:image/svg+xml,@{svg-guider-close}")
-        !important;
+      background-image: url("data:image/svg+xml,@{svg-nomail}") !important;
+      background-position: 0 0 !important;
     }
 
     /* The comment navigator's fly-out. Its rows are built on hover, so
@@ -1359,20 +1358,6 @@
     #new_modmail,
     #RESAccountSwitcherIcon {
       filter: @dim-filter !important;
-    }
-
-    /* RES draws its own envelope in the bar that follows a scrolled page,
-       from images of its own rather than reddit's sprite. */
-    #NREMail.havemail {
-      @svg-nre-mail: escape('<svg xmlns="http://www.w3.org/2000/svg" width="15" height="10" viewBox="0 0 15 10"><g fill="none" stroke="@{red}"><rect x=".5" y=".5" width="14" height="9"/><path d="M.5 .5 L7.5 6 L14.5 .5"/></g></svg>');
-
-      background-image: url("data:image/svg+xml,@{svg-nre-mail}") !important;
-    }
-
-    #NREMail.nohavemail {
-      @svg-nre-nomail: escape('<svg xmlns="http://www.w3.org/2000/svg" width="15" height="10" viewBox="0 0 15 10"><g fill="none" stroke="@{dim}"><rect x=".5" y=".5" width="14" height="9"/><path d="M.5 .5 L7.5 6 L14.5 .5"/></g></svg>');
-
-      background-image: url("data:image/svg+xml,@{svg-nre-nomail}") !important;
     }
 
     /* The unread count beside the envelope, and RES's copy of it. The
