@@ -100,9 +100,11 @@
       }
     }
 
+    /* Same @surface0 background as the flair labels, so the same Latte swap:
+       @subtext1 is 4.05:1 there, @text 5.17:1. */
     .tabmenu li a {
       background-color: @surface0 !important;
-      color: @subtext1 !important;
+      color: if(@flavor = latte, @text, @subtext1) !important;
     }
 
     .tabmenu li.selected a {
