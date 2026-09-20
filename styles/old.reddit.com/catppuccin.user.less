@@ -314,8 +314,12 @@
       color: @text !important;
     }
 
+    /* Reddit paints a gradient across this button as a sprite tile, which
+       sits over the fill below and is the button's whole appearance on the
+       light flavors, where nothing else is dark enough to hide it. */
     .morelink {
       background-color: @surface0 !important;
+      background-image: none !important;
       border-color: @surface1 !important;
 
       a {
@@ -343,15 +347,15 @@
       }
 
       &.remove {
-        background-color: @red !important;
+        background-color: @leave !important;
         color: @crust !important;
-        border-color: @red !important;
+        border-color: @leave !important;
       }
 
       &.add {
-        background-color: @green !important;
+        background-color: @join !important;
         color: @crust !important;
-        border-color: @green !important;
+        border-color: @join !important;
       }
     }
 
@@ -392,7 +396,23 @@
        4.5:1 on its @base at full strength and are darkened instead. The dark
        flavors have the opposite problem and are damped towards @base. */
     @op: if(@flavor = latte, darken(@blue, 5%), @blue);
-    @stamp: if(@flavor = latte, darken(@peach, 15%), @peach);
+    @stamp: if(@flavor = latte, darken(@peach, 18%), @peach);
+
+    /* Prose links, and the two subscribe fills. Latte's surfaces are close
+       enough to white that each of these falls below 4.5:1 there at full
+       strength — the link reaches only 3.18:1 on @surface0, where the
+       dropdowns put it — so each is darkened by the least that clears it on
+       the darkest surface it lands on. */
+    @link: if(@flavor = latte, darken(@blue, 12%), @blue);
+
+    /* An icon-font glyph is a graphical object, so 3:1 applies to it rather
+       than the 4.5:1 `@accent-text` is darkened for. At 35% every accent
+       lands near black on Latte and the icon stops looking themed at all;
+       22% is the least that clears 3:1 for all fifteen on `@surface0`, the
+       darkest surface one of these sits on. */
+    @accent-icon: if(@flavor = latte, darken(@accent, 22%), @accent);
+    @join: if(@flavor = latte, darken(@green, 12%), @green);
+    @leave: if(@flavor = latte, darken(@red, 4%), @red);
     @sticky: if(@flavor = latte, darken(@green, 10%), @green);
 
     /* Thirteen of the fifteen accent choices fall below 4.5:1 on Latte's
@@ -648,7 +668,7 @@
     }
 
     .score.dislikes {
-      color: @blue !important;
+      color: @link !important;
     }
 
     /* The vote arrows are a raster sprite, so they are recoloured with the
@@ -1054,7 +1074,7 @@
       }
 
       a {
-        color: @blue !important;
+        color: @link !important;
       }
 
       h1,
@@ -2049,7 +2069,7 @@
     #RESSettingsButton::after,
     .gearIcon::after,
     .RESUserTagImage::after {
-      color: @accent-text !important;
+      color: @accent-icon !important;
     }
 
     #NREPause::after {
