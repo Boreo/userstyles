@@ -602,25 +602,34 @@
       border-color: @surface0 !important;
     }
 
-    /* The camera, play and text glyphs are this element's own background
-       image, so the filter that recolours them recolours its background with
-       them. It carries no background colour for that reason. */
+    /* Every one of these buttons is a plate with a white glyph on it, drawn
+       either as an SVG data URI or as a tile in a sprite sheet. A
+       single-colour filter flattens plate and glyph together and the button
+       reads as a plain square, so each is rebuilt in palette colours
+       instead and none of them carries a filter.
+
+       Reddit appends a listing's next page with the type class missing and
+       fills it in a moment later, so the rules below are reached only after
+       that. These two carry a neutral plate for the gap, which is what the
+       reader sees flash otherwise. */
     .expando-button {
       background-color: transparent !important;
       border-color: @surface0 !important;
-      filter: @dim-filter !important;
+      filter: none !important;
     }
 
-    /* Four of these buttons are not sprites but an SVG data URI: a filled
-       plate with a white glyph cut out of it. A single-colour filter flattens
-       plate and glyph together and the button reads as a plain square, so
-       each is rebuilt in palette colours and takes no filter. */
-    .expando-button.image,
-    .expando-button.video-muted,
-    .expando-button.selftext,
-    .expando-button.video,
-    .expando-button.expando-button-requires-permission {
-      filter: none !important;
+    .expando-button.collapsed {
+      @svg-expand: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M10,5 h3 v13 h-3z M5,10 h13 v3 h-13z"/></svg>');
+
+      background-image: url("data:image/svg+xml,@{svg-expand}") !important;
+      background-position: 0 0 !important;
+    }
+
+    .expando-button.expanded {
+      @svg-collapse: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><circle cx="11.5" cy="11.5" r="11.5" fill="@{surface0}"/><g stroke="@{text}" stroke-width="3.25" stroke-linecap="round"><line x1="7.5" y1="7.5" x2="15.5" y2="15.5"/><line x1="15.5" y1="7.5" x2="7.5" y2="15.5"/></g></svg>');
+
+      background-image: url("data:image/svg+xml,@{svg-collapse}") !important;
+      background-position: 0 0 !important;
     }
 
     .expando-button.collapsed.image {
@@ -938,6 +947,17 @@
     }
 
     .nextprev {
+      color: @muted !important;
+    }
+
+    .nextprev .separator {
+      border-color: @surface0 !important;
+    }
+
+    /* The rule NeverEndingReddit draws between appended pages. */
+    .NERPageMarker {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
       color: @muted !important;
     }
 
