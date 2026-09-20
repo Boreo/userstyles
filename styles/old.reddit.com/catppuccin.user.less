@@ -16,9 +16,11 @@
 @var checkbox flairColors "Theme subreddit flair colours" 1
 @var checkbox threadColors "Colour comment threads by depth" 1
 @var select threadColor1 "Thread colour, depth 1" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve", "red:Red*", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
-@var select threadColor2 "Thread colour, depth 2" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow*", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
-@var select threadColor3 "Thread colour, depth 3" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green*", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
-@var select threadColor4 "Thread colour, depth 4" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue*", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
+@var select threadColor2 "Thread colour, depth 2" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve", "red:Red", "maroon:Maroon", "peach:Peach*", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
+@var select threadColor3 "Thread colour, depth 3" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow*", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
+@var select threadColor4 "Thread colour, depth 4" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green*", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
+@var select threadColor5 "Thread colour, depth 5" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue*", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
+@var select threadColor6 "Thread colour, depth 6" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve*", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
 ==/UserStyle== */
 
 @import "https://userstyles.catppuccin.com/lib/std/v1.less";
@@ -403,6 +405,10 @@
     @thread3: if(@threadColors = 1, @catppuccin[@@flavor][@@threadColor3],
       @surface1);
     @thread4: if(@threadColors = 1, @catppuccin[@@flavor][@@threadColor4],
+      @surface1);
+    @thread5: if(@threadColors = 1, @catppuccin[@@flavor][@@threadColor5],
+      @surface1);
+    @thread6: if(@threadColors = 1, @catppuccin[@@flavor][@@threadColor6],
       @surface1);
 
     .link,
@@ -816,6 +822,24 @@
       @{sel} {
         background-color: @base !important;
         border-left-color: @thread4 !important;
+      }
+
+      .comment-level-5(@depth + 1; ~"@{sel} > .child > .listing > .comment");
+    }
+
+    .comment-level-5(@depth; @sel) when (@depth < 12) {
+      @{sel} {
+        background-color: @band !important;
+        border-left-color: @thread5 !important;
+      }
+
+      .comment-level-6(@depth + 1; ~"@{sel} > .child > .listing > .comment");
+    }
+
+    .comment-level-6(@depth; @sel) when (@depth < 12) {
+      @{sel} {
+        background-color: @base !important;
+        border-left-color: @thread6 !important;
       }
 
       .comment-level-1(@depth + 1; ~"@{sel} > .child > .listing > .comment");
