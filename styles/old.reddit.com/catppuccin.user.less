@@ -573,5 +573,68 @@
       color: @subtext1 !important;
       border-bottom-color: @surface0 !important;
     }
+
+    /* Tier 3 — preferences */
+    .pretty-form,
+    .preftable {
+      color: @text !important;
+    }
+
+    .preftable td,
+    .preftable th {
+      border-top-color: @surface0 !important;
+    }
+
+    .prefright,
+    .preftable .details {
+      color: @muted !important;
+    }
+
+    /* Tier 3 — wiki */
+    /* `.wiki-page` is a class on <body> itself, not a wrapping element, so
+       nesting under it would require the gate's body to be its own strict
+       ancestor and match nothing; these stay unnested. */
+    .wiki-page-content {
+      background-color: transparent !important;
+      color: @text !important;
+    }
+
+    .wikititle {
+      color: @muted !important;
+    }
+
+    .wiki-page-content .wiki > .toc > ul {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
+    }
+
+    .diff .diff_add {
+      background-color: fade(@green, 20%) !important;
+      color: @text !important;
+    }
+
+    .diff .diff_sub {
+      background-color: fade(@red, 20%) !important;
+      color: @text !important;
+    }
+
+    /* Tier 3 — public about pages */
+    .subreddit-rule-item {
+      color: @text !important;
+
+      &:hover {
+        background-color: @hover-bg !important;
+      }
+    }
+
+    .subreddit-rule-kind,
+    .subreddit-rule-label {
+      color: @muted !important;
+    }
+
+    .usertable td {
+      border-top-color: @surface0 !important;
+      color: @text !important;
+    }
   }
 }
