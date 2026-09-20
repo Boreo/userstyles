@@ -275,5 +275,53 @@
       background-color: transparent !important;
       color: @text !important;
     }
+
+    /* Tier 1 — comments */
+    .commentarea .menuarea {
+      background-color: transparent !important;
+      border-bottom-color: @surface0 !important;
+      color: @subtext0 !important;
+    }
+
+    .comment {
+      .child,
+      .showreplies {
+        border-left-color: @surface1 !important;
+      }
+
+      &.collapsed .tagline {
+        color: @inactive !important;
+      }
+
+      .expand {
+        color: @inactive !important;
+      }
+    }
+
+    .comment.spam,
+    .comment.deleted {
+      background-color: fade(@red, 10%) !important;
+    }
+
+    .usertext-edit textarea,
+    .usertext-edit .markdownEditor-wrapper {
+      background-color: @mantle !important;
+      border-color: @surface1 !important;
+      color: @text !important;
+    }
+
+    .morecomments a {
+      color: @accent !important;
+    }
+
+    .comment-visits-box {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
+      color: @subtext0 !important;
+    }
+
+    .new-comment .usertext-body {
+      border-left-color: @yellow !important;
+    }
   }
 }
