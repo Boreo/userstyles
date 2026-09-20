@@ -377,6 +377,7 @@
        of the fifteen, pink, at 5.09:1 there and 7.01:1 on @base. The dark
        flavors clear both already. */
     @accent-text: if(@flavor = latte, darken(@accent, 35%), @accent);
+    @read: if(@flavor = latte, @subtext0, @overlay1);
 
     .link,
     .thing {
@@ -395,21 +396,23 @@
 
     /* Link titles are the page's dominant text, not incidental links, so a
        saturated accent across every row overwhelms the listing. They take the
-       body text colour and step down to @muted once visited, which is the
+       body text colour and drop to @read once visited, which is the
        read/unread distinction old reddit draws with #0000ff and #551a8b.
-       @subtext0 reaches only 4.37:1 on Latte, so Latte dims to @subtext1. */
+       @muted is one step away from @text and too close to read as a state
+       change; @read is two, and is as far as Latte can go — @subtext0 is
+       4.37:1 on its @base and @overlay0 falls to 3.13:1. */
     .thing .title,
     a.title {
       color: @text !important;
 
       &:visited {
-        color: @muted !important;
+        color: @read !important;
       }
     }
 
     .thing.visited a.title,
     .thing.visited .title {
-      color: @muted !important;
+      color: @read !important;
     }
 
     .tagline,
@@ -417,10 +420,11 @@
       color: @dim !important;
     }
 
-    /* The line reads title, author, domain, then the action row: @muted,
-       @dim and @inactive are consecutive steps on the dark flavors. Latte
-       runs out of room — @subtext0 is 4.37:1 on its @base — so the author and
-       the domain share @subtext1 there and only the action row steps away. */
+    /* The line reads title, author, domain, then the action row. The author
+       is the row's other name and carries the title's colour; @dim and
+       @inactive are consecutive steps below it on the dark flavors. Latte
+       runs out of room — @subtext0 is 4.37:1 on its @base — so the domain
+       takes @subtext1 there and only the action row steps away. */
     .tagline a,
     .domain a {
       color: @dim !important;
@@ -433,17 +437,40 @@
     }
 
     .tagline .author {
-      color: @muted !important;
+      color: @text !important;
+    }
 
-      /* Reddit Enhancement Suite gives these authors a background of its own,
-         which the reader chooses, so it is left alone. Only the name on top
-         of it is lightened, since RES's own colour for it sits low against
-         the backgrounds it picks. */
-      &.submitter,
-      &.moderator,
-      &.admin,
+    /* Reddit Enhancement Suite paints these author pills in colours of its
+       own, at `.tagline .author.moderator` with `!important`, and darkens
+       each on hover. Every rule here therefore carries one class more than
+       RES's does. The fill is the palette colour RES's own choice stands for;
+       Latte's four are too light to carry @base at full strength, so they are
+       darkened until each clears 4.5:1. */
+    .author-pill(@fill) {
+      &,
+      &:hover {
+        background-color: if(@flavor = latte, darken(@fill, 18%), @fill)
+          !important;
+        color: @base !important;
+      }
+    }
+
+    .thing .tagline .author,
+    .thing .crosspost-preview-tagline .author {
+      &.submitter {
+        .author-pill(@blue);
+      }
+
+      &.moderator {
+        .author-pill(@green);
+      }
+
+      &.admin {
+        .author-pill(@red);
+      }
+
       &.friend {
-        color: if(@flavor = latte, @base, @text) !important;
+        .author-pill(@peach);
       }
     }
 
@@ -551,6 +578,48 @@
       filter: @dim-filter !important;
     }
 
+    /* Four of these buttons are not sprites but an SVG data URI: a filled
+       plate with a white glyph cut out of it. A single-colour filter flattens
+       plate and glyph together and the button reads as a plain square, so
+       each is rebuilt in palette colours and takes no filter. */
+    .expando-button.image,
+    .expando-button.video-muted,
+    .expando-button.expando-button-requires-permission {
+      filter: none !important;
+    }
+
+    .expando-button.collapsed.image {
+      @svg-image: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" fill-rule="evenodd" d="M4,5 l1,-.5 h2 l1,.5 h1 l1,-1 h3 l2,2 h2 v8 h-13z M5,6 h2 v1 h-2 v-1z M 11.5 9.5 m -3.5, 0 a 3.5,3.5 0 1,0 7,0 a 3.5,3.5 0 1,0 -7,0 M 11.5 9.5 m -2.5, 0 a 2.5,2.5 0 1,0 5,0 a 2.5,2.5 0 1,0 -5,0"/><g stroke="@{text}" stroke-width="1.5" stroke-linecap="round"><line x1="18.75" y1="16.5" x2="18.75" y2="21"/><line x1="16.5" y1="18.75" x2="21" y2="18.75"/></g></svg>');
+
+      background-image: url("data:image/svg+xml,@{svg-image}") !important;
+    }
+
+    .expando-button.collapsed.image.gallery {
+      @svg-gallery: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" fill-rule="evenodd" d="M4,3 h10 v10 h-10z M5,4 h8 v3.5 l-3,1.75 l-5,.25z M 7 6 m -1.25, 0 a 1.25,1.25 0 1,0 2.5,0 a 1.25,1.25 0 1,0 -2.5,0"/><path fill="none" stroke="@{text}" stroke-dasharray="1.25 .5" d="M15.5 5 v9.5 h-9.5"/><g stroke="@{text}" stroke-width="1.5" stroke-linecap="round"><line x1="18.75" y1="16.5" x2="18.75" y2="21"/><line x1="16.5" y1="18.75" x2="21" y2="18.75"/></g></svg>');
+
+      background-image: url("data:image/svg+xml,@{svg-gallery}") !important;
+    }
+
+    .expando-button.collapsed.video-muted {
+      @svg-video: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" fill-rule="evenodd" d="M4,4 h11 v11 h-11z M7,7 l5,2.5 l-5,2.5z"/><g stroke="@{text}" stroke-width="1.5" stroke-linecap="round"><line x1="18.75" y1="16.5" x2="18.75" y2="21"/><line x1="16.5" y1="18.75" x2="21" y2="18.75"/></g></svg>');
+
+      background-image: url("data:image/svg+xml,@{svg-video}") !important;
+    }
+
+    .expando-button.collapsed.expando-button-requires-permission {
+      @svg-locked: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="none" stroke="@{text}" stroke-width="2" d="M6,10 h8 v5 h-8z M7,10 v-2 c0-4, 6-4, 6,0 v2"/><g stroke="@{text}" stroke-width="1.5" stroke-linecap="round"><line x1="18.75" y1="16.5" x2="18.75" y2="21"/><line x1="16.5" y1="18.75" x2="21" y2="18.75"/></g></svg>');
+
+      background-image: url("data:image/svg+xml,@{svg-locked}") !important;
+    }
+
+    .expando-button.expanded.image,
+    .expando-button.expanded.video-muted,
+    .expando-button.expanded.expando-button-requires-permission {
+      @svg-open: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><circle cx="11.5" cy="11.5" r="11.5" fill="@{surface0}"/><g stroke="@{text}" stroke-width="3.25" stroke-linecap="round"><line x1="7.5" y1="7.5" x2="15.5" y2="15.5"/><line x1="15.5" y1="7.5" x2="7.5" y2="15.5"/></g></svg>');
+
+      background-image: url("data:image/svg+xml,@{svg-open}") !important;
+    }
+
     .nsfw-stamp {
       color: @red !important;
     }
@@ -602,6 +671,38 @@
     .usertext-edit .markdownEditor-wrapper {
       background-color: @mantle !important;
       border-color: @surface1 !important;
+      color: @text !important;
+    }
+
+    /* Each formatting button is a black glyph on a transparent sprite, drawn
+       as the button's own background image, so the button takes a filter and
+       no colour of its own — a filter flattens whatever it is applied to,
+       border included. The wrapper above is the surface they sit on. */
+    .markdownEditor > .edit-btn {
+      background-color: transparent !important;
+      border-color: transparent !important;
+      filter: @dim-filter !important;
+
+      &:hover {
+        filter: @text-filter !important;
+      }
+    }
+
+    .RESCharCounter {
+      color: @muted !important;
+    }
+
+    .RESMacroDropdownTitle {
+      color: @muted !important;
+    }
+
+    .RESMacroDropdown {
+      background-color: @mantle !important;
+      border-color: @surface1 !important;
+    }
+
+    .RESMacroDropdownList li a {
+      border-color: @surface0 !important;
       color: @text !important;
     }
 
@@ -695,16 +796,19 @@
     }
 
     /* Tier 1 — page furniture */
-    /* The tint is kept light because it darkens the background under the
-       infobar's links: @blue is 4.34:1 on a bare Latte @base, 4.01:1 under a
-       10% tint and 3.85:1 under 15%. */
+    /* A tint of @yellow over @base is indistinguishable from reddit's own
+       infobar on Latte, so the bar takes a surface instead and keeps the
+       yellow only as its border. @base is Latte's lightest colour, so any
+       surface darkens the ground under the bar's links: @blue is 4.47:1 on
+       @base and 3.18:1 on @surface0, and has to be darkened to clear 4.5:1
+       there. */
     .infobar {
-      background-color: fade(@yellow, 10%) !important;
+      background-color: @surface0 !important;
       border-color: @yellow !important;
       color: @text !important;
 
       a {
-        color: @blue !important;
+        color: if(@flavor = latte, darken(@blue, 25%), @blue) !important;
       }
     }
 
@@ -1138,19 +1242,96 @@
     .res-fancy-toggle-button,
     .RESshortcutside,
     .RESDashboardToggle {
+      /* RES paints these with a gradient, which covers any background colour
+         set under it. */
+      background-image: none !important;
       background-color: fade(@accent, 20%) !important;
       border-color: @accent !important;
       color: @text !important;
     }
 
-    /* Reddit's own hover bubbles: the multireddit picker on an author, and
-       the subreddit card. */
+    /* Reddit's own hover bubbles: the author card, the multireddit picker
+       and the subreddit card. */
+    .author-tooltip,
     .hover-bubble,
     .hover-bubble .title,
     .hovercard {
       background-color: @mantle !important;
       border-color: @surface0 !important;
       color: @text !important;
+    }
+
+    /* The bubble's pointer is two stacked triangles drawn as borders: the
+       ::before is the outline and the ::after the fill, and which side of
+       each carries the colour depends on where the bubble is anchored. */
+    .hover-bubble {
+      &.anchor-top::before,
+      &.anchor-top-left::before,
+      &.anchor-top-right::before,
+      &.anchor-top-centered::before {
+        border-bottom-color: @surface0 !important;
+      }
+
+      &.anchor-top::after,
+      &.anchor-top-left::after,
+      &.anchor-top-right::after,
+      &.anchor-top-centered::after {
+        border-bottom-color: @mantle !important;
+      }
+
+      &.anchor-bottom-left::before,
+      &.anchor-bottom-right::before,
+      &.anchor-bottom-centered::before {
+        border-top-color: @surface0 !important;
+      }
+
+      &.anchor-bottom-left::after,
+      &.anchor-bottom-right::after,
+      &.anchor-bottom-centered::after {
+        border-top-color: @mantle !important;
+      }
+
+      &.anchor-left::before {
+        border-right-color: @surface0 !important;
+      }
+
+      &.anchor-left::after {
+        border-right-color: @mantle !important;
+      }
+
+      &.anchor-right::before {
+        border-left-color: @surface0 !important;
+      }
+
+      &.anchor-right::after {
+        border-left-color: @mantle !important;
+      }
+    }
+
+    /* RES's own buttons, shared by the user fly-out's ignore and tag
+       controls and by the subreddit info card. Each ships a saturated fill
+       with white text; the palette equivalents are light, so the label
+       inverts to @base. */
+    .blueButton {
+      background-color: @op !important;
+      border-color: @op !important;
+      color: @base !important;
+    }
+
+    .redButton {
+      background-color: @red !important;
+      border-color: @red !important;
+      color: @base !important;
+    }
+
+    .RESButton {
+      background-color: @surface0 !important;
+      border-color: @surface1 !important;
+      color: @text !important;
+
+      &:hover {
+        background-color: @hover-bg !important;
+      }
     }
 
     /* The user tag dialog and the hover card behind it. Its colour picker is
