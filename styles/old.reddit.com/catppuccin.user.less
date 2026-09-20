@@ -703,9 +703,16 @@
       background-color: @surface0 !important;
     }
 
+    /* The highlight sits behind a whole entry, so every foreground inside it
+       — link titles, authors, taglines, scores — moves off @base onto this
+       colour. @surface0 dropped five of them below 4.5:1 on Latte (@blue
+       3.18:1, @sapphire 2.03:1). @mantle is the gentlest visible step: it
+       leaves each foreground at its existing baseline on Latte and raises
+       every one of them on the dark flavors, where @mantle is darker than
+       @base. */
     .RES-keyNav-activeElement,
     .RES-keyNav-activeElement .md-container {
-      background-color: @surface0 !important;
+      background-color: @mantle !important;
     }
 
     .RESUserTag a,
