@@ -323,5 +323,101 @@
     .new-comment .usertext-body {
       border-left-color: @yellow !important;
     }
+
+    /* Tier 1 — markdown prose */
+    .md {
+      color: @text !important;
+
+      a {
+        color: @blue !important;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        color: @text !important;
+      }
+
+      blockquote {
+        border-left-color: @surface2 !important;
+        color: @subtext1 !important;
+      }
+
+      code,
+      pre {
+        background-color: @mantle !important;
+        border-color: @surface0 !important;
+        color: @peach !important;
+      }
+
+      pre code {
+        background-color: transparent !important;
+        border-color: transparent !important;
+        color: @text !important;
+      }
+
+      hr {
+        border-color: @surface0 !important;
+      }
+
+      table,
+      th,
+      td {
+        border-color: @surface1 !important;
+      }
+
+      th {
+        background-color: @surface0 !important;
+        color: @text !important;
+      }
+    }
+
+    .md-spoiler-text {
+      background-color: @surface0 !important;
+      color: transparent !important;
+
+      &:hover,
+      &.revealed {
+        color: @text !important;
+      }
+    }
+
+    /* Tier 1 — page furniture */
+    .infobar {
+      background-color: fade(@yellow, 15%) !important;
+      border-color: @yellow !important;
+      color: @text !important;
+
+      a {
+        color: @blue !important;
+      }
+    }
+
+    .nextprev a {
+      background-color: @surface0 !important;
+      border-color: @surface1 !important;
+      color: @text !important;
+    }
+
+    .footer {
+      border-color: @surface0 !important;
+
+      .title {
+        color: @subtext0 !important;
+      }
+
+      a {
+        color: @subtext1 !important;
+      }
+    }
+
+    .debuginfo {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
+      color: @inactive !important;
+    }
   }
 }
