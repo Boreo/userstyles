@@ -14,7 +14,7 @@
 @var select darkFlavor "Dark Flavor" ["latte:Latte", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha*"]
 @var select accentColor "Accent" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve*", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
 @var checkbox flairColors "Theme subreddit flair colours" 1
-@var checkbox threadColors "Colour comment threads by depth" 1
+@var select threadColors "Comment thread colours" ["off:Off", "accent:Accent colours*", "neutral:Neutral"]
 @var select threadColor1 "Thread colour, depth 1" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve", "red:Red*", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
 @var select threadColor2 "Thread colour, depth 2" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve", "red:Red", "maroon:Maroon", "peach:Peach*", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
 @var select threadColor3 "Thread colour, depth 3" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow*", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
@@ -397,19 +397,20 @@
     /* A comment's nesting level is only expressible as a selector chain, so
        the four thread colours repeat every fourth level. With the switch off
        each one is the border colour every other box on the page carries, so
-       the chain emits the border it would have had anyway. */
-    @thread1: if(@threadColors = 1, @catppuccin[@@flavor][@@threadColor1],
-      @surface1);
-    @thread2: if(@threadColors = 1, @catppuccin[@@flavor][@@threadColor2],
-      @surface1);
-    @thread3: if(@threadColors = 1, @catppuccin[@@flavor][@@threadColor3],
-      @surface1);
-    @thread4: if(@threadColors = 1, @catppuccin[@@flavor][@@threadColor4],
-      @surface1);
-    @thread5: if(@threadColors = 1, @catppuccin[@@flavor][@@threadColor5],
-      @surface1);
-    @thread6: if(@threadColors = 1, @catppuccin[@@flavor][@@threadColor6],
-      @surface1);
+       the chain emits the border it would have had anyway, and set to
+       neutral they climb one surface step per level instead. */
+    @thread1: if(@threadColors = off, @surface1, if(@threadColors = neutral,
+      @surface0, @catppuccin[@@flavor][@@threadColor1]));
+    @thread2: if(@threadColors = off, @surface1, if(@threadColors = neutral,
+      @surface1, @catppuccin[@@flavor][@@threadColor2]));
+    @thread3: if(@threadColors = off, @surface1, if(@threadColors = neutral,
+      @surface2, @catppuccin[@@flavor][@@threadColor3]));
+    @thread4: if(@threadColors = off, @surface1, if(@threadColors = neutral,
+      @overlay0, @catppuccin[@@flavor][@@threadColor4]));
+    @thread5: if(@threadColors = off, @surface1, if(@threadColors = neutral,
+      @overlay1, @catppuccin[@@flavor][@@threadColor5]));
+    @thread6: if(@threadColors = off, @surface1, if(@threadColors = neutral,
+      @overlay2, @catppuccin[@@flavor][@@threadColor6]));
 
     .link,
     .thing {
@@ -619,23 +620,61 @@
       background-color: transparent !important;
     }
 
-    /* Reddit's placeholder thumbnails — the link, the text card, the 18+
-       badge, the snoo — are a light plate with a white glyph cut out of it,
-       and one of them spells its label in type rather than in shapes, so
-       none can be redrawn and a palette filter would flatten plate and glyph
-       into a single disc. Inverting keeps the two apart and is the one
-       transform that moves the plate onto a dark surface tone. Latte's page
-       is lighter than the plate already, so it is left alone. The guard
+    /* Reddit's placeholder thumbnails are a light disc with a white glyph cut
+       out of it, so a palette filter flattens the two into a plain disc, and
+       inverting keeps them apart but puts the glyph darker than the plate it
+       sits on. They are redrawn instead: the disc takes a surface and the
+       glyph a tone above it, which is the way round every other icon in the
+       style reads. The mark is plain geometry rather than reddit's own
+       drawing, so `spoiler` and `account` carry a generic glyph.
+
+       `background-size` is reset with the position: reddit serves a second
+       set of offsets to high-density screens under a media query that also
+       scales the sheet, and a scaled sheet would stretch these. The guard
        excludes a post that has a real thumbnail under the same class. */
-    & when not (@flavor = latte) {
-      .thumbnail.account:not(:has(img)),
-      .thumbnail.default:not(:has(img)),
-      .thumbnail.image:not(:has(img)),
-      .thumbnail.nsfw:not(:has(img)),
-      .thumbnail.self:not(:has(img)),
-      .thumbnail.spoiler:not(:has(img)) {
-        filter: invert(1) !important;
-      }
+    .thumbnail-art(@glyph) {
+      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="70" height="50" viewBox="0 0 70 50"><circle cx="35" cy="25" r="24" fill="@{surface0}"/>@{glyph}</svg>');
+
+      background-image: url("data:image/svg+xml,@{svg}") !important;
+      background-position: 0 0 !important;
+      background-size: auto !important;
+      filter: none !important;
+    }
+
+    .thumbnail.default:not(:has(img)) {
+      .thumbnail-art(
+        ~'<g fill="none" stroke="@{overlay1}" stroke-width="3"><rect x="23" y="12" width="12" height="21" rx="6"/><rect x="35" y="17" width="12" height="21" rx="6"/></g>'
+      );
+    }
+
+    .thumbnail.self:not(:has(img)) {
+      .thumbnail-art(
+        ~'<rect x="22" y="11" width="26" height="28" rx="2" fill="@{overlay1}"/><path fill="@{surface0}" d="M26,17h18v2H26z M26,22h18v2H26z M26,27h18v2H26z M26,32h10v2H26z"/>'
+      );
+    }
+
+    .thumbnail.image:not(:has(img)) {
+      .thumbnail-art(
+        ~'<rect x="20" y="13" width="30" height="24" rx="2" fill="@{overlay1}"/><path fill="@{surface0}" d="M24,33l8,-11 5,6 4,-4 7,9z"/>'
+      );
+    }
+
+    .thumbnail.nsfw:not(:has(img)) {
+      .thumbnail-art(
+        ~'<g fill="none" stroke="@{overlay1}" stroke-width="3"><circle cx="35" cy="25" r="11"/><path d="M27,17 43,33"/></g>'
+      );
+    }
+
+    .thumbnail.spoiler:not(:has(img)) {
+      .thumbnail-art(
+        ~'<path fill="@{overlay1}" d="M32,10h6v19h-6z M32,33h6v6h-6z"/>'
+      );
+    }
+
+    .thumbnail.account:not(:has(img)) {
+      .thumbnail-art(
+        ~'<g fill="@{overlay1}"><circle cx="35" cy="19" r="7"/><path d="M22,40a13,11 0 0 1 26,0z"/></g>'
+      );
     }
 
     .expando .md,
@@ -865,7 +904,11 @@
        side, since a border is inside the box and cannot be clipped. */
     .usertext-edit textarea:focus {
       border-color: @accent !important;
-      outline-color: @accent !important;
+
+      /* The ring is drawn outside the box and the form clips it along the
+         edge the field is flush with, so it is cleared and the border alone
+         marks the focus, the same width on all four sides. */
+      outline-color: transparent !important;
     }
 
     /* Each formatting button is a black glyph on a transparent sprite, drawn
