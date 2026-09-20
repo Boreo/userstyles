@@ -481,5 +481,88 @@
     .was-comment .subject {
       color: @subtext1 !important;
     }
+
+    /* Tier 2 — forms */
+    input[type="text"],
+    input[type="url"],
+    input[type="password"],
+    input[type="number"],
+    input[type="search"],
+    textarea,
+    select {
+      background-color: @mantle !important;
+      border-color: @surface1 !important;
+      color: @text !important;
+    }
+
+    button,
+    input[type="submit"],
+    input[type="button"] {
+      background-color: @surface0 !important;
+      border-color: @surface1 !important;
+      color: @text !important;
+
+      &:hover {
+        background-color: @surface1 !important;
+      }
+    }
+
+    .formtabs-content {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
+    }
+
+    .tabmenu.formtab li a {
+      background-color: @surface0 !important;
+      color: if(@flavor = latte, @text, @subtext1) !important;
+    }
+
+    .tabmenu.formtab li.selected a {
+      background-color: @mantle !important;
+      color: @accent !important;
+      border-color: @surface0 !important;
+    }
+
+    .roundfield {
+      background-color: @base !important;
+      color: @text !important;
+
+      .title {
+        color: @subtext1 !important;
+      }
+
+      .gray,
+      .little {
+        color: @muted !important;
+      }
+    }
+
+    .error {
+      color: @red !important;
+    }
+
+    /* Tier 2 — search */
+    #search input[type="text"] {
+      background-color: @mantle !important;
+      border-color: @surface1 !important;
+      color: @text !important;
+    }
+
+    #searchexpando,
+    #moresearchinfo {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
+      color: @text !important;
+    }
+
+    .search-result-meta {
+      color: @muted !important;
+    }
+
+    .search-result-header,
+    .search-result-group-header {
+      color: @subtext1 !important;
+      border-bottom-color: @surface0 !important;
+    }
   }
 }
