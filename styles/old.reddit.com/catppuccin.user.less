@@ -432,9 +432,15 @@
       color: @dim !important;
     }
 
+    /* A subreddit link written in prose carries no class of its own, so it
+       is matched on its target. A link into a subreddit's comments is a link
+       to a post, not to the subreddit, and keeps the prose colour. */
     .tagline .subreddit,
     .thing .subreddit,
-    a.subreddit {
+    a.subreddit,
+    .md a[href^="/r/"]:not([href*="/comments/"]),
+    .md a[href^="https://old.reddit.com/r/"]:not([href*="/comments/"]),
+    .md a[href^="https://www.reddit.com/r/"]:not([href*="/comments/"]) {
       color: @accent-text !important;
     }
 
@@ -588,8 +594,11 @@
       border-color: @surface0 !important;
     }
 
+    /* The expanded self-text sits in the listing's own column rather than
+       on top of it, so it takes the page colour and is separated by its
+       border alone. */
     .expando {
-      background-color: @mantle !important;
+      background-color: transparent !important;
       border-color: @surface0 !important;
     }
 
