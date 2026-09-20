@@ -718,7 +718,7 @@
       );
     }
 
-    .expando .md,
+    .md,
     .panestack-title {
       border-color: @surface0 !important;
     }
@@ -1450,7 +1450,21 @@
       color: inherit !important;
     }
 
+    /* The search panel at the top of /subreddits and /search. Reddit fills
+       and outlines the box but no longer draws the large magnifier behind
+       it: the panel's left gutter is thirty pixels now and the glyph is
+       forty-eight, so it lands on the controls rather than beside them. RES
+       night mode rewrites the whole `background` shorthand and brings the
+       image back, so it is cleared here. The submit button beside the field
+       carries a magnifier of its own. */
+    .searchpane,
+    .raisedbox {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
+    }
+
     .searchpane {
+      background-image: none !important;
       color: @text !important;
 
       h4 {
