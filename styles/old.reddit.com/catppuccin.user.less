@@ -21,6 +21,7 @@
 @var select threadColor4 "Thread colour, depth 4" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green*", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
 @var select threadColor5 "Thread colour, depth 5" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue*", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
 @var select threadColor6 "Thread colour, depth 6" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve*", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
+@var select threadStrength "Thread colour strength" ["100:Full", "70:Muted*", "45:Faint"]
 ==/UserStyle== */
 
 @import "https://userstyles.catppuccin.com/lib/std/v1.less";
@@ -399,18 +400,24 @@
        each one is the border colour every other box on the page carries, so
        the chain emits the border it would have had anyway, and set to
        neutral they climb one surface step per level instead. */
+    /* An accent at full strength is a bright 1px line against a very dark
+       surface. `@thread-tint` is an alpha, so the rail blends into whichever
+       background its own level carries rather than being mixed against one
+       chosen in advance. The neutral ramp is already quiet and is left at
+       full strength. */
+    @thread-tint: unit(@threadStrength, %);
     @thread1: if(@threadColors = off, @surface1, if(@threadColors = neutral,
-      @surface0, @catppuccin[@@flavor][@@threadColor1]));
+      @surface0, fade(@catppuccin[@@flavor][@@threadColor1], @thread-tint)));
     @thread2: if(@threadColors = off, @surface1, if(@threadColors = neutral,
-      @surface1, @catppuccin[@@flavor][@@threadColor2]));
+      @surface1, fade(@catppuccin[@@flavor][@@threadColor2], @thread-tint)));
     @thread3: if(@threadColors = off, @surface1, if(@threadColors = neutral,
-      @surface2, @catppuccin[@@flavor][@@threadColor3]));
+      @surface2, fade(@catppuccin[@@flavor][@@threadColor3], @thread-tint)));
     @thread4: if(@threadColors = off, @surface1, if(@threadColors = neutral,
-      @overlay0, @catppuccin[@@flavor][@@threadColor4]));
+      @overlay0, fade(@catppuccin[@@flavor][@@threadColor4], @thread-tint)));
     @thread5: if(@threadColors = off, @surface1, if(@threadColors = neutral,
-      @overlay1, @catppuccin[@@flavor][@@threadColor5]));
+      @overlay1, fade(@catppuccin[@@flavor][@@threadColor5], @thread-tint)));
     @thread6: if(@threadColors = off, @surface1, if(@threadColors = neutral,
-      @overlay2, @catppuccin[@@flavor][@@threadColor6]));
+      @overlay2, fade(@catppuccin[@@flavor][@@threadColor6], @thread-tint)));
 
     .link,
     .thing {
