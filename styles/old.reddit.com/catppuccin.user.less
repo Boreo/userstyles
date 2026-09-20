@@ -396,41 +396,47 @@
       60%));
 
     /* A comment's nesting level is only expressible as a selector chain, so
-       the six thread colours repeat every sixth level. A preset is a list of
-       palette keys, one per level, looked up the way the accent is; custom
-       reads the six selects instead, and accent shades takes whatever the
-       accent is set to and tells the levels apart by strength alone.
+       the six thread colours repeat every sixth level. Each level resolves to
+       a palette key and is looked up the way the accent is. `custom` reads
+       the six selects; `shade` takes whatever the accent is set to for every
+       level and tells them apart by strength alone, which climbs level by
+       level, so it is the only setting that follows a choice made elsewhere
+       in the dialogue.
+
+       A value this does not recognise is treated as off. Stylus keeps a
+       select's saved value when a style's option list changes, so a reader
+       who set this before the list was rewritten still has the old value,
+       and nothing here may fail on it.
 
        Strength is how far a rail departs from `@surface1`, the border colour
        every other box on the page already carries. Measuring it from there
-       rather than from the page behind it makes "off" the same thing as
-       strength zero, and gives every preset the same dial: fading a neutral
-       toward the page would simply erase it, since `@surface0` is barely a
+       rather than from the page behind the rail makes "off" the same thing
+       as strength zero, and gives every setting the same dial: fading a
+       neutral toward the page would erase it, since `@surface0` is barely a
        step from the page to begin with. It also keeps a rail from washing
        out on Latte, whose page is lighter than any of these colours. */
-    @thread-presets: {
-      @off: surface1 surface1 surface1 surface1 surface1 surface1;
-      @rainbow: red peach yellow green blue mauve;
-      @warm: maroon red peach yellow flamingo rosewater;
-      @cool: teal sky sapphire blue lavender mauve;
-      @neutral: surface0 surface1 surface2 overlay0 overlay1 overlay2;
-      @shade: mauve mauve mauve mauve mauve mauve;
-      @custom: red peach yellow green blue mauve;
-    }
-    @thread-list: @thread-presets[@@threadColors];
-    @thread-tint: if(@threadColors = off, 0%, unit(@threadStrength, %));
+    @thread-known: if(@threadColors = rainbow, 1, if(@threadColors = warm, 1,
+      if(@threadColors = cool, 1, if(@threadColors = neutral, 1,
+      if(@threadColors = shade, 1, if(@threadColors = custom, 1, 0))))));
+    @thread-tint: if(@thread-known = 1, unit(@threadStrength, %), 0%);
     @thread-name1: if(@threadColors = custom, @threadColor1, if(@threadColors =
-      shade, @accentColor, extract(@thread-list, 1)));
+      shade, @accentColor, if(@threadColors = warm, maroon, if(@threadColors =
+      cool, teal, if(@threadColors = neutral, surface0, red)))));
     @thread-name2: if(@threadColors = custom, @threadColor2, if(@threadColors =
-      shade, @accentColor, extract(@thread-list, 2)));
+      shade, @accentColor, if(@threadColors = warm, red, if(@threadColors =
+      cool, sky, if(@threadColors = neutral, surface1, peach)))));
     @thread-name3: if(@threadColors = custom, @threadColor3, if(@threadColors =
-      shade, @accentColor, extract(@thread-list, 3)));
+      shade, @accentColor, if(@threadColors = warm, peach, if(@threadColors =
+      cool, sapphire, if(@threadColors = neutral, surface2, yellow)))));
     @thread-name4: if(@threadColors = custom, @threadColor4, if(@threadColors =
-      shade, @accentColor, extract(@thread-list, 4)));
+      shade, @accentColor, if(@threadColors = warm, yellow, if(@threadColors =
+      cool, blue, if(@threadColors = neutral, overlay0, green)))));
     @thread-name5: if(@threadColors = custom, @threadColor5, if(@threadColors =
-      shade, @accentColor, extract(@thread-list, 5)));
+      shade, @accentColor, if(@threadColors = warm, flamingo, if(@threadColors =
+      cool, lavender, if(@threadColors = neutral, overlay1, blue)))));
     @thread-name6: if(@threadColors = custom, @threadColor6, if(@threadColors =
-      shade, @accentColor, extract(@thread-list, 6)));
+      shade, @accentColor, if(@threadColors = warm, rosewater, if(@threadColors
+      = cool, mauve, if(@threadColors = neutral, overlay2, mauve)))));
     @thread1: mix(@catppuccin[@@flavor][@@thread-name1], @surface1,
       if(@threadColors = shade, @thread-tint * 3 / 8, @thread-tint));
     @thread2: mix(@catppuccin[@@flavor][@@thread-name2], @surface1,
