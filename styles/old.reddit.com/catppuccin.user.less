@@ -2083,6 +2083,46 @@
       color: @text !important;
     }
 
+    /* The badge beside a crosspost's title: one colour on a transparent
+       tile, on an element that paints nothing else. */
+    .crosspost-badge {
+      filter: @dim-filter !important;
+    }
+
+    /* RES's controls over an expanded image — the settings gear, the two
+       rotates, save and reverse lookup. They sit on a scrim laid over the
+       picture, and each glyph is an icon-font character drawn in a
+       pseudo-element.
+
+       Every button is cleared: the generic button rule paints a plate, and
+       here that breaks the strip into separate tiles over the image. RES
+       desaturates them too, which would drain whatever palette colour is set
+       on the glyph, so the filter goes with it. */
+    .res-media-controls {
+      background-color: fade(@crust, 70%) !important;
+
+      button {
+        background-color: transparent !important;
+        filter: none !important;
+      }
+
+      button::after {
+        color: @text !important;
+      }
+
+      button:hover::after {
+        color: @accent !important;
+      }
+    }
+
+    .res-media-controls-clippy {
+      color: @text !important;
+
+      &::after {
+        color: @text !important;
+      }
+    }
+
     /* The spinner shown while Never Ending Reddit fetches the next page. RES
        draws it as a half-circle border that it rotates, so it carries no
        image and its colour is all there is to set. */
