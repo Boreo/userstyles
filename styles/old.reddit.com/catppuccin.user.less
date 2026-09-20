@@ -49,6 +49,12 @@
 
     /* Tier 1 — page chrome */
 
+    /* A floor for links that no more specific rule below reaches. Every rule
+       in this file outranks it, so it only ever fills gaps. */
+    a {
+      color: @accent !important;
+    }
+
     /* Reddit serves `.content` with no background of its own, so the page
        background shows through it. Reddit Enhancement Suite's night mode
        paints it `hsl(0, 0%, 15%)`, which would cover the themed background
@@ -74,6 +80,10 @@
       .selected a {
         color: @accent !important;
       }
+    }
+
+    .dropdown.lightdrop .selected {
+      color: @text !important;
     }
 
     .drop-choices {
@@ -111,7 +121,8 @@
       background-color: @mantle !important;
       color: @muted !important;
 
-      a {
+      a,
+      .user {
         color: @muted !important;
       }
 
@@ -403,6 +414,11 @@
       background-color: transparent !important;
     }
 
+    .expando .md,
+    .panestack-title {
+      border-color: @surface0 !important;
+    }
+
     .expando,
     .expando-button {
       background-color: @mantle !important;
@@ -422,6 +438,8 @@
     }
 
     .comment {
+      border-color: @surface1 !important;
+
       .child,
       .showreplies {
         border-left-color: @surface1 !important;
@@ -833,6 +851,12 @@
     .RES-keyNav-activeElement .md-container,
     .entry.res-selected {
       background-color: @mantle !important;
+    }
+
+    #REScommentSubToggle {
+      background-color: @surface0 !important;
+      border-color: @surface1 !important;
+      color: @text !important;
     }
 
     .RESUserTag,
