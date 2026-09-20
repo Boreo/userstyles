@@ -347,9 +347,9 @@
       }
 
       &.remove {
-        background-color: @leave !important;
+        background-color: @alert !important;
         color: @crust !important;
-        border-color: @leave !important;
+        border-color: @alert !important;
       }
 
       &.add {
@@ -412,7 +412,7 @@
        darkest surface one of these sits on. */
     @accent-icon: if(@flavor = latte, darken(@accent, 22%), @accent);
     @join: if(@flavor = latte, darken(@green, 12%), @green);
-    @leave: if(@flavor = latte, darken(@red, 4%), @red);
+    @alert: if(@flavor = latte, darken(@red, 4%), @red);
     @sticky: if(@flavor = latte, darken(@green, 10%), @green);
 
     /* Thirteen of the fifteen accent choices fall below 4.5:1 on Latte's
@@ -666,7 +666,7 @@
        name, which is the pill directly above. */
     .userattrs {
       .admin {
-        color: @red !important;
+        color: @alert !important;
       }
 
       .moderator {
