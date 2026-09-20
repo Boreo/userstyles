@@ -173,6 +173,11 @@
     }
 
     /* Tier 1 — link listing */
+    /* @overlay1 is only 2.83:1 on Latte's @base, so inactive affordances step
+       up to @subtext0 there; the dark flavors already clear 4.4:1. */
+    @inactive: if(@flavor = latte, @subtext0, @overlay1);
+    @inactive-filter: if(@flavor = latte, @subtext0-filter, @overlay1-filter);
+
     .link,
     .thing {
       background-color: transparent !important;
@@ -222,7 +227,7 @@
     }
 
     .flat-list.buttons li a {
-      color: @overlay1 !important;
+      color: @inactive !important;
 
       &:hover {
         color: @text !important;
@@ -230,7 +235,7 @@
     }
 
     .score.unvoted {
-      color: @overlay1 !important;
+      color: @inactive !important;
     }
 
     .score.likes {
@@ -245,7 +250,7 @@
        palette's filter variables rather than a colour property. */
     .arrow.up,
     .arrow.down {
-      filter: @overlay1-filter !important;
+      filter: @inactive-filter !important;
     }
 
     .arrow.upmod {
