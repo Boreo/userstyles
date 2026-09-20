@@ -422,7 +422,9 @@
        of the fifteen, pink, at 5.09:1 there and 7.01:1 on @base. The dark
        flavors clear both already. */
     @accent-text: if(@flavor = latte, darken(@accent, 35%), @accent);
-    @read: if(@flavor = latte, darken(@mauve, 2%), @mauve);
+    @read: if(@flavor = latte, darken(@mauve, 2%), if(@flavor = frappe, @mauve,
+      @overlay1));
+    @title: if(@flavor = latte, @link, if(@flavor = frappe, @link, @text));
     @band: if(@flavor = latte, mix(@crust, @base, 50%), mix(@mantle, @base,
       60%));
 
@@ -499,17 +501,24 @@
       color: @sticky !important;
     }
 
-    /* Old reddit draws read from unread the way a browser draws a link:
-       `#0000ff` unread, `#551a8b` once visited. The palette's blue and mauve
-       stand in for those two. Telling them apart by lightness instead reads
-       as a state change only on the dark flavors — on Latte the two ends are
-       a few points of luminance apart on an already pale page, and @overlay0,
-       the next step down, falls to 3.13:1 there. Hue carries it on all four.
+    /* Two ways of drawing read from unread, one per half of the palette.
+
+       The dark flavors step down in lightness, from @text to @overlay1. That
+       is the quieter reading, and a saturated colour on every row of a
+       listing would overwhelm it.
+
+       Latte and Frappé have no room for that step. Latte's page is already
+       pale, so @text and the step below it sit a few points of luminance
+       apart, and @overlay0 — the next one down — falls to 3.13:1 there;
+       Frappé's surfaces cluster the same way. Those two use hue instead, the
+       way old reddit does it and the way a browser draws a link: `#0000ff`
+       unread and `#551a8b` visited, for which the palette's blue and mauve
+       stand in.
 
        The stickied title keeps its green, which is also what reddit does. */
     .thing .title,
     a.title {
-      color: @link !important;
+      color: @title !important;
 
       &:visited {
         color: @read !important;
