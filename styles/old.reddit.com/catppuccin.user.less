@@ -117,19 +117,21 @@
       color: @text !important;
     }
 
+    /* The user strip reads as a layer above the header it sits on, so it
+       steps up to @surface0 rather than repeating the header's @mantle. */
     #header-bottom-right {
-      background-color: @mantle !important;
-      color: @muted !important;
+      background-color: @surface0 !important;
+      color: @text !important;
 
       a,
       .user {
-        color: @muted !important;
+        color: @text !important;
       }
 
-      /* A divider glyph, so 3:1 applies rather than 4.5:1. @overlay0 is only
-         2.14:1 on Latte's @mantle; @overlay2 reaches 3.25:1. */
+      /* A divider glyph, so 3:1 applies rather than 4.5:1. @subtext0 is the
+         dimmest step that clears it on @surface0 across all four flavors. */
       .separator {
-        color: if(@flavor = latte, @overlay2, @overlay0) !important;
+        color: @subtext0 !important;
       }
     }
 
@@ -243,6 +245,14 @@
       color: @muted !important;
     }
 
+    .markhelp,
+    .markhelp table tr,
+    .markhelp .spaces {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
+      color: @text !important;
+    }
+
     .morelink {
       background-color: @surface0 !important;
       border-color: @surface1 !important;
@@ -258,6 +268,7 @@
       /* A raster sprite corner, so it is recoloured with the palette's filter
          variables rather than a colour property. */
       .nub {
+        background-color: transparent !important;
         filter: @surface0-filter !important;
       }
     }
@@ -306,6 +317,22 @@
        The dark flavors darken as before and clear 6.3:1. */
     @hover-bg: if(@flavor = latte, @crust, @surface1);
 
+    /* Reddit Enhancement Suite's night mode renders the tagline at 3.94:1 and
+       its links at 4.85:1. These match that quieter reading order as closely
+       as 4.5:1 allows: @dim is the dimmest passing step on each flavor, and
+       Latte's neutrals cluster so tightly that it cannot go below @subtext1. */
+    @dim: if(@flavor = latte, @subtext1, @overlay2);
+    @dim-filter: if(@flavor = latte, @subtext1-filter, @overlay2-filter);
+
+    /* Latte's saturated colours sit mid-tone, so several of them cannot reach
+       4.5:1 on its @base at full strength and are darkened instead. The dark
+       flavors have the opposite problem and are damped towards @base. */
+    @tagline-link: if(@flavor = latte, darken(@sapphire, 15%), mix(@sapphire,
+      @base, 80%));
+    @op: if(@flavor = latte, darken(@blue, 5%), @blue);
+    @stamp: if(@flavor = latte, darken(@peach, 15%), @peach);
+    @sticky: if(@flavor = latte, darken(@green, 10%), @green);
+
     .link,
     .thing {
       background-color: transparent !important;
@@ -318,7 +345,7 @@
 
     .link.stickied a.title,
     .thing.stickied a.title {
-      color: @green !important;
+      color: @sticky !important;
     }
 
     /* Link titles are the page's dominant text, not incidental links, so a
@@ -341,26 +368,50 @@
     }
 
     .tagline,
-    .tagline a,
-    .domain,
-    .domain a {
-      color: @muted !important;
+    .domain {
+      color: @dim !important;
     }
 
+    .tagline a,
+    .domain a,
+    .tagline .subreddit {
+      color: @tagline-link !important;
+    }
+
+    /* Reddit Enhancement Suite marks these authors with a solid background of
+       its own — a literal green behind a moderator, for instance, which its
+       own green text then sits on. The tint carries the distinction and @text
+       carries the name, which clears 5:1 on every flavor. */
     .tagline .author {
-      color: @sapphire !important;
+      background-color: transparent !important;
+      color: @tagline-link !important;
+
+      &.submitter,
+      &.moderator,
+      &.admin,
+      &.friend {
+        color: @text !important;
+      }
 
       &.submitter {
-        color: @blue !important;
+        background-color: fade(@blue, 20%) !important;
       }
 
       &.moderator {
-        color: @green !important;
+        background-color: fade(@green, 20%) !important;
       }
 
       &.admin {
-        color: @red !important;
+        background-color: fade(@red, 20%) !important;
       }
+
+      &.friend {
+        background-color: fade(@peach, 20%) !important;
+      }
+    }
+
+    .stickied-tagline {
+      color: @sticky !important;
     }
 
     /* @subtext1 is 4.05:1 on Latte's @surface0, so flair text takes @text
@@ -423,6 +474,22 @@
     .expando-button {
       background-color: @mantle !important;
       border-color: @surface0 !important;
+    }
+
+    /* The camera, play and text glyphs are sprite images, so they take a
+       palette filter rather than a colour. */
+    .expando-button .expando-button-icon,
+    .expando-button {
+      filter: @dim-filter !important;
+    }
+
+    .nsfw-stamp {
+      color: @red !important;
+    }
+
+    .spoiler-stamp,
+    .newComments {
+      color: @stamp !important;
     }
 
     .usertext-body {
@@ -999,7 +1066,41 @@
     }
 
     .res-fancy-toggle-button {
+      background-color: @surface0 !important;
       border-color: @surface1 !important;
+      color: @text !important;
+    }
+
+    /* The floating controls at the corner of a comments page, and the comment
+       navigator's choices, which open over the page. */
+    .res-wheel-browse-gallery {
+      background-color: fade(@red, 24%) !important;
+    }
+
+    .res-floater-list,
+    .res-floater-list .res-wheel-browse,
+    .res-commentNavToggle-choices {
+      background-color: @mantle !important;
+      color: @text !important;
+    }
+
+    /* RES's first-run guider and the screen it dims the page with. */
+    .guider,
+    .guiders_content,
+    .guiders_description,
+    .guiders_description * {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
+      color: @text !important;
+    }
+
+    .guiders_title,
+    .settingsPointer {
+      color: @accent !important;
+    }
+
+    #guiders_overlay {
+      background-color: @crust !important;
     }
 
     #RESSettingsButton {
