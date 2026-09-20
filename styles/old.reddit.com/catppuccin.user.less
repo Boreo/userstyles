@@ -573,6 +573,10 @@
       }
     }
 
+    .nextprev {
+      color: @muted !important;
+    }
+
     .nextprev a {
       background-color: @surface0 !important;
       border-color: @surface1 !important;
@@ -698,7 +702,8 @@
 
     .tabmenu.formtab li a {
       background-color: @surface0 !important;
-      color: if(@flavor = latte, @text, @subtext1) !important;
+      border-color: @surface1 !important;
+      color: @text !important;
     }
 
     .tabmenu.formtab li.selected a {
@@ -709,7 +714,12 @@
 
     .roundfield {
       background-color: @base !important;
+      border-color: @surface0 !important;
       color: @text !important;
+
+      .RESCharCounter {
+        color: @muted !important;
+      }
 
       .title {
         color: @subtext1 !important;
@@ -725,11 +735,78 @@
       color: @red !important;
     }
 
+    input,
+    select,
+    button {
+      color: @text !important;
+    }
+
+    #new-link-image-input {
+      background-color: @mantle !important;
+      border-color: @surface1 !important;
+
+      .file-drop-label {
+        color: @muted !important;
+      }
+    }
+
+    .submit_text h1 {
+      color: @subtext1 !important;
+    }
+
+    .gold-accent,
+    .gold-accent * {
+      background-color: fade(@yellow, 15%) !important;
+      border-color: @yellow !important;
+      color: @text !important;
+    }
+
     /* Tier 2 — search */
-    #search input[type="text"] {
+    #search input {
       background-color: @mantle !important;
       border-color: @surface1 !important;
       color: @text !important;
+    }
+
+    /* The matched run inside a search result, which reddit marks up with
+       <mark>; it takes the colour of the link it sits in. */
+    mark {
+      background-color: transparent !important;
+      color: inherit !important;
+    }
+
+    .searchpane {
+      color: @text !important;
+
+      h4 {
+        color: @muted !important;
+      }
+    }
+
+    .search-expando-button {
+      color: @accent !important;
+    }
+
+    .duration-overlay {
+      background-color: fade(@crust, 80%) !important;
+      color: @text !important;
+    }
+
+    .res-search-tabs li a {
+      background-color: @surface0 !important;
+      border-color: @surface1 !important;
+      color: @text !important;
+    }
+
+    .res-search-tabs li.res-search-tab-active,
+    .res-search-tabs li.res-search-tab-active a {
+      background-color: @base !important;
+      border-color: @accent !important;
+      color: @accent !important;
+    }
+
+    .res-search-subreddits {
+      background-color: @mantle !important;
     }
 
     #searchexpando,
