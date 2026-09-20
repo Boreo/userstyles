@@ -621,11 +621,17 @@
        themed. Reddit puts a template's colours in the element's own `style`
        attribute, so a flair with none, or one set to `transparent`, is
        carrying reddit's default white box and would sit unreadable on a dark
-       flavor. */
+       flavor. Rich-text flair carries the attribute even when it is empty,
+       and an empty one matches `[style]`, so it is named here too — without
+       that it falls through to the rule below, has its box cleared, and is
+       left outlined in whatever RES gave it. */
     & when (@flairColors = 0) {
       .linkflairlabel:not([style]),
       .flair:not([style]),
       .flairrichtext:not([style]),
+      .linkflairlabel[style=""],
+      .flair[style=""],
+      .flairrichtext[style=""],
       .linkflairlabel[style*="transparent"],
       .flair[style*="transparent"],
       .flairrichtext[style*="transparent"],
@@ -647,11 +653,32 @@
          colour identifies the flair from its outline. `#ffffff` and
          `#edeff1` are reddit's own defaults rather than a subreddit's
          choice, so they are themed above instead. */
-      .linkflairlabel[style]:not([style*="transparent"]):not([style*="#ffffff"]):not([style*="#edeff1"]),
-      .flair[style]:not([style*="transparent"]):not([style*="#ffffff"]):not([style*="#edeff1"]),
-      .flairrichtext[style]:not([style*="transparent"]):not([style*="#ffffff"]):not([style*="#edeff1"]) {
+      .linkflairlabel[style]:not([style=""]):not([style*="transparent"]):not([style*="#ffffff"]):not([style*="#edeff1"]),
+      .flair[style]:not([style=""]):not([style*="transparent"]):not([style*="#ffffff"]):not([style*="#edeff1"]),
+      .flairrichtext[style]:not([style=""]):not([style*="transparent"]):not([style*="#ffffff"]):not([style*="#edeff1"]) {
         background-color: transparent !important;
         color: @text !important;
+      }
+    }
+
+    /* The bracketed mark beside a distinguished author — [A] for an admin,
+       [M] for a moderator. They carry the same colours as the author's own
+       name, which is the pill directly above. */
+    .userattrs {
+      .admin {
+        color: @red !important;
+      }
+
+      .moderator {
+        color: @green !important;
+      }
+
+      .friend {
+        color: @peach !important;
+      }
+
+      .submitter {
+        color: @op !important;
       }
     }
 
