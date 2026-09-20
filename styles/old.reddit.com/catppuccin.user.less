@@ -46,5 +46,67 @@
 
     background-color: @base !important;
     color: @text !important;
+
+    /* Tier 1 — page chrome */
+    #sr-header-area {
+      background-color: @crust !important;
+      border-bottom-color: @surface0 !important;
+
+      .sr-list .separator,
+      .dropdown.srdrop .selected {
+        color: @subtext0 !important;
+      }
+
+      a {
+        color: @subtext1 !important;
+      }
+
+      .selected a {
+        color: @accent !important;
+      }
+    }
+
+    .drop-choices {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
+
+      a.choice {
+        color: @text !important;
+
+        &:hover {
+          background-color: @surface0 !important;
+        }
+      }
+    }
+
+    #header {
+      background-color: @mantle !important;
+      border-bottom-color: @accent !important;
+    }
+
+    #header-bottom-left .pagename a,
+    #header-bottom-right .user a {
+      color: @text !important;
+    }
+
+    #header-bottom-right {
+      background-color: @mantle !important;
+      color: @subtext0 !important;
+
+      .separator {
+        color: @overlay0 !important;
+      }
+    }
+
+    .tabmenu li a {
+      background-color: @surface0 !important;
+      color: @subtext1 !important;
+    }
+
+    .tabmenu li.selected a {
+      background-color: @base !important;
+      color: @accent !important;
+      border-color: @accent !important;
+    }
   }
 }
