@@ -422,7 +422,7 @@
        of the fifteen, pink, at 5.09:1 there and 7.01:1 on @base. The dark
        flavors clear both already. */
     @accent-text: if(@flavor = latte, darken(@accent, 35%), @accent);
-    @read: if(@flavor = latte, @subtext0, @overlay1);
+    @read: if(@flavor = latte, darken(@mauve, 2%), @mauve);
     @band: if(@flavor = latte, mix(@crust, @base, 50%), mix(@mantle, @base,
       60%));
 
@@ -499,16 +499,17 @@
       color: @sticky !important;
     }
 
-    /* Link titles are the page's dominant text, not incidental links, so a
-       saturated accent across every row overwhelms the listing. They take the
-       body text colour and drop to @read once visited, which is the
-       read/unread distinction old reddit draws with #0000ff and #551a8b.
-       @muted is one step away from @text and too close to read as a state
-       change; @read is two, and is as far as Latte can go — @subtext0 is
-       4.37:1 on its @base and @overlay0 falls to 3.13:1. */
+    /* Old reddit draws read from unread the way a browser draws a link:
+       `#0000ff` unread, `#551a8b` once visited. The palette's blue and mauve
+       stand in for those two. Telling them apart by lightness instead reads
+       as a state change only on the dark flavors — on Latte the two ends are
+       a few points of luminance apart on an already pale page, and @overlay0,
+       the next step down, falls to 3.13:1 there. Hue carries it on all four.
+
+       The stickied title keeps its green, which is also what reddit does. */
     .thing .title,
     a.title {
-      color: @text !important;
+      color: @link !important;
 
       &:visited {
         color: @read !important;
