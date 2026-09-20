@@ -417,10 +417,10 @@
       color: @dim !important;
     }
 
-    /* The author and the domain sit one step lighter than the action row
-       below them, which is @inactive, so the reading order runs title, then
-       these, then the actions. The subreddit is the one navigational target
-       in the line and takes the accent. */
+    /* The line reads title, author, domain, then the action row: @muted,
+       @dim and @inactive are consecutive steps on the dark flavors. Latte
+       runs out of room — @subtext0 is 4.37:1 on its @base — so the author and
+       the domain share @subtext1 there and only the action row steps away. */
     .tagline a,
     .domain a {
       color: @dim !important;
@@ -433,7 +433,7 @@
     }
 
     .tagline .author {
-      color: @dim !important;
+      color: @muted !important;
 
       /* Reddit Enhancement Suite gives these authors a background of its own,
          which the reader chooses, so it is left alone. Only the name on top
@@ -455,13 +455,33 @@
        often mean something, so it is behind a switch. @subtext1 is 4.05:1 on
        Latte's @surface0, so flair text takes @text there for 5.17:1; the dark
        flavors keep the quieter @subtext1. */
+    .flair-themed() {
+      background-color: @surface0 !important;
+      border-color: @surface1 !important;
+      color: if(@flavor = latte, @text, @subtext1) !important;
+    }
+
     & when (@flairColors = 1) {
       .linkflairlabel,
       .flair,
       .flairrichtext {
-        background-color: @surface0 !important;
-        border-color: @surface1 !important;
-        color: if(@flavor = latte, @text, @subtext1) !important;
+        .flair-themed();
+      }
+    }
+
+    /* With the switch off, a flair the subreddit gave no colour to is still
+       themed. Reddit puts a template's colours in the element's own `style`
+       attribute, so a flair with none, or one set to `transparent`, is
+       carrying reddit's default white box and would sit unreadable on a dark
+       flavor. */
+    & when (@flairColors = 0) {
+      .linkflairlabel:not([style]),
+      .flair:not([style]),
+      .flairrichtext:not([style]),
+      .linkflairlabel[style*="transparent"],
+      .flair[style*="transparent"],
+      .flairrichtext[style*="transparent"] {
+        .flair-themed();
       }
     }
 
