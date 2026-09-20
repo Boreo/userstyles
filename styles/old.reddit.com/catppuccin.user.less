@@ -409,8 +409,11 @@
     }
 
     /* Tier 1 — page furniture */
+    /* The tint is kept light because it darkens the background under the
+       infobar's links: @blue is 4.34:1 on a bare Latte @base, 4.01:1 under a
+       10% tint and 3.85:1 under 15%. */
     .infobar {
-      background-color: fade(@yellow, 15%) !important;
+      background-color: fade(@yellow, 10%) !important;
       border-color: @yellow !important;
       color: @text !important;
 
