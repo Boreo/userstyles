@@ -423,5 +423,50 @@
       border-color: @surface0 !important;
       color: @inactive !important;
     }
+
+    /* Tier 2 — profile */
+    .trophy-area .content {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
+    }
+
+    .trophy-info .trophy-name {
+      color: @text !important;
+    }
+
+    .trophy-info .trophy-description {
+      color: @subtext0 !important;
+    }
+
+    .titlebox .karma {
+      color: @accent !important;
+    }
+
+    /* Tier 2 — inbox */
+    .message {
+      background-color: transparent !important;
+
+      .subject {
+        color: @text !important;
+      }
+
+      .head {
+        color: @subtext0 !important;
+      }
+
+      &.new,
+      &.recipient {
+        background-color: fade(@accent, 8%) !important;
+      }
+
+      .message-parent {
+        background-color: @mantle !important;
+        border-color: @surface0 !important;
+      }
+    }
+
+    .was-comment .subject {
+      color: @subtext1 !important;
+    }
   }
 }
