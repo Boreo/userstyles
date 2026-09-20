@@ -640,11 +640,19 @@
 
     /* These two are sprite tiles rather than whole images: the button keeps
        reddit's background-position and scrolls to an offset inside the
-       sheet, so the replacement is drawn at that same offset. */
+       sheet, so each replacement is drawn at that same offset. Hover scrolls
+       to a different offset in a different sheet, which is why it needs a
+       rule of its own rather than inheriting this one. */
     .expando-button.collapsed.selftext {
       @svg-text: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="572" viewBox="0 0 23 572"><g transform="translate(0 549)"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M4,5 h15 v2 h-15z M4,9 h15 v2 h-15z M4,13 h15 v2 h-15z M4,17 h9 v2 h-9z"/></g></svg>');
 
       background-image: url("data:image/svg+xml,@{svg-text}") !important;
+    }
+
+    .expando-button.collapsed.selftext:hover {
+      @svg-text-hover: escape('<svg xmlns="http://www.w3.org/2000/svg" width="83" height="1459" viewBox="0 0 83 1459"><g transform="translate(60 1436)"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M4,5 h15 v2 h-15z M4,9 h15 v2 h-15z M4,13 h15 v2 h-15z M4,17 h9 v2 h-9z"/></g></svg>');
+
+      background-image: url("data:image/svg+xml,@{svg-text-hover}") !important;
     }
 
     .expando-button.collapsed.video {
@@ -653,11 +661,31 @@
       background-image: url("data:image/svg+xml,@{svg-play}") !important;
     }
 
+    .expando-button.collapsed.video:hover {
+      @svg-play-hover: escape('<svg xmlns="http://www.w3.org/2000/svg" width="81" height="1489" viewBox="0 0 81 1489"><g transform="translate(58 1466)"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M8,5 l10,6.5 l-10,6.5z"/></g></svg>');
+
+      background-image: url("data:image/svg+xml,@{svg-play-hover}") !important;
+    }
+
     .expando-button.expanded.selftext,
     .expando-button.expanded.video {
       @svg-sprite-open: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="456" viewBox="0 0 23 456"><g transform="translate(0 433)"><circle cx="11.5" cy="11.5" r="11.5" fill="@{surface0}"/><g stroke="@{text}" stroke-width="3.25" stroke-linecap="round"><line x1="7.5" y1="7.5" x2="15.5" y2="15.5"/><line x1="15.5" y1="7.5" x2="7.5" y2="15.5"/></g></g></svg>');
 
       background-image: url("data:image/svg+xml,@{svg-sprite-open}") !important;
+    }
+
+    .expando-button.expanded.selftext:hover {
+      @svg-text-open-hover: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="1489" viewBox="0 0 23 1489"><g transform="translate(0 1466)"><circle cx="11.5" cy="11.5" r="11.5" fill="@{surface0}"/><g stroke="@{text}" stroke-width="3.25" stroke-linecap="round"><line x1="7.5" y1="7.5" x2="15.5" y2="15.5"/><line x1="15.5" y1="7.5" x2="7.5" y2="15.5"/></g></g></svg>');
+
+      background-image: url("data:image/svg+xml,@{svg-text-open-hover}")
+        !important;
+    }
+
+    .expando-button.expanded.video:hover {
+      @svg-play-open-hover: escape('<svg xmlns="http://www.w3.org/2000/svg" width="139" height="1489" viewBox="0 0 139 1489"><g transform="translate(116 1466)"><circle cx="11.5" cy="11.5" r="11.5" fill="@{surface0}"/><g stroke="@{text}" stroke-width="3.25" stroke-linecap="round"><line x1="7.5" y1="7.5" x2="15.5" y2="15.5"/><line x1="15.5" y1="7.5" x2="7.5" y2="15.5"/></g></g></svg>');
+
+      background-image: url("data:image/svg+xml,@{svg-play-open-hover}")
+        !important;
     }
 
     .expando-button.expanded.image,
@@ -890,6 +918,24 @@
       a {
         color: if(@flavor = latte, darken(@blue, 25%), @blue) !important;
       }
+    }
+
+    /* The banner reddit puts above a locked or quarantined post. Its icon is
+       a pseudo-element with a colour of its own. */
+    .reddit-infobar {
+      background-color: @surface0 !important;
+      border-color: @blue !important;
+      color: @text !important;
+    }
+
+    .reddit-infobar.with-icon::before {
+      background-color: @yellow !important;
+    }
+
+    /* The original-content badge, which ships white on reddit's own blue. */
+    .oc-tag {
+      background-color: @op !important;
+      color: @base !important;
     }
 
     /* Scrolling a comments page lifts the post into a window pinned to the
