@@ -368,9 +368,13 @@
         color: @text !important;
       }
 
+      blockquote,
+      del {
+        color: @subtext1 !important;
+      }
+
       blockquote {
         border-left-color: @surface2 !important;
-        color: @subtext1 !important;
       }
 
       code,
@@ -442,6 +446,21 @@
       a {
         color: @subtext1 !important;
       }
+    }
+
+    /* Reddit's own literals on surfaces this style otherwise owns: `.gray`
+       and the footer menus are #808080, and a removed comment's body is gray
+       text on #f0f0f0, which leaves @text at 1.27:1 on the dark flavors. */
+    .gray,
+    .footer,
+    .bottommenu,
+    .bottommenu a {
+      color: @muted !important;
+    }
+
+    .usertext.grayed .usertext-body {
+      background-color: @mantle !important;
+      color: @muted !important;
     }
 
     .debuginfo {
