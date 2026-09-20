@@ -1324,7 +1324,45 @@
       background-image: url("data:image/svg+xml,@{svg-mail}") !important;
     }
 
-    /* The unread count beside the envelope, and RES's copy of it. */
+    /* The comment navigator's fly-out. Its rows are built on hover, so
+       neither the visible nor the hidden audit pass reaches them. */
+    .res-commentNavToggle-type {
+      color: @text !important;
+
+      &:hover {
+        background-color: @hover-bg !important;
+      }
+    }
+
+    /* The rest of the user bar's icons are single-colour sprite tiles, or
+       close enough that flattening them reads as a filled silhouette. */
+    #notifications,
+    #chat,
+    #modmail,
+    #new_modmail,
+    #RESAccountSwitcherIcon {
+      filter: @dim-filter !important;
+    }
+
+    /* RES draws its own envelope in the bar that follows a scrolled page,
+       from images of its own rather than reddit's sprite. */
+    #NREMail.havemail {
+      @svg-nre-mail: escape('<svg xmlns="http://www.w3.org/2000/svg" width="15" height="10" viewBox="0 0 15 10"><g fill="none" stroke="@{red}"><rect x=".5" y=".5" width="14" height="9"/><path d="M.5 .5 L7.5 6 L14.5 .5"/></g></svg>');
+
+      background-image: url("data:image/svg+xml,@{svg-nre-mail}") !important;
+    }
+
+    #NREMail.nohavemail {
+      @svg-nre-nomail: escape('<svg xmlns="http://www.w3.org/2000/svg" width="15" height="10" viewBox="0 0 15 10"><g fill="none" stroke="@{dim}"><rect x=".5" y=".5" width="14" height="9"/><path d="M.5 .5 L7.5 6 L14.5 .5"/></g></svg>');
+
+      background-image: url("data:image/svg+xml,@{svg-nre-nomail}") !important;
+    }
+
+    /* The unread count beside the envelope, and RES's copy of it. The
+       header's own link colour reaches this one through
+       `#header-bottom-right a`, which outranks a bare class, so the rule
+       carries the id too. */
+    #header-bottom-right .message-count,
     .message-count,
     #NREMailCount {
       background-color: @red !important;
