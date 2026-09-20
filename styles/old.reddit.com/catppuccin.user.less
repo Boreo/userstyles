@@ -688,5 +688,33 @@
     a.banned-user {
       color: @red !important;
     }
+
+    /* Tier 4 — Reddit Enhancement Suite chrome */
+    /* The current RES settings console renders in a cross-origin
+       `chrome-extension://` iframe (`#console-container`), not in the page
+       DOM, so a page-injected stylesheet cannot reach into it. */
+    .RESDropdownList {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
+      color: @text !important;
+    }
+
+    .RESDropdownList li a:hover {
+      background-color: @surface0 !important;
+    }
+
+    .RES-keyNav-activeElement,
+    .RES-keyNav-activeElement .md-container {
+      background-color: @surface0 !important;
+    }
+
+    .RESUserTag a,
+    .voteWeight {
+      color: @accent !important;
+    }
+
+    #RESSettingsButton {
+      filter: @inactive-filter !important;
+    }
   }
 }
