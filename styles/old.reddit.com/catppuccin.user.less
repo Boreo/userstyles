@@ -378,6 +378,7 @@
        flavors clear both already. */
     @accent-text: if(@flavor = latte, darken(@accent, 35%), @accent);
     @read: if(@flavor = latte, @subtext0, @overlay1);
+    @band: if(@flavor = latte, @crust, @surface0);
 
     .link,
     .thing {
@@ -507,8 +508,30 @@
       .flairrichtext:not([style]),
       .linkflairlabel[style*="transparent"],
       .flair[style*="transparent"],
-      .flairrichtext[style*="transparent"] {
+      .flairrichtext[style*="transparent"],
+      .linkflairlabel[style*="#ffffff"],
+      .flair[style*="#ffffff"],
+      .flairrichtext[style*="#ffffff"],
+      .linkflairlabel[style*="#edeff1"],
+      .flair[style*="#edeff1"],
+      .flairrichtext[style*="#edeff1"] {
         .flair-themed();
+      }
+
+      /* A flair the subreddit did colour cannot be handed back its colour
+         under RES night mode: RES declares `.res-nightmode .linkflairlabel`
+         with `!important`, which outranks reddit's inline style, and no
+         author rule can return the cascade to an inline value. What RES does
+         leave alone is the border, which reddit sets inline to the same
+         colour as the fill — so the box is cleared and the subreddit's own
+         colour identifies the flair from its outline. `#ffffff` and
+         `#edeff1` are reddit's own defaults rather than a subreddit's
+         choice, so they are themed above instead. */
+      .linkflairlabel[style]:not([style*="transparent"]):not([style*="#ffffff"]):not([style*="#edeff1"]),
+      .flair[style]:not([style*="transparent"]):not([style*="#ffffff"]):not([style*="#edeff1"]),
+      .flairrichtext[style]:not([style*="transparent"]):not([style*="#ffffff"]):not([style*="#edeff1"]) {
+        background-color: transparent !important;
+        color: @text !important;
       }
     }
 
@@ -584,6 +607,8 @@
        each is rebuilt in palette colours and takes no filter. */
     .expando-button.image,
     .expando-button.video-muted,
+    .expando-button.selftext,
+    .expando-button.video,
     .expando-button.expando-button-requires-permission {
       filter: none !important;
     }
@@ -612,8 +637,22 @@
       background-image: url("data:image/svg+xml,@{svg-locked}") !important;
     }
 
+    .expando-button.collapsed.selftext {
+      @svg-text: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M4,5 h15 v2 h-15z M4,9 h15 v2 h-15z M4,13 h15 v2 h-15z M4,17 h9 v2 h-9z"/></svg>');
+
+      background-image: url("data:image/svg+xml,@{svg-text}") !important;
+    }
+
+    .expando-button.collapsed.video {
+      @svg-play: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M8,5 l10,6.5 l-10,6.5z"/></svg>');
+
+      background-image: url("data:image/svg+xml,@{svg-play}") !important;
+    }
+
     .expando-button.expanded.image,
     .expando-button.expanded.video-muted,
+    .expando-button.expanded.selftext,
+    .expando-button.expanded.video,
     .expando-button.expanded.expando-button-requires-permission {
       @svg-open: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><circle cx="11.5" cy="11.5" r="11.5" fill="@{surface0}"/><g stroke="@{text}" stroke-width="3.25" stroke-linecap="round"><line x1="7.5" y1="7.5" x2="15.5" y2="15.5"/><line x1="15.5" y1="7.5" x2="7.5" y2="15.5"/></g></svg>');
 
@@ -662,6 +701,29 @@
       }
     }
 
+    /* Nesting is read from indentation alone, which is hard to follow once a
+       thread runs deep, so each level takes a band and the next steps back to
+       the page. A top-level comment carries the band, which on the dark
+       flavors is lighter than the page behind it; @base is Latte's lightest
+       colour, so there the band is the darker step instead. */
+    .comment-band-on(@depth; @sel) when (@depth < 10) {
+      @{sel} {
+        background-color: @band !important;
+      }
+
+      .comment-band-off(@depth + 1; ~"@{sel} > .child > .listing > .comment");
+    }
+
+    .comment-band-off(@depth; @sel) when (@depth < 10) {
+      @{sel} {
+        background-color: @base !important;
+      }
+
+      .comment-band-on(@depth + 1; ~"@{sel} > .child > .listing > .comment");
+    }
+
+    .comment-band-on(0; ~".nestedlisting > .comment");
+
     .comment.spam,
     .comment.deleted {
       background-color: fade(@red, 10%) !important;
@@ -680,9 +742,12 @@
        border included. The wrapper above is the surface they sit on. */
     .markdownEditor > .edit-btn {
       background-color: transparent !important;
-      border-color: transparent !important;
-      filter: @dim-filter !important;
+      border-color: @accent !important;
+      filter: @accent-filter !important;
 
+      /* The filter flattens the border along with the glyph, so the border's
+         own colour only has to be visible — the filter is what sets the tone
+         of both. */
       &:hover {
         filter: @text-filter !important;
       }
@@ -708,6 +773,12 @@
 
     .morecomments a {
       color: @accent-text !important;
+    }
+
+    /* The comment count beside a recently viewed link. The title next to it
+       carries the accent; two accents on one line read as one control. */
+    .reddit-comment-link {
+      color: @muted !important;
     }
 
     .comment-visits-box {
@@ -810,6 +881,18 @@
       a {
         color: if(@flavor = latte, darken(@blue, 25%), @blue) !important;
       }
+    }
+
+    /* Scrolling a comments page lifts the post into a window pinned to the
+       top of the viewport. It sits over the listing, so it takes a surface
+       rather than the page colour. */
+    .pinnable-content.pinned {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
+    }
+
+    .dismiss-pinnable {
+      color: @dim !important;
     }
 
     .nextprev {
