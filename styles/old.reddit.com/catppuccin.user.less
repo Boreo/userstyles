@@ -54,7 +54,7 @@
 
       .sr-list .separator,
       .dropdown.srdrop .selected {
-        color: @subtext0 !important;
+        color: @muted !important;
       }
 
       a {
@@ -91,10 +91,12 @@
 
     #header-bottom-right {
       background-color: @mantle !important;
-      color: @subtext0 !important;
+      color: @muted !important;
 
+      /* A divider glyph, so 3:1 applies rather than 4.5:1. @overlay0 is only
+         2.14:1 on Latte's @mantle; @overlay2 reaches 3.25:1. */
       .separator {
-        color: @overlay0 !important;
+        color: if(@flavor = latte, @overlay2, @overlay0) !important;
       }
     }
 
@@ -124,7 +126,7 @@
       }
 
       .titlebox .bottom {
-        color: @subtext0 !important;
+        color: @muted !important;
       }
 
       .sidecontentbox .title h1 {
@@ -173,10 +175,11 @@
     }
 
     /* Tier 1 — link listing */
-    /* @overlay1 is only 2.83:1 on Latte's @base, so inactive affordances step
-       up to @subtext0 there; the dark flavors already clear 4.4:1. */
-    @inactive: if(@flavor = latte, @subtext0, @overlay1);
-    @inactive-filter: if(@flavor = latte, @subtext0-filter, @overlay1-filter);
+    /* @overlay1 is only 2.83:1 on Latte's @base, and @subtext0 only 4.37:1,
+       so inactive affordances step up to @subtext1 there for 5.53:1. The dark
+       flavors clear 4.4:1 with @overlay1 and keep the dimmer value. */
+    @inactive: if(@flavor = latte, @subtext1, @overlay1);
+    @inactive-filter: if(@flavor = latte, @subtext1-filter, @overlay1-filter);
 
     /* @peach is only 2.45:1 on Latte's @mantle; @red reaches 4.46:1 and keeps
        the warm accent. The dark flavors clear 6.5:1 with @peach. */
@@ -210,7 +213,7 @@
     .tagline a,
     .domain,
     .domain a {
-      color: @subtext0 !important;
+      color: @muted !important;
     }
 
     .tagline .author {
@@ -229,11 +232,13 @@
       }
     }
 
+    /* @subtext1 is 4.05:1 on Latte's @surface0, so flair text takes @text
+       there for 5.17:1; the dark flavors keep the quieter @subtext1. */
     .linkflairlabel,
     .flair {
       background-color: @surface0 !important;
       border-color: @surface1 !important;
-      color: @subtext1 !important;
+      color: if(@flavor = latte, @text, @subtext1) !important;
     }
 
     .flat-list.buttons li a {
@@ -290,7 +295,7 @@
     .commentarea .menuarea {
       background-color: transparent !important;
       border-bottom-color: @surface0 !important;
-      color: @subtext0 !important;
+      color: @muted !important;
     }
 
     .comment {
@@ -327,7 +332,7 @@
     .comment-visits-box {
       background-color: @mantle !important;
       border-color: @surface0 !important;
-      color: @subtext0 !important;
+      color: @muted !important;
     }
 
     .new-comment .usertext-body {
@@ -416,7 +421,7 @@
       border-color: @surface0 !important;
 
       .title {
-        color: @subtext0 !important;
+        color: @muted !important;
       }
 
       a {
