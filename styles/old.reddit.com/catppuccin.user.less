@@ -145,7 +145,7 @@
       }
 
       &:hover {
-        background-color: @surface1 !important;
+        background-color: @hover-bg !important;
       }
 
       /* A raster sprite corner, so it is recoloured with the palette's filter
@@ -192,6 +192,12 @@
        5.14:1 and 5.53:1. The dark flavors are already past 7:1 with
        @subtext0, so they keep it. */
     @muted: if(@flavor = latte, @subtext1, @subtext0);
+
+    /* Hover background for controls whose label is @text. Stepping @surface0
+       -> @surface1 darkens Latte to 4.39:1, under 4.5:1; Latte instead
+       lightens to @crust for 6.04:1, the usual light-theme hover direction.
+       The dark flavors darken as before and clear 6.3:1. */
+    @hover-bg: if(@flavor = latte, @crust, @surface1);
 
     .link,
     .thing {
@@ -503,7 +509,7 @@
       color: @text !important;
 
       &:hover {
-        background-color: @surface1 !important;
+        background-color: @hover-bg !important;
       }
     }
 
