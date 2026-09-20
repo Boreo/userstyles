@@ -171,5 +171,104 @@
         border-color: @green !important;
       }
     }
+
+    /* Tier 1 — link listing */
+    .link,
+    .thing {
+      background-color: transparent !important;
+    }
+
+    .link.stickied a.title,
+    .thing.stickied a.title {
+      color: @green !important;
+    }
+
+    a.title {
+      color: @blue !important;
+
+      &:visited {
+        color: @mauve !important;
+      }
+    }
+
+    .tagline,
+    .tagline a,
+    .domain,
+    .domain a {
+      color: @subtext0 !important;
+    }
+
+    .tagline .author {
+      color: @sapphire !important;
+
+      &.submitter {
+        color: @blue !important;
+      }
+
+      &.moderator {
+        color: @green !important;
+      }
+
+      &.admin {
+        color: @red !important;
+      }
+    }
+
+    .linkflairlabel,
+    .flair {
+      background-color: @surface0 !important;
+      border-color: @surface1 !important;
+      color: @subtext1 !important;
+    }
+
+    .flat-list.buttons li a {
+      color: @overlay1 !important;
+
+      &:hover {
+        color: @text !important;
+      }
+    }
+
+    .score.unvoted {
+      color: @overlay1 !important;
+    }
+
+    .score.likes {
+      color: @red !important;
+    }
+
+    .score.dislikes {
+      color: @blue !important;
+    }
+
+    /* The vote arrows are a raster sprite, so they are recoloured with the
+       palette's filter variables rather than a colour property. */
+    .arrow.up,
+    .arrow.down {
+      filter: @overlay1-filter !important;
+    }
+
+    .arrow.upmod {
+      filter: @red-filter !important;
+    }
+
+    .arrow.downmod {
+      filter: @blue-filter !important;
+    }
+
+    .thumbnail {
+      background-color: @surface0 !important;
+    }
+
+    .expando,
+    .expando-button {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
+    }
+
+    .usertext-body {
+      background-color: transparent !important;
+      color: @text !important;
+    }
   }
 }
