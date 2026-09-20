@@ -93,6 +93,7 @@
       border-bottom-color: @accent !important;
     }
 
+    #header-bottom-left .pagename,
     #header-bottom-left .pagename a,
     #header-bottom-right .user a {
       color: @text !important;
@@ -109,11 +110,12 @@
       }
     }
 
-    /* Same @surface0 background as the flair labels, so the same Latte swap:
-       @subtext1 is 4.05:1 there, @text 5.17:1. */
+    /* These tabs are primary navigation, so they take the full text colour
+       rather than a muted one: @text reaches 5.17:1 on Latte's @surface0 and
+       clears 9:1 on the dark flavors. */
     .tabmenu li a {
       background-color: @surface0 !important;
-      color: if(@flavor = latte, @text, @subtext1) !important;
+      color: @text !important;
     }
 
     .tabmenu li.selected a {
@@ -223,12 +225,22 @@
       color: @green !important;
     }
 
+    /* Link titles are the page's dominant text, not incidental links, so a
+       saturated accent across every row overwhelms the listing. They take the
+       body text colour and step down to @muted once visited, which is the
+       read/unread distinction old reddit draws with #0000ff and #551a8b.
+       @subtext0 reaches only 4.37:1 on Latte, so Latte dims to @subtext1. */
     a.title {
-      color: @blue !important;
+      color: @text !important;
 
       &:visited {
-        color: @mauve !important;
+        color: @muted !important;
       }
+    }
+
+    .thing.visited a.title,
+    .thing.visited .title {
+      color: @muted !important;
     }
 
     .tagline,
@@ -271,8 +283,9 @@
       }
     }
 
+    /* Matches the tagline it sits in rather than dimming below it. */
     .score.unvoted {
-      color: @inactive !important;
+      color: @muted !important;
     }
 
     .score.likes {
