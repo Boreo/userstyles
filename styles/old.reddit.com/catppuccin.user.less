@@ -178,6 +178,10 @@
     @inactive: if(@flavor = latte, @subtext0, @overlay1);
     @inactive-filter: if(@flavor = latte, @subtext0-filter, @overlay1-filter);
 
+    /* @peach is only 2.45:1 on Latte's @mantle; @red reaches 4.46:1 and keeps
+       the warm accent. The dark flavors clear 6.5:1 with @peach. */
+    @code-fg: if(@flavor = latte, @red, @peach);
+
     .link,
     .thing {
       background-color: transparent !important;
@@ -350,7 +354,7 @@
       pre {
         background-color: @mantle !important;
         border-color: @surface0 !important;
-        color: @peach !important;
+        color: @code-fg !important;
       }
 
       pre code {
