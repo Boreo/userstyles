@@ -2175,6 +2175,25 @@
       filter: @dim-filter !important;
     }
 
+    /* Reddit fetches a crosspost's preview when the expando opens, so it is
+       not in the markup a static pass reads. The panel carries a surface and
+       a border of reddit's own, its rule divider is drawn as a filled `hr`
+       rather than a line, and the separator between the tagline's items is a
+       grey of its own. */
+    .crosspost-preview {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
+    }
+
+    .crosspost-preview .self-divider {
+      background-color: @surface0 !important;
+      border-color: @surface0 !important;
+    }
+
+    .crosspost-preview-tagline .dot {
+      color: @dim !important;
+    }
+
     /* RES's controls over an expanded image — the settings gear, the two
        rotates, save and reverse lookup. They sit on a scrim laid over the
        picture, and each glyph is an icon-font character drawn in a
