@@ -954,6 +954,15 @@
       border-color: @surface0 !important;
     }
 
+    /* The subreddit filter's add button draws a black plus over the fill
+       set beneath it. */
+    .add-sr .add {
+      @svg-add: escape('<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15"><path fill="@{text}" d="M6,2 h3 v11 h-3z M2,6 h11 v3 h-11z"/></svg>');
+
+      background-image: url("data:image/svg+xml,@{svg-add}") !important;
+      background-position: 0 0 !important;
+    }
+
     /* The rule NeverEndingReddit draws between appended pages. */
     .NERPageMarker {
       background-color: @mantle !important;
