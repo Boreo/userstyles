@@ -32,19 +32,30 @@
      domain cannot identify the interface. `body > #header` exists only on old
      reddit; new reddit's shreddit markup has no such element, so the style
      emits nothing there. */
+  /* Old reddit has no dark mode of its own, so Reddit Enhancement Suite's
+     night mode is the only light/dark state the interface has. Where RES is
+     loaded it is therefore the switch, and the system preference is consulted
+     only where it is not: a reader who turns night mode off is asking for
+     reddit's light interface and gets it whatever the desktop is set to.
+
+     The light flavor is the base rather than an arm of its own, because both
+     of the cases below are a reason to depart from it. */
   body:has(> #header) {
-    @media (prefers-color-scheme: light) {
-      #catppuccin(@lightFlavor);
-    }
-    @media (prefers-color-scheme: dark) {
+    #catppuccin(@lightFlavor);
+  }
+
+  /* No RES, so nothing on the page states a preference and the system's is
+     all there is. RES marks its own presence with a bare `res` class, beside
+     the versioned ones. */
+  @media (prefers-color-scheme: dark) {
+    body:not(.res):has(> #header) {
       #catppuccin(@darkFlavor);
     }
   }
 
-  /* Reddit Enhancement Suite's night mode. RES applies its classes to both
-     documentElement and body, so this body-scoped form matches. It follows the
-     media queries above and carries an extra class, so it wins on both order
-     and specificity when RES and the system preference disagree. */
+  /* RES applies its classes to both documentElement and body, so this
+     body-scoped form matches. It comes last and carries a class the others do
+     not, so it wins on both order and specificity. */
   body.res-nightmode:has(> #header) {
     #catppuccin(@darkFlavor);
   }
