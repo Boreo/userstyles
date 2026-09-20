@@ -1120,7 +1120,8 @@
       color: @text !important;
     }
 
-    #userTaggerIgnoreContainer .toggleThumb {
+    #userTaggerIgnoreContainer .toggleThumb,
+    #userTaggerIgnoreContainer .toggleThumb::before {
       background-color: @surface2 !important;
       border-color: @surface2 !important;
     }
@@ -1168,8 +1169,23 @@
       background-color: @crust !important;
     }
 
-    #RESSettingsButton {
-      filter: @inactive-filter !important;
+    /* These are icon-font glyphs drawn in a pseudo-element, so they take a
+       colour; a filter on the element would flatten the glyph with it. */
+    #RESSettingsButton::after,
+    .gearIcon::after,
+    .RESUserTagImage::after {
+      color: @accent !important;
+    }
+
+    #NREPause::after {
+      color: @dim !important;
+    }
+
+    /* The follow control beside a subreddit is a raster icon drawn in a
+       pseudo-element, dark on a transparent background, so it takes a palette
+       filter rather than a colour. */
+    .subreddit-subscribe::before {
+      filter: @dim-filter !important;
     }
 
     /* The subreddit shortcut bar and its editing controls sit in the themed
