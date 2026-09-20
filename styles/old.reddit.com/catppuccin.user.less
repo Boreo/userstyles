@@ -141,6 +141,10 @@
         border-color: @surface0 !important;
       }
 
+      .titlebox .redditname {
+        background-color: transparent !important;
+      }
+
       .titlebox h1.redditname a {
         color: @text !important;
       }
@@ -152,6 +156,15 @@
       .sidecontentbox .title h1 {
         color: @subtext1 !important;
       }
+    }
+
+    /* Reddit paints the create-a-subreddit box a literal white. */
+    .sidebox .spacer {
+      background-color: @mantle !important;
+    }
+
+    .sidebox .subtitle {
+      color: @muted !important;
     }
 
     .morelink {
@@ -756,6 +769,41 @@
 
     #RESSettingsButton {
       filter: @inactive-filter !important;
+    }
+
+    .res-filterline {
+      background-color: @mantle !important;
+      color: @muted !important;
+    }
+
+    .res-filterline-filter {
+      border-bottom-color: @surface1 !important;
+    }
+
+    /* The bottom rule is how an active filter reads as active, so it takes
+       the accent rather than RES's greenyellow. */
+    .res-filterline-filter-hiding,
+    .res-filterline-filter-hiding:hover {
+      border-bottom-color: @accent !important;
+      color: @text !important;
+    }
+
+    .res-filterline-dropdown {
+      background-color: @mantle !important;
+
+      details summary,
+      .res-filterline-dropdown-toggles label {
+        color: @text !important;
+      }
+    }
+
+    .res-filterline-dropdown-action {
+      border-bottom-color: @surface0 !important;
+      color: @text !important;
+
+      &:hover {
+        background-color: @surface0 !important;
+      }
     }
   }
 }
