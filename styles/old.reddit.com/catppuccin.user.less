@@ -169,9 +169,31 @@
         background-color: transparent !important;
       }
 
+      /* RES night mode sets a colour on every descendant of the sidebar,
+         which defeats inheritance from the surfaces themed above. Clearing
+         the blanket lets those colours reach the text again. */
+      * {
+        color: inherit !important;
+      }
+
+      a {
+        color: @accent !important;
+      }
+
       .sidecontentbox .title h1 {
         color: @subtext1 !important;
       }
+    }
+
+    /* Section headings such as "discover more music subreddits". */
+    .flat-vert.title {
+      color: @subtext1 !important;
+    }
+
+    .c-btn-primary {
+      background-color: @surface0 !important;
+      border-color: @surface1 !important;
+      color: @text !important;
     }
 
     /* "this post was submitted on ..." */
@@ -793,7 +815,8 @@
        every one of them on the dark flavors, where @mantle is darker than
        @base. */
     .RES-keyNav-activeElement,
-    .RES-keyNav-activeElement .md-container {
+    .RES-keyNav-activeElement .md-container,
+    .entry.res-selected {
       background-color: @mantle !important;
     }
 
@@ -804,6 +827,74 @@
 
     #RESSettingsButton {
       filter: @inactive-filter !important;
+    }
+
+    /* The subreddit shortcut bar and its editing controls sit in the themed
+       header strip. */
+    #RESShortcutsEditContainer,
+    #RESShortcutsSort,
+    #RESShortcutsRight,
+    #RESShortcutsLeft,
+    #RESShortcutsAdd {
+      background-color: @crust !important;
+      color: @subtext1 !important;
+    }
+
+    #sr-header-area a.RESShortcutsCurrentSub {
+      color: @accent !important;
+    }
+
+    #RESShortcutsAddFormContainer,
+    #srList {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
+      color: @text !important;
+    }
+
+    #srList tbody tr {
+      border-bottom-color: @surface0 !important;
+
+      &:hover {
+        background-color: @surface0 !important;
+      }
+    }
+
+    #progressIndicator,
+    #jumpToContent {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
+      color: @text !important;
+    }
+
+    #RESNotifications {
+      color: @text !important;
+    }
+
+    .RESNotification {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
+    }
+
+    .RESNotificationHeader {
+      background-color: @surface0 !important;
+      color: @text !important;
+    }
+
+    .RESNotificationContent {
+      border-color: @surface0 !important;
+      color: @text !important;
+
+      h2 {
+        color: @text !important;
+      }
+    }
+
+    .RESNotificationFooter {
+      color: @muted !important;
+    }
+
+    .RESNotification a {
+      color: @accent !important;
     }
 
     .res-filterline {
