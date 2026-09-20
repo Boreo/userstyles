@@ -216,6 +216,12 @@
         background-color: @surface0 !important;
       }
 
+      /* The handle's arrow, a single-colour tile on a pseudo-element that
+         paints nothing of its own. */
+      .grippy::before {
+        filter: @accent-filter !important;
+      }
+
       li {
         background-color: @mantle !important;
         border-color: @surface0 !important;
@@ -587,6 +593,25 @@
        the page background rather than a surface of its own. */
     .thumbnail {
       background-color: transparent !important;
+    }
+
+    /* Reddit's placeholder thumbnails — the link, the text card, the 18+
+       badge, the snoo — are a light plate with a white glyph cut out of it,
+       and one of them spells its label in type rather than in shapes, so
+       none can be redrawn and a palette filter would flatten plate and glyph
+       into a single disc. Inverting keeps the two apart and is the one
+       transform that moves the plate onto a dark surface tone. Latte's page
+       is lighter than the plate already, so it is left alone. The guard
+       excludes a post that has a real thumbnail under the same class. */
+    & when not (@flavor = latte) {
+      .thumbnail.account:not(:has(img)),
+      .thumbnail.default:not(:has(img)),
+      .thumbnail.image:not(:has(img)),
+      .thumbnail.nsfw:not(:has(img)),
+      .thumbnail.self:not(:has(img)),
+      .thumbnail.spoiler:not(:has(img)) {
+        filter: invert(1) !important;
+      }
     }
 
     .expando .md,
@@ -961,6 +986,20 @@
 
       background-image: url("data:image/svg+xml,@{svg-add}") !important;
       background-position: 0 0 !important;
+      filter: none !important;
+    }
+
+    /* The cross beside each filtered subreddit. Reddit's tile is black, and
+       the button carries a fill and a three-pixel border, so a filter would
+       flatten all three together. */
+    .remove-sr {
+      @svg-remove: escape('<svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 9 9"><path stroke="@{text}" stroke-width="2" d="M1,1 L8,8 M8,1 L1,8"/></svg>');
+
+      background-color: transparent !important;
+      background-image: url("data:image/svg+xml,@{svg-remove}") !important;
+      background-position: 0 0 !important;
+      border-color: transparent !important;
+      filter: none !important;
     }
 
     /* The rule NeverEndingReddit draws between appended pages. */
@@ -1159,6 +1198,13 @@
       background-color: @mantle !important;
       border-color: @surface1 !important;
       color: @text !important;
+    }
+
+    /* The magnifier is a borderless sprite tile of one colour, so it takes a
+       filter — but only once the box fill above is off it. */
+    #search input[type="submit"] {
+      background-color: transparent !important;
+      filter: @dim-filter !important;
     }
 
     /* The matched run inside a search result, which reddit marks up with
