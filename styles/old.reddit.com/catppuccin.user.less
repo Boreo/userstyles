@@ -401,7 +401,10 @@
        the six selects; `shade` takes whatever the accent is set to for every
        level and tells them apart by strength alone, which climbs level by
        level, so it is the only setting that follows a choice made elsewhere
-       in the dialogue.
+       in the dialogue. Its per-level weights are written as multipliers
+       rather than as divisions: Less divides with `/` only under `math:
+       always`, and Stylus compiles a userstyle on the default setting, where
+       the same expression yields NaN and the rule is dropped.
 
        A value this does not recognise is treated as off. Stylus keeps a
        select's saved value when a style's option list changes, so a reader
@@ -438,17 +441,17 @@
       shade, @accentColor, if(@threadColors = warm, rosewater, if(@threadColors
       = cool, mauve, if(@threadColors = neutral, overlay2, mauve)))));
     @thread1: mix(@catppuccin[@@flavor][@@thread-name1], @surface1,
-      if(@threadColors = shade, @thread-tint * 3 / 8, @thread-tint));
+      if(@threadColors = shade, (@thread-tint * 0.375), @thread-tint));
     @thread2: mix(@catppuccin[@@flavor][@@thread-name2], @surface1,
-      if(@threadColors = shade, @thread-tint * 4 / 8, @thread-tint));
+      if(@threadColors = shade, (@thread-tint * 0.5), @thread-tint));
     @thread3: mix(@catppuccin[@@flavor][@@thread-name3], @surface1,
-      if(@threadColors = shade, @thread-tint * 5 / 8, @thread-tint));
+      if(@threadColors = shade, (@thread-tint * 0.625), @thread-tint));
     @thread4: mix(@catppuccin[@@flavor][@@thread-name4], @surface1,
-      if(@threadColors = shade, @thread-tint * 6 / 8, @thread-tint));
+      if(@threadColors = shade, (@thread-tint * 0.75), @thread-tint));
     @thread5: mix(@catppuccin[@@flavor][@@thread-name5], @surface1,
-      if(@threadColors = shade, @thread-tint * 7 / 8, @thread-tint));
+      if(@threadColors = shade, (@thread-tint * 0.875), @thread-tint));
     @thread6: mix(@catppuccin[@@flavor][@@thread-name6], @surface1,
-      if(@threadColors = shade, @thread-tint * 8 / 8, @thread-tint));
+      if(@threadColors = shade, (@thread-tint * 1), @thread-tint));
 
     .link,
     .thing {
