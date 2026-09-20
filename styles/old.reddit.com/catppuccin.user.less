@@ -647,54 +647,28 @@
       background-image: url("data:image/svg+xml,@{svg-locked}") !important;
     }
 
-    /* These two are sprite tiles rather than whole images: the button keeps
+    /* These are sprite tiles rather than whole images: the button keeps
        reddit's background-position and scrolls to an offset inside the
-       sheet, so each replacement is drawn at that same offset. Hover scrolls
-       to a different offset in a different sheet, which is why it needs a
-       rule of its own rather than inheriting this one. */
+       sheet, and hover scrolls to a second one. Each replacement is a sheet
+       of its own carrying the tile at both offsets, so one rule covers the
+       resting and hovered states. */
     .expando-button.collapsed.selftext {
-      @svg-text: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="572" viewBox="0 0 23 572"><g transform="translate(0 549)"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M4,5 h15 v2 h-15z M4,9 h15 v2 h-15z M4,13 h15 v2 h-15z M4,17 h9 v2 h-9z"/></g></svg>');
+      @svg-text: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="572" viewBox="0 0 23 572"><g transform="translate(0 520)"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M4,5 h15 v2 h-15z M4,9 h15 v2 h-15z M4,13 h15 v2 h-15z M4,17 h9 v2 h-9z"/></g><g transform="translate(0 549)"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M4,5 h15 v2 h-15z M4,9 h15 v2 h-15z M4,13 h15 v2 h-15z M4,17 h9 v2 h-9z"/></g></svg>');
 
       background-image: url("data:image/svg+xml,@{svg-text}") !important;
     }
 
-    .expando-button.collapsed.selftext:hover {
-      @svg-text-hover: escape('<svg xmlns="http://www.w3.org/2000/svg" width="83" height="1459" viewBox="0 0 83 1459"><g transform="translate(60 1436)"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M4,5 h15 v2 h-15z M4,9 h15 v2 h-15z M4,13 h15 v2 h-15z M4,17 h9 v2 h-9z"/></g></svg>');
-
-      background-image: url("data:image/svg+xml,@{svg-text-hover}") !important;
-    }
-
     .expando-button.collapsed.video {
-      @svg-play: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="514" viewBox="0 0 23 514"><g transform="translate(0 491)"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M8,5 l10,6.5 l-10,6.5z"/></g></svg>');
+      @svg-play: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="514" viewBox="0 0 23 514"><g transform="translate(0 462)"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M8,5 l10,6.5 l-10,6.5z"/></g><g transform="translate(0 491)"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M8,5 l10,6.5 l-10,6.5z"/></g></svg>');
 
       background-image: url("data:image/svg+xml,@{svg-play}") !important;
     }
 
-    .expando-button.collapsed.video:hover {
-      @svg-play-hover: escape('<svg xmlns="http://www.w3.org/2000/svg" width="81" height="1489" viewBox="0 0 81 1489"><g transform="translate(58 1466)"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M8,5 l10,6.5 l-10,6.5z"/></g></svg>');
-
-      background-image: url("data:image/svg+xml,@{svg-play-hover}") !important;
-    }
-
     .expando-button.expanded.selftext,
     .expando-button.expanded.video {
-      @svg-sprite-open: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="456" viewBox="0 0 23 456"><g transform="translate(0 433)"><circle cx="11.5" cy="11.5" r="11.5" fill="@{surface0}"/><g stroke="@{text}" stroke-width="3.25" stroke-linecap="round"><line x1="7.5" y1="7.5" x2="15.5" y2="15.5"/><line x1="15.5" y1="7.5" x2="7.5" y2="15.5"/></g></g></svg>');
+      @svg-sprite-open: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="456" viewBox="0 0 23 456"><g transform="translate(0 404)"><circle cx="11.5" cy="11.5" r="11.5" fill="@{surface0}"/><g stroke="@{text}" stroke-width="3.25" stroke-linecap="round"><line x1="7.5" y1="7.5" x2="15.5" y2="15.5"/><line x1="15.5" y1="7.5" x2="7.5" y2="15.5"/></g></g><g transform="translate(0 433)"><circle cx="11.5" cy="11.5" r="11.5" fill="@{surface0}"/><g stroke="@{text}" stroke-width="3.25" stroke-linecap="round"><line x1="7.5" y1="7.5" x2="15.5" y2="15.5"/><line x1="15.5" y1="7.5" x2="7.5" y2="15.5"/></g></g></svg>');
 
       background-image: url("data:image/svg+xml,@{svg-sprite-open}") !important;
-    }
-
-    .expando-button.expanded.selftext:hover {
-      @svg-text-open-hover: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="1489" viewBox="0 0 23 1489"><g transform="translate(0 1466)"><circle cx="11.5" cy="11.5" r="11.5" fill="@{surface0}"/><g stroke="@{text}" stroke-width="3.25" stroke-linecap="round"><line x1="7.5" y1="7.5" x2="15.5" y2="15.5"/><line x1="15.5" y1="7.5" x2="7.5" y2="15.5"/></g></g></svg>');
-
-      background-image: url("data:image/svg+xml,@{svg-text-open-hover}")
-        !important;
-    }
-
-    .expando-button.expanded.video:hover {
-      @svg-play-open-hover: escape('<svg xmlns="http://www.w3.org/2000/svg" width="139" height="1489" viewBox="0 0 139 1489"><g transform="translate(116 1466)"><circle cx="11.5" cy="11.5" r="11.5" fill="@{surface0}"/><g stroke="@{text}" stroke-width="3.25" stroke-linecap="round"><line x1="7.5" y1="7.5" x2="15.5" y2="15.5"/><line x1="15.5" y1="7.5" x2="7.5" y2="15.5"/></g></g></svg>');
-
-      background-image: url("data:image/svg+xml,@{svg-play-open-hover}")
-        !important;
     }
 
     .expando-button.expanded.image,
@@ -1339,6 +1313,24 @@
     }
 
     /* Tier 4 — Reddit Enhancement Suite chrome */
+    /* The envelope is a sprite tile drawn in two colours — white with an
+       orange flap when there is mail — so a single-colour filter flattens it
+       into a block. It is rebuilt as an outline at each of the three offsets
+       the icon scrolls to, unread in @red and read in the tagline's grey, so
+       one rule covers every state. */
+    #mail {
+      @svg-mail: escape('<svg xmlns="http://www.w3.org/2000/svg" width="130" height="1728" viewBox="0 0 130 1728"><g transform="translate(73 1718)"><g fill="none" stroke="@{red}"><rect x=".5" y=".5" width="14" height="9"/><path d="M.5 .5 L7.5 6 L14.5 .5"/></g></g><g transform="translate(94 1718)"><g fill="none" stroke="@{red}"><rect x=".5" y=".5" width="14" height="9"/><path d="M.5 .5 L7.5 6 L14.5 .5"/></g></g><g transform="translate(115 1718)"><g fill="none" stroke="@{dim}"><rect x=".5" y=".5" width="14" height="9"/><path d="M.5 .5 L7.5 6 L14.5 .5"/></g></g></svg>');
+
+      background-image: url("data:image/svg+xml,@{svg-mail}") !important;
+    }
+
+    /* The unread count beside the envelope, and RES's copy of it. */
+    .message-count,
+    #NREMailCount {
+      background-color: @red !important;
+      color: @base !important;
+    }
+
     /* The current RES settings console renders in a cross-origin
        `chrome-extension://` iframe (`#console-container`), not in the page
        DOM, so a page-injected stylesheet cannot reach into it. */
@@ -1348,8 +1340,42 @@
       color: @text !important;
     }
 
-    .RESDropdownList li a:hover {
+    .RESDropdownList li {
       background-color: @surface0 !important;
+      border-color: @surface1 !important;
+      color: @text !important;
+    }
+
+    /* The row's anchor fills it and carries a background of its own. */
+    .RESDropdownList li a {
+      background-color: transparent !important;
+    }
+
+    .RESDropdownList li:hover,
+    .RESDropdownList li a:hover {
+      background-color: @hover-bg !important;
+      color: @text !important;
+    }
+
+    /* RES's switches: a track that turns blue when on and red when the
+       setting it guards is inverted, with a thumb riding on top. */
+    .toggleButton .toggleThumb {
+      background-color: @surface2 !important;
+      border-color: @surface2 !important;
+    }
+
+    .toggleButton.enabled .toggleThumb {
+      background-color: @op !important;
+      border-color: @op !important;
+    }
+
+    .toggleButton.enabled.reverseToggleButton .toggleThumb {
+      background-color: @red !important;
+      border-color: @red !important;
+    }
+
+    .toggleButton .toggleThumb::before {
+      background-color: @base !important;
     }
 
     /* The highlight sits behind a whole entry, so every foreground inside it
