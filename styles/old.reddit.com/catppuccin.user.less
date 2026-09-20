@@ -48,6 +48,15 @@
     color: @text !important;
 
     /* Tier 1 — page chrome */
+
+    /* Reddit serves `.content` with no background of its own, so the page
+       background shows through it. Reddit Enhancement Suite's night mode
+       paints it `hsl(0, 0%, 15%)`, which would cover the themed background
+       across the whole listing and comment column. */
+    .content {
+      background-color: transparent !important;
+      color: @text !important;
+    }
     #sr-header-area {
       background-color: @crust !important;
       border-bottom-color: @surface0 !important;
@@ -202,6 +211,11 @@
     .link,
     .thing {
       background-color: transparent !important;
+    }
+
+    /* The listing rank is ordinal decoration beside the title it numbers. */
+    .rank {
+      color: @inactive !important;
     }
 
     .link.stickied a.title,
