@@ -348,7 +348,11 @@
     }
 
     /* Tier 1 — markdown prose */
+    /* Reddit gives self-post bodies and subreddit descriptions the literal
+       #fafafa, which leaves @text at 1.39:1 on Mocha. The rule sits on the
+       inner .md, so clearing .usertext-body alone does not reach it. */
     .md {
+      background-color: transparent !important;
       color: @text !important;
 
       a {
@@ -661,7 +665,8 @@
        4.10:1 on Mocha. @red reaches 4.80:1 and 7.08:1 at rest. */
     .usertable tr.banned-user,
     .usertable tr.banned-user a,
-    .usertable tr.banned-user .user {
+    .usertable tr.banned-user .user,
+    a.banned-user {
       color: @red !important;
     }
   }
