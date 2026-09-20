@@ -618,6 +618,19 @@
       color: @text !important;
     }
 
+    .diff .diff_chg {
+      background-color: fade(@yellow, 20%) !important;
+      color: @text !important;
+    }
+
+    /* Reddit gives these the literal colour `lightgrey`, which survives the
+       dark flavors untouched. */
+    .diff .diff_header,
+    .diff .diff_next {
+      background-color: @surface0 !important;
+      color: @text !important;
+    }
+
     /* Tier 3 — public about pages */
     .subreddit-rule-item {
       color: @text !important;
