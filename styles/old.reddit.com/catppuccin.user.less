@@ -182,6 +182,12 @@
        the warm accent. The dark flavors clear 6.5:1 with @peach. */
     @code-fg: if(@flavor = latte, @red, @peach);
 
+    /* Secondary text. @subtext0 reaches only 4.06:1 on Latte's @mantle and
+       4.37:1 on its @base, both short of 4.5:1; @subtext1 clears both at
+       5.14:1 and 5.53:1. The dark flavors are already past 7:1 with
+       @subtext0, so they keep it. */
+    @muted: if(@flavor = latte, @subtext1, @subtext0);
+
     .link,
     .thing {
       background-color: transparent !important;
@@ -435,7 +441,7 @@
     }
 
     .trophy-info .trophy-description {
-      color: @subtext0 !important;
+      color: @muted !important;
     }
 
     .titlebox .karma {
@@ -451,17 +457,17 @@
       }
 
       .head {
-        color: @subtext0 !important;
+        color: @muted !important;
+      }
+
+      &.message-parent {
+        background-color: @mantle !important;
+        border-color: @surface0 !important;
       }
 
       &.new,
       &.recipient {
         background-color: fade(@accent, 8%) !important;
-      }
-
-      .message-parent {
-        background-color: @mantle !important;
-        border-color: @surface0 !important;
       }
     }
 
