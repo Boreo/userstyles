@@ -378,8 +378,8 @@
        flavors clear both already. */
     @accent-text: if(@flavor = latte, darken(@accent, 35%), @accent);
     @read: if(@flavor = latte, @subtext0, @overlay1);
-    @band: if(@flavor = latte, mix(@crust, @base, 50%), mix(@surface0, @base,
-      45%));
+    @band: if(@flavor = latte, mix(@crust, @base, 50%), mix(@mantle, @base,
+      60%));
 
     .link,
     .thing {
@@ -736,9 +736,9 @@
 
     /* Nesting is read from indentation alone, which is hard to follow once a
        thread runs deep, so each level takes a band and the next steps back to
-       the page. A top-level comment carries the band, which on the dark
-       flavors is lighter than the page behind it; @base is Latte's lightest
-       colour, so there the band is the darker step instead. */
+       the page. The band steps away from @base towards the darker surface
+       behind it on every flavor, which is the direction RES draws it and the
+       only direction Latte has — @base is its lightest colour. */
     .comment-band-on(@depth; @sel) when (@depth < 10) {
       @{sel} {
         background-color: @band !important;
