@@ -93,6 +93,13 @@
       border-bottom-color: @accent !important;
     }
 
+    /* The header logo is a sprite whose wordmark is black, 1.14:1 against
+       @mantle, so it is recoloured with a palette filter rather than a colour
+       property. */
+    #header-img.default-header {
+      filter: @text-filter !important;
+    }
+
     #header-bottom-left .pagename,
     #header-bottom-left .pagename a,
     #header-bottom-right .user a {
