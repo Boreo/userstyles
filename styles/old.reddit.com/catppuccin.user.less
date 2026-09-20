@@ -14,14 +14,14 @@
 @var select darkFlavor "Dark Flavor" ["latte:Latte", "frappe:Frappé", "macchiato:Macchiato", "mocha:Mocha*"]
 @var select accentColor "Accent" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve*", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
 @var checkbox flairColors "Theme subreddit flair colours" 1
-@var select threadColors "Comment threads" ["off:Off*", "accent:Accent colours", "neutral:Neutral"]
+@var select threadColors "Comment threads" ["off:Off*", "rainbow:Rainbow", "warm:Warm", "cool:Cool", "shade:Accent shades", "neutral:Neutral", "custom:Custom"]
 @var select threadStrength "Comment threads — strength" ["100:Full", "70:Muted*", "45:Faint"]
-@var select threadColor1 "Comment threads — depth 1" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve", "red:Red*", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
-@var select threadColor2 "Comment threads — depth 2" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve", "red:Red", "maroon:Maroon", "peach:Peach*", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
-@var select threadColor3 "Comment threads — depth 3" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow*", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
-@var select threadColor4 "Comment threads — depth 4" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green*", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
-@var select threadColor5 "Comment threads — depth 5" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue*", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
-@var select threadColor6 "Comment threads — depth 6" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve*", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
+@var select threadColor1 "Comment threads — custom 1" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve", "red:Red*", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
+@var select threadColor2 "Comment threads — custom 2" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve", "red:Red", "maroon:Maroon", "peach:Peach*", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
+@var select threadColor3 "Comment threads — custom 3" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow*", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
+@var select threadColor4 "Comment threads — custom 4" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green*", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
+@var select threadColor5 "Comment threads — custom 5" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue*", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
+@var select threadColor6 "Comment threads — custom 6" ["rosewater:Rosewater", "flamingo:Flamingo", "pink:Pink", "mauve:Mauve*", "red:Red", "maroon:Maroon", "peach:Peach", "yellow:Yellow", "green:Green", "teal:Teal", "blue:Blue", "sapphire:Sapphire", "sky:Sky", "lavender:Lavender", "subtext0:Gray"]
 ==/UserStyle== */
 
 @import "https://userstyles.catppuccin.com/lib/std/v1.less";
@@ -396,28 +396,53 @@
       60%));
 
     /* A comment's nesting level is only expressible as a selector chain, so
-       the four thread colours repeat every fourth level. With the switch off
-       each one is the border colour every other box on the page carries, so
-       the chain emits the border it would have had anyway, and set to
-       neutral they climb one surface step per level instead. */
-    /* An accent at full strength is a bright 1px line against a very dark
-       surface. `@thread-tint` is an alpha, so the rail blends into whichever
-       background its own level carries rather than being mixed against one
-       chosen in advance. The neutral ramp is already quiet and is left at
-       full strength. */
-    @thread-tint: unit(@threadStrength, %);
-    @thread1: if(@threadColors = off, @surface1, if(@threadColors = neutral,
-      @surface0, fade(@catppuccin[@@flavor][@@threadColor1], @thread-tint)));
-    @thread2: if(@threadColors = off, @surface1, if(@threadColors = neutral,
-      @surface1, fade(@catppuccin[@@flavor][@@threadColor2], @thread-tint)));
-    @thread3: if(@threadColors = off, @surface1, if(@threadColors = neutral,
-      @surface2, fade(@catppuccin[@@flavor][@@threadColor3], @thread-tint)));
-    @thread4: if(@threadColors = off, @surface1, if(@threadColors = neutral,
-      @overlay0, fade(@catppuccin[@@flavor][@@threadColor4], @thread-tint)));
-    @thread5: if(@threadColors = off, @surface1, if(@threadColors = neutral,
-      @overlay1, fade(@catppuccin[@@flavor][@@threadColor5], @thread-tint)));
-    @thread6: if(@threadColors = off, @surface1, if(@threadColors = neutral,
-      @overlay2, fade(@catppuccin[@@flavor][@@threadColor6], @thread-tint)));
+       the six thread colours repeat every sixth level. A preset is a list of
+       palette keys, one per level, looked up the way the accent is; custom
+       reads the six selects instead, and accent shades takes whatever the
+       accent is set to and tells the levels apart by strength alone.
+
+       Strength is how far a rail departs from `@surface1`, the border colour
+       every other box on the page already carries. Measuring it from there
+       rather than from the page behind it makes "off" the same thing as
+       strength zero, and gives every preset the same dial: fading a neutral
+       toward the page would simply erase it, since `@surface0` is barely a
+       step from the page to begin with. It also keeps a rail from washing
+       out on Latte, whose page is lighter than any of these colours. */
+    @thread-presets: {
+      @off: surface1 surface1 surface1 surface1 surface1 surface1;
+      @rainbow: red peach yellow green blue mauve;
+      @warm: maroon red peach yellow flamingo rosewater;
+      @cool: teal sky sapphire blue lavender mauve;
+      @neutral: surface0 surface1 surface2 overlay0 overlay1 overlay2;
+      @shade: mauve mauve mauve mauve mauve mauve;
+      @custom: red peach yellow green blue mauve;
+    }
+    @thread-list: @thread-presets[@@threadColors];
+    @thread-tint: if(@threadColors = off, 0%, unit(@threadStrength, %));
+    @thread-name1: if(@threadColors = custom, @threadColor1, if(@threadColors =
+      shade, @accentColor, extract(@thread-list, 1)));
+    @thread-name2: if(@threadColors = custom, @threadColor2, if(@threadColors =
+      shade, @accentColor, extract(@thread-list, 2)));
+    @thread-name3: if(@threadColors = custom, @threadColor3, if(@threadColors =
+      shade, @accentColor, extract(@thread-list, 3)));
+    @thread-name4: if(@threadColors = custom, @threadColor4, if(@threadColors =
+      shade, @accentColor, extract(@thread-list, 4)));
+    @thread-name5: if(@threadColors = custom, @threadColor5, if(@threadColors =
+      shade, @accentColor, extract(@thread-list, 5)));
+    @thread-name6: if(@threadColors = custom, @threadColor6, if(@threadColors =
+      shade, @accentColor, extract(@thread-list, 6)));
+    @thread1: mix(@catppuccin[@@flavor][@@thread-name1], @surface1,
+      if(@threadColors = shade, @thread-tint * 3 / 8, @thread-tint));
+    @thread2: mix(@catppuccin[@@flavor][@@thread-name2], @surface1,
+      if(@threadColors = shade, @thread-tint * 4 / 8, @thread-tint));
+    @thread3: mix(@catppuccin[@@flavor][@@thread-name3], @surface1,
+      if(@threadColors = shade, @thread-tint * 5 / 8, @thread-tint));
+    @thread4: mix(@catppuccin[@@flavor][@@thread-name4], @surface1,
+      if(@threadColors = shade, @thread-tint * 6 / 8, @thread-tint));
+    @thread5: mix(@catppuccin[@@flavor][@@thread-name5], @surface1,
+      if(@threadColors = shade, @thread-tint * 7 / 8, @thread-tint));
+    @thread6: mix(@catppuccin[@@flavor][@@thread-name6], @surface1,
+      if(@threadColors = shade, @thread-tint * 8 / 8, @thread-tint));
 
     .link,
     .thing {
