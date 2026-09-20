@@ -378,7 +378,8 @@
        flavors clear both already. */
     @accent-text: if(@flavor = latte, darken(@accent, 35%), @accent);
     @read: if(@flavor = latte, @subtext0, @overlay1);
-    @band: if(@flavor = latte, @crust, @surface0);
+    @band: if(@flavor = latte, mix(@crust, @base, 50%), mix(@surface0, @base,
+      45%));
 
     .link,
     .thing {
@@ -637,22 +638,30 @@
       background-image: url("data:image/svg+xml,@{svg-locked}") !important;
     }
 
+    /* These two are sprite tiles rather than whole images: the button keeps
+       reddit's background-position and scrolls to an offset inside the
+       sheet, so the replacement is drawn at that same offset. */
     .expando-button.collapsed.selftext {
-      @svg-text: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M4,5 h15 v2 h-15z M4,9 h15 v2 h-15z M4,13 h15 v2 h-15z M4,17 h9 v2 h-9z"/></svg>');
+      @svg-text: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="572" viewBox="0 0 23 572"><g transform="translate(0 549)"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M4,5 h15 v2 h-15z M4,9 h15 v2 h-15z M4,13 h15 v2 h-15z M4,17 h9 v2 h-9z"/></g></svg>');
 
       background-image: url("data:image/svg+xml,@{svg-text}") !important;
     }
 
     .expando-button.collapsed.video {
-      @svg-play: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M8,5 l10,6.5 l-10,6.5z"/></svg>');
+      @svg-play: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="514" viewBox="0 0 23 514"><g transform="translate(0 491)"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M8,5 l10,6.5 l-10,6.5z"/></g></svg>');
 
       background-image: url("data:image/svg+xml,@{svg-play}") !important;
     }
 
+    .expando-button.expanded.selftext,
+    .expando-button.expanded.video {
+      @svg-sprite-open: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="456" viewBox="0 0 23 456"><g transform="translate(0 433)"><circle cx="11.5" cy="11.5" r="11.5" fill="@{surface0}"/><g stroke="@{text}" stroke-width="3.25" stroke-linecap="round"><line x1="7.5" y1="7.5" x2="15.5" y2="15.5"/><line x1="15.5" y1="7.5" x2="7.5" y2="15.5"/></g></g></svg>');
+
+      background-image: url("data:image/svg+xml,@{svg-sprite-open}") !important;
+    }
+
     .expando-button.expanded.image,
     .expando-button.expanded.video-muted,
-    .expando-button.expanded.selftext,
-    .expando-button.expanded.video,
     .expando-button.expanded.expando-button-requires-permission {
       @svg-open: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><circle cx="11.5" cy="11.5" r="11.5" fill="@{surface0}"/><g stroke="@{text}" stroke-width="3.25" stroke-linecap="round"><line x1="7.5" y1="7.5" x2="15.5" y2="15.5"/><line x1="15.5" y1="7.5" x2="7.5" y2="15.5"/></g></svg>');
 
