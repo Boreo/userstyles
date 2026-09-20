@@ -388,8 +388,10 @@
       filter: @blue-filter !important;
     }
 
+    /* A thumbnail is an image that sits directly on the page, so it takes
+       the page background rather than a surface of its own. */
     .thumbnail {
-      background-color: @surface0 !important;
+      background-color: transparent !important;
     }
 
     .expando,
