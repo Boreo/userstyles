@@ -69,11 +69,15 @@
 
     /* Tier 1 — page chrome */
 
-    /* A floor for links that no more specific rule below reaches. Every rule
-       in this file outranks it, so it only ever fills gaps. An author is
-       excluded because its own rule below deliberately carries no
+    /* A floor for links that no more specific rule below reaches. The
+       exclusion is wrapped in `:where()`, which contributes no specificity
+       of its own, so this stays a bare element selector and every rule below
+       outranks it — a plain `:not(.author)` would count as a class and beat
+       any single-class rule in this file that happens to match an anchor,
+       which is what it did to the primary button in the sidebar. An author
+       is excluded because its own rule below deliberately carries no
        `!important`, which this would otherwise outrank. */
-    a:not(.author) {
+    a:where(:not(.author)) {
       color: @accent-text !important;
     }
 
@@ -273,7 +277,13 @@
       color: @subtext1 !important;
     }
 
-    .c-btn-primary {
+    /* Reddit's primary button, which the sidebar uses for "message the
+       moderators". The sidebar's own link rule is a class and a type where
+       this is a class alone, so it outranks this one and hands the button
+       accent text on a surface: 4.3:1 on Frappé, and 3.57:1 with red as the
+       accent. The sidebar's copy is therefore named. */
+    .c-btn-primary,
+    .side .c-btn-primary {
       background-color: @surface0 !important;
       border-color: @surface1 !important;
       color: @text !important;
@@ -1248,8 +1258,22 @@
       color: @text !important;
     }
 
+    /* The banner's mark is a white padlock on a transparent ground, so the
+       tile behind it carries the contrast — and white on @yellow is 2.62:1
+       on Latte and 1.27:1 on Mocha. The tile is cleared and the glyph takes
+       a filter instead, which is the only thing the element then paints.
+       @red is the one warm palette colour that clears 3:1 on @surface0 on
+       all four flavors; @yellow is 1.7:1 on Latte's. */
     .reddit-infobar.with-icon::before {
-      background-color: @yellow !important;
+      background-color: transparent !important;
+      filter: @red-filter !important;
+    }
+
+    /* The padlock beside a locked comment's tagline, a single-colour glyph
+       on a transparent ground and reddit's own gold. */
+    .locked-tagline::before {
+      background-color: transparent !important;
+      filter: @red-filter !important;
     }
 
     /* The original-content badge, which ships white on reddit's own blue. */
