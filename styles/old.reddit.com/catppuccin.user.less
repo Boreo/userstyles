@@ -239,6 +239,7 @@
       .grippy,
       .grippy::after {
         background-color: @surface0 !important;
+        border-color: @surface0 !important;
       }
 
       /* The handle's arrow, a single-colour tile on a pseudo-element that
@@ -259,6 +260,12 @@
 
       li a {
         color: @accent-text !important;
+      }
+
+      /* The line under each choice, which reddit greys to #808080: 3.25:1 on
+         Latte's @mantle. */
+      .description {
+        color: @muted !important;
       }
 
       .intro {
@@ -1841,7 +1848,8 @@
     }
 
     .subreddit-rule-kind,
-    .subreddit-rule-label {
+    .subreddit-rule-label,
+    .subreddit-rule-description {
       color: @muted !important;
     }
 
