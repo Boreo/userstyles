@@ -1913,6 +1913,87 @@
       }
     }
 
+    /* A disabled control keeps the plate every button here carries and steps
+       its label back to @inactive, the one tone in the palette meant to
+       recede. Reddit greys the fill instead, which the rule above paints over,
+       so without this a disabled button looks live. `.c-btn` marks the state
+       with a class because it is sometimes an anchor, and the crosspost
+       dialog's submit button with the attribute. */
+    button:disabled:not(.reddit-video-player-root *),
+    input[type="submit"]:disabled,
+    input[type="button"]:disabled,
+    .c-btn.disabled,
+    .c-btn[disabled],
+    .fancybutton.disabled {
+      background-color: @surface0 !important;
+      border-color: @surface1 !important;
+      color: @inactive !important;
+    }
+
+    /* The buttons on the authorization page. A pale blue gradient is the
+       button's whole appearance, so the image is cleared the way `.morelink`'s
+       is and a flat surface takes its place. */
+    .fancybutton {
+      background-color: @surface0 !important;
+      background-image: none !important;
+      border-color: @surface1 !important;
+      color: @text !important;
+
+      &:hover {
+        background-color: @hover-bg !important;
+      }
+    }
+
+    /* The grant button, which reddit fills with its own orangered against a
+       near-white decline. The plate above is the right answer for the decline,
+       so only the affirmative is named, and it takes the accent because the
+       colour is reddit's branding rather than a state. The fill carries @base,
+       which no Latte colour is dark enough to hold at full strength. */
+    .oauth2-authorize .fancybutton.allow {
+      background-color: if(@flavor = latte, darken(@accent, 18%), @accent)
+        !important;
+      border-color: if(@flavor = latte, darken(@accent, 18%), @accent)
+        !important;
+      color: @base !important;
+    }
+
+    /* The moderation queue's approve, remove and spam controls. Each state is
+       a gradient strip stretched across the plate rather than an icon — a pale
+       tint at rest, a saturated fill once the action is taken — so the image
+       is cleared and both are drawn from the palette. The hue is what says
+       which action it was, so it is kept. */
+    .pretty-button {
+      background-color: @surface0 !important;
+      background-image: none !important;
+      border-color: @surface1 !important;
+      color: @text !important;
+
+      &.positive {
+        background-color: fade(@green, 20%) !important;
+      }
+
+      &.negative {
+        background-color: fade(@red, 20%) !important;
+      }
+
+      &.neutral.pressed {
+        background-color: @surface2 !important;
+        border-color: @surface2 !important;
+      }
+
+      &.positive.pressed {
+        background-color: @join !important;
+        border-color: @join !important;
+        color: @crust !important;
+      }
+
+      &.negative.pressed {
+        background-color: @alert !important;
+        border-color: @alert !important;
+        color: @crust !important;
+      }
+    }
+
     .formtabs-content {
       background-color: @mantle !important;
       border-color: @surface0 !important;
@@ -1951,6 +2032,24 @@
 
     .error {
       color: @red !important;
+    }
+
+    /* Reddit's other reds, all of them the literal `red`: the inline
+       "are you sure?" prompt on a destructive action and the line that
+       confirms it, the marker on a field that failed validation, and the
+       heading on an error page. They are states, so they keep the family the
+       rule above uses. `.green` is the moderator green reddit shares between
+       `.tagline .moderator` and this utility class. */
+    .confirm-button .confirmation,
+    .question,
+    .wrong,
+    .red,
+    .errors h2 {
+      color: @red !important;
+    }
+
+    .green {
+      color: @green !important;
     }
 
     input,
@@ -2049,6 +2148,55 @@
       background-color: fade(@yellow, 15%) !important;
       border-color: @yellow !important;
       color: @text !important;
+    }
+
+    /* The inline report form, which reddit fills pale yellow and outlines in a
+       darker one. It takes the surface and border `.infobar` takes: a tint
+       over Latte's @base is indistinguishable from reddit's own. */
+    .action-form {
+      background-color: @surface0 !important;
+      border-color: @yellow !important;
+      color: @text !important;
+    }
+
+    /* The strip under an expando that carries its submit button. Its mark is
+       reddit's full-colour confirmation tick, which is left alone. */
+    .form-bar {
+      background-color: @surface0 !important;
+      border-color: @surface1 !important;
+    }
+
+    /* The field rows on the create-a-subreddit and subreddit-settings forms.
+       Reddit draws the row a saturated pale blue and the panel nested in it a
+       lighter one on a border of the row's colour; a surface and the step
+       below it keep the same relation. */
+    .linefield {
+      background-color: @surface0 !important;
+      color: @text !important;
+
+      &.mobile {
+        background-color: @mantle !important;
+        border-color: @surface0 !important;
+      }
+    }
+
+    /* An information box outlined in reddit's chrome blue: the explanatory
+       panels inside a field row, and the notice above the submit form. A link
+       inside is left to the prose rule, whose blue is darkened far enough to
+       clear 4.5:1 on @surface0. */
+    .infotext,
+    .content.submit .info-notice {
+      background-color: @surface0 !important;
+      border-color: @accent !important;
+      color: @text !important;
+    }
+
+    .user-form label {
+      color: @muted !important;
+    }
+
+    .info-text {
+      color: @dim !important;
     }
 
     /* Tier 2 — search */
@@ -2219,6 +2367,25 @@
       color: @muted !important;
     }
 
+    /* The chosen theme in the preferences page's theme picker, which reddit
+       marks with a pale blue fill. The table sits on @base, so a surface is
+       what says "selected". */
+    .preftable .container.reddit-themes .theme.selected {
+      background-color: @surface0 !important;
+    }
+
+    /* Reddit greys these headings and darkens the emphasised word inside them.
+       The heading takes the step a form's field titles take and the emphasis
+       the body colour, which keeps the two a step apart. */
+    .fancy-settings h1,
+    .fancy-settings h2 {
+      color: @subtext1 !important;
+    }
+
+    .fancy-settings h1 strong {
+      color: @text !important;
+    }
+
     /* /prefs/apps, which is a page of its own rather than a preference
        table: each app is a bordered card, its name is a heading reddit
        colours as a link, and the permission popup is a literal yellow. */
@@ -2352,6 +2519,22 @@
     .usertable tr.banned-user .user,
     a.banned-user {
       color: @red !important;
+    }
+
+    /* The note under the message on the over-18 and quarantine gate pages. */
+    .interstitial-message .note {
+      color: @dim !important;
+    }
+
+    /* The subreddit description an error page shows for a private or banned
+       subreddit. Reddit rules it off in black and writes the heading in black
+       too. */
+    .errorpage-message.sr-description {
+      border-color: @surface0 !important;
+    }
+
+    .errorpage-message.sr-description h2 {
+      color: @text !important;
     }
 
     /* Tier 4 — Reddit Enhancement Suite chrome */
