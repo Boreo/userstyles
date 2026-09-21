@@ -3245,6 +3245,18 @@
       background-color: @crust !important;
     }
 
+    /* The guider's Next and Close buttons, which RES fills with a blue
+       gradient. The gradient is a background image and covers any fill set
+       under it, so it is cleared first. These are anchors, so the link floor
+       reaches them, which puts accent text on an accent fill; the label is
+       named here instead. */
+    .guiders_button {
+      background-image: none !important;
+      background-color: @accent-text !important;
+      border-color: @accent-text !important;
+      color: @base !important;
+    }
+
     /* These are icon-font glyphs drawn in a pseudo-element, so they take a
        colour; a filter on the element would flatten the glyph with it. */
     #RESSettingsButton::after,
@@ -3443,6 +3455,163 @@
       &:hover {
         background-color: @surface0 !important;
       }
+    }
+
+    /* The condition builder. It is an option type in the settings console,
+       which is out of reach, but the same markup is built into the page
+       twice: inside a filter's hover card on the filter line, and inside the
+       comment navigator's conditions panel. Both of those sit on @mantle. */
+    .builderItem {
+      background-color: @surface0 !important;
+      border-color: @surface1 !important;
+    }
+
+    /* RES's own subreddit, user and wiki autocomplete, which it appends to
+       the body as a `.drop-choices` list. Only the keyboard cursor's row is
+       named: the list and its text already follow the header's dropdown
+       rules, and the row under the pointer already takes @surface0 there. */
+    #autocomplete_dropdown .selectedItem {
+      background-color: @surface0 !important;
+    }
+
+    /* The subscribe control RES adds to a comments page. Inside the
+       dashboard's new-comments table RES draws the same control as a bare
+       glyph with no plate, and the rule above outranks that, so the fill is
+       handed back. */
+    .RESSubscriptionButton {
+      background-color: @surface0 !important;
+      border-color: @surface1 !important;
+      color: @text !important;
+    }
+
+    #newCommentsTable .RESSubscriptionButton {
+      background-color: transparent !important;
+    }
+
+    /* The dialog behind a subreddit shortcut's edit control, which opens
+       over the page from the shortcut bar. */
+    #editShortcutDialog {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
+      color: @text !important;
+    }
+
+    #editShortcutDialog .RESDescription {
+      color: @dim !important;
+    }
+
+    /* /r/dashboard, which RES builds out of reddit's own page. Each widget is
+       a box with a raised header strip; the loader is a plate RES floats over
+       the box while the widget refreshes. */
+    .RESDashboardComponent {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
+    }
+
+    .RESDashboardComponentHeader {
+      background-color: @surface0 !important;
+      color: @text !important;
+    }
+
+    .RESDashboardComponentLoader {
+      background-color: @surface0 !important;
+      border-color: @surface1 !important;
+    }
+
+    /* The dashboard's actions are divs rather than anchors, so the floor for
+       a link does not reach them. */
+    .addNewWidget,
+    .editWidget,
+    .backToWidgetTypes {
+      color: @accent-text !important;
+    }
+
+    /* The widget forms' confirm and cancel, which RES fills green and red
+       behind white. The palette greens and reds are light, so the label
+       inverts to @crust, as it does on the subscribe and unsubscribe
+       fills. */
+    .addButton,
+    .updateButton {
+      background-color: @join !important;
+      border-color: @join !important;
+      color: @crust !important;
+    }
+
+    .cancelButton {
+      background-color: @alert !important;
+      border-color: @alert !important;
+      color: @crust !important;
+    }
+
+    /* The chips along a widget's header: the sort controls on one side and
+       the refresh, minimise and close on the other. RES draws them white on
+       the strip, so they take the page's own surface, which reads as a chip
+       against the strip from either side of the palette; @surface1 leaves
+       @text at 4.39:1 on Latte. The selected one takes the accent, which is
+       where its blue goes. */
+    .RESDashboardComponentHeader ul li {
+      background-color: @base !important;
+      border-color: @surface1 !important;
+      color: @text !important;
+
+      &.active,
+      &:hover {
+        background-color: if(@flavor = latte, darken(@accent, 18%), @accent)
+          !important;
+        border-color: if(@flavor = latte, darken(@accent, 18%), @accent)
+          !important;
+        color: @base !important;
+      }
+    }
+
+    /* A chip RES has switched off reads as switched off, the way every other
+       disabled control here does. */
+    ul.widgetStateButtons li.disabled,
+    ul.widgetStateButtons li.disabled:hover {
+      background-color: @surface0 !important;
+      border-color: @surface1 !important;
+      color: @inactive !important;
+    }
+
+    /* The refresh timestamp in a widget's header. RES draws it as bare text
+       rather than a chip, so the plate above is taken back off it. @muted is
+       the local for a secondary line, but it reaches only 4.05:1 on Latte's
+       @surface0, which is the surface this strip carries. */
+    ul.widgetStateButtons li.updateTime,
+    ul.widgetStateButtons li.updateTime:hover {
+      background-color: transparent !important;
+      border-color: transparent !important;
+      color: @text !important;
+    }
+
+    /* The label RES shows on the scrim while a widget reloads. */
+    .dashboardLoader,
+    .dashboardLoader span {
+      color: @text !important;
+    }
+
+    /* The control that adds a widget, and the one that edits the set. Reddit's
+       chrome blue outlines both. */
+    #RESDashboardAddComponent,
+    #RESDashboardEditComponent {
+      background-color: @surface0 !important;
+      border-color: @accent !important;
+      color: @text !important;
+    }
+
+    /* Reddit's own read-next card, a panel it floats at the foot of a
+       comments page. It declares a colour on itself, so the page's own text
+       colour does not reach it. */
+    .read-next {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
+      color: @text !important;
+    }
+
+    .read-next .read-next-header {
+      background-color: @surface0 !important;
+      border-bottom-color: @surface1 !important;
+      color: @text !important;
     }
   }
 }
