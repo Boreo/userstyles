@@ -218,7 +218,8 @@
          inside the themed titlebox but carry a literal white of their own. */
       .titlebox form.toggle,
       .titlebox form.flairtoggle,
-      .leavemoderator {
+      .leavemoderator,
+      .leavecontributor-button {
         background-color: transparent !important;
         color: @muted !important;
       }
@@ -870,8 +871,11 @@
       }
     }
 
+    /* A tag that carries text is drawn as a pill, outlined in a grey of
+       Reddit Enhancement Suite's own. */
     .RESUserTag,
     .RESUserTag a {
+      border-color: @surface1 !important;
       color: @accent-text !important;
     }
 
@@ -912,11 +916,13 @@
 
     /* @red is 4.46:1 on Latte's @mantle, which the comment banding puts this
        on, so it takes @alert's darkening there. */
-    .score.likes {
+    .score.likes,
+    .linkinfo .upvotes {
       color: @alert !important;
     }
 
-    .score.dislikes {
+    .score.dislikes,
+    .linkinfo .downvotes {
       color: @link !important;
     }
 
@@ -2564,7 +2570,8 @@
     /* `.wiki-page` is a class on <body> itself, not a wrapping element, so
        nesting under it would require the gate's body to be its own strict
        ancestor and match nothing; these stay unnested. */
-    .wiki-page-content {
+    .wiki-page-content,
+    .wiki-page-content .pagelisting {
       background-color: transparent !important;
       color: @text !important;
     }
@@ -2653,7 +2660,10 @@
       color: @text !important;
     }
 
-    .usertable .user {
+    /* The karma figure beside a name carries a colour of night mode's own,
+       so the name's rule has to name it rather than be inherited from. */
+    .usertable .user,
+    .usertable .user .userkarma {
       color: @muted !important;
     }
 
@@ -2697,6 +2707,13 @@
        counted, which reddit turns red once the wait is long. */
     #timeseries-unprocessed.slow {
       color: @alert !important;
+    }
+
+    /* The moderation log's rows take the page colour from reddit, which
+       night mode overrides with a grey of its own on the line describing
+       each action. */
+    .modactionlisting .description {
+      color: @text !important;
     }
 
     /* Tier 4 — Reddit Enhancement Suite chrome */
