@@ -2211,8 +2211,17 @@
     .question,
     .wrong,
     .red,
-    .errors h2 {
+    .errors h2,
+    #validation-errors li,
+    #validation-errors a {
       color: @red !important;
+    }
+
+    /* The raw detail under a failed submission, which reddit draws in black
+       rather than in the red its messages carry, to keep it apart from them.
+       Black is the one colour a dark flavor cannot leave alone. */
+    #validation-errors pre {
+      color: @text !important;
     }
 
     .green {
