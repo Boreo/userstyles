@@ -294,8 +294,12 @@
         color: @text !important;
       }
 
+      /* The chosen listing. It takes the page's own surface, the way every
+         other selected tab here does: the rail is @mantle, so the row reads
+         against it, and accent text on @surface0 falls below 4.5:1 on Frappé
+         for five of the fifteen accents. */
       li.selected {
-        background-color: @surface0 !important;
+        background-color: @base !important;
       }
 
       li a {
@@ -2548,9 +2552,11 @@
     }
 
     /* The label tab on the search menu strip: a raised plate carrying
-       reddit's chrome blue, which this style spends on the accent. */
+       reddit's chrome blue, which this style spends on the accent. The plate
+       is @mantle rather than @surface0 because accent text on @surface0 falls
+       below 4.5:1 on Frappé for five of the fifteen accents. */
     #searchmenu .searchlabel {
-      background-color: @surface0 !important;
+      background-color: @mantle !important;
       color: @accent-text !important;
     }
 
