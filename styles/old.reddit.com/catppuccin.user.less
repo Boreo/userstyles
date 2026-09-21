@@ -229,6 +229,30 @@
       .sidecontentbox .title h1 {
         color: @subtext1 !important;
       }
+
+      /* The notice reddit puts at the top of a sidebar, filled pale yellow
+         and outlined gold. A tint over Latte's @base is indistinguishable
+         from reddit's own bar, so this takes the surface `.infobar` takes
+         and keeps the meaning in the border. */
+      .side-message {
+        background-color: @surface0 !important;
+        border-color: @yellow !important;
+        color: @text !important;
+      }
+
+      /* The subreddit suggestions reddit offers beside a listing. Each
+         suggestion is a chip on the transparent sidebar; the panel that
+         closes the list is a box. */
+      .recommend-box {
+        .rec-item {
+          background-color: @surface0 !important;
+          border-color: @surface1 !important;
+        }
+
+        .endoflist {
+          background-color: @mantle !important;
+        }
+      }
     }
 
     /* The left rail on /r/all and the front page. */
@@ -323,6 +347,18 @@
 
     .sidebox .subtitle {
       color: @muted !important;
+    }
+
+    /* The box reddit fills white to describe a subreddit, which RES night
+       mode paints along with its border and greys the text inside. */
+    .subreddit-info {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
+      color: @text !important;
+
+      .label {
+        color: @muted !important;
+      }
     }
 
     .markhelp,
@@ -829,6 +865,27 @@
 
       &:hover {
         color: @text !important;
+      }
+    }
+
+    /* The source link reddit lifts out of the action row's grey into its own
+       link blue, to say it leads off this post. The row's rule names a class
+       and a type where this names a class alone, so the row's copy is named
+       too. */
+    .post-source-button,
+    .flat-list.buttons li a.post-source-button {
+      color: @link !important;
+    }
+
+    /* The panel the share control opens out of the action row, and the
+       labels down its left edge. */
+    .post-sharing {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
+      color: @text !important;
+
+      .post-sharing-label {
+        color: @muted !important;
       }
     }
 
@@ -1405,6 +1462,13 @@
       }
     }
 
+    /* A heading in the aside reddit's policy and help pages set beside their
+       prose. It sits outside the `.md` body, so the heading rule above does
+       not reach it. */
+    .sidebar h1 {
+      color: @text !important;
+    }
+
     .md-spoiler-text {
       background-color: @surface0 !important;
       color: transparent !important;
@@ -1498,6 +1562,29 @@
     .profile-page .link.promotedlink.saved {
       background-color: @mantle !important;
       border-color: @surface0 !important;
+    }
+
+    /* "Are you interested in these subreddits?", a strip reddit fills with
+       its own pale blue and outlines in its chrome blue. The fill is the
+       raised step above the sponsored box the rule above paints, and the
+       outline is the accent, which is where reddit's own blue goes. The
+       upside-down snoo behind it is full-colour art, so only the colour half
+       of reddit's shorthand is replaced. */
+    .sr-interest-bar {
+      background-color: @surface0 !important;
+      border-color: @accent !important;
+      color: @text !important;
+
+      /* The speech bubble on the strip, whose tail is a border triangle and
+         has to carry the fill or it detaches from the box. RES night mode
+         fills the bubble black, which is darker than any surface here. */
+      .bubble {
+        background-color: @base !important;
+
+        &::after {
+          border-right-color: @base !important;
+        }
+      }
     }
 
     /* The original-content badge, which ships white on reddit's own blue. */
@@ -1794,6 +1881,15 @@
       color: @red !important;
     }
 
+    /* The field headings on the create-a-subreddit form, which reddit writes
+       in a literal blue. They take the step the submit form's field titles
+       take. RES night mode lays a translucent dark strip behind each one,
+       which reddit itself does not draw. */
+    .create-reddit .title {
+      background-color: transparent !important;
+      color: @subtext1 !important;
+    }
+
     .new-stamp {
       color: @stamp !important;
     }
@@ -1978,6 +2074,41 @@
     .search-result-group-header {
       color: @subtext1 !important;
       border-bottom-color: @surface0 !important;
+    }
+
+    /* The facet box beside a search result list. Reddit outlines it in a
+       literal grey and, on the legacy path, fills it a near-white. */
+    .searchfacets {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
+
+      > h4.title {
+        color: @muted !important;
+      }
+    }
+
+    /* The count beside a facet, which reddit greys away from the facet link
+       it follows. */
+    .facet.count {
+      color: @muted !important;
+    }
+
+    /* Search's failure notice. It reports a state, so it keeps the red
+       family rather than dropping to prose; the link inside it is part of
+       the same message and takes the same colour. */
+    .searchfail {
+      color: @alert !important;
+
+      a {
+        color: @alert !important;
+      }
+    }
+
+    /* The label tab on the search menu strip: a raised plate carrying
+       reddit's chrome blue, which this style spends on the accent. */
+    #searchmenu .searchlabel {
+      background-color: @surface0 !important;
+      color: @accent-text !important;
     }
 
     /* Tier 3 — preferences */
@@ -2373,6 +2504,53 @@
 
       &.anchor-right::after {
         border-left-color: @mantle !important;
+      }
+    }
+
+    /* Reddit's tooltip, drawn as a filled box with a triangle borrowed from a
+       border. It ships two ways — a black bubble with white text on the page,
+       and a white one inside the share panel — which land on the same pair
+       here, since both are a floating control over a surface. The arrow's
+       colour has to follow the fill or the pointer detaches from the box, and
+       which border side carries it depends on where the tooltip is anchored.
+       The error variant keeps its red, which is what it is there to say. */
+    .c-tooltip {
+      .tooltip-inner {
+        background-color: @surface0 !important;
+        border-color: @surface1 !important;
+        color: @text !important;
+      }
+
+      &.top .tooltip-arrow,
+      &.top-right .tooltip-arrow {
+        border-top-color: @surface0 !important;
+      }
+
+      &.right .tooltip-arrow {
+        border-right-color: @surface0 !important;
+      }
+
+      &.left .tooltip-arrow {
+        border-left-color: @surface0 !important;
+      }
+
+      &.bottom .tooltip-arrow {
+        border-bottom-color: @surface0 !important;
+      }
+    }
+
+    .c-has-error .c-tooltip {
+      &.top .tooltip-arrow,
+      &.top-right .tooltip-arrow {
+        border-top-color: @red !important;
+      }
+
+      &.right .tooltip-arrow {
+        border-right-color: @red !important;
+      }
+
+      &.left .tooltip-arrow {
+        border-left-color: @red !important;
       }
     }
 
