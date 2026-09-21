@@ -911,6 +911,17 @@
       background-position: 0 0 !important;
     }
 
+    /* A crosspost is a type of its own, and reddit draws it as a branching
+       arrow rather than as the content behind it. Without this the button
+       keeps the neutral plate above, which is meant to cover the moment
+       before reddit fills in a type class, not to stand as one. */
+    .expando-button.collapsed.crosspost {
+      @svg-crosspost: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="none" stroke="@{text}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3.5,11.5 h3.5 l4,-4.5 h3.5 M7,11.5 l4,4.5 h3.5"/><path fill="@{text}" d="M14.5,3.5 l5,3.5 l-5,3.5z M14.5,12.5 l5,3.5 l-5,3.5z"/></svg>');
+
+      background-image: url("data:image/svg+xml,@{svg-crosspost}") !important;
+      background-position: 0 0 !important;
+    }
+
     .expando-button.collapsed.video {
       @svg-play: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M8,5 l10,6.5 l-10,6.5z"/></svg>');
 
