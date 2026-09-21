@@ -1453,6 +1453,12 @@
       background-color: @mantle !important;
       border-color: @surface1 !important;
       color: @text !important;
+
+      /* The ring the browser draws on a focused field, which is otherwise a
+         colour of the browser's own. A focus indicator is a graphical
+         object, so it takes the 3:1 form of the accent rather than the 4.5:1
+         one, which on Latte would be near black. */
+      outline-color: @accent-icon !important;
     }
 
     /* Reddit's video controls are excluded because they are drawn on top of
@@ -2191,9 +2197,15 @@
       color: @text !important;
     }
 
+    /* The primary button in a RES notification. It is an anchor, and the
+       rule for a link inside a notification is a class and a type where this
+       is a class alone, so that one won: accent text on an accent fill, 1:1
+       on the dark flavors. The fill takes @accent-text, which is darkened on
+       Latte by exactly the amount that carries @base against it. */
+    .RESNotification a.RESNotificationButtonBlue,
     .RESNotificationButtonBlue {
-      background-color: @accent !important;
-      color: @crust !important;
+      background-color: @accent-text !important;
+      color: @base !important;
     }
 
     /* The floating controls at the corner of a comments page, and the comment
