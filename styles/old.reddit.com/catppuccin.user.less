@@ -2046,10 +2046,51 @@
     input[type="button"]:disabled,
     .c-btn.disabled,
     .c-btn[disabled],
-    .fancybutton.disabled {
+    .fancybutton.disabled,
+    .basic-button:disabled,
+    .basic-button.disabled {
       background-color: @surface0 !important;
       border-color: @surface1 !important;
       color: @inactive !important;
+    }
+
+    /* A disabled field says so the same way: the fill steps off @mantle onto
+       the control surface, so it stops reading as somewhere to type, and the
+       value recedes with it. Reddit darkens the fill to say this, which only
+       reads as inert on a light flavor. */
+    input:not([type]):disabled,
+    input[type="text"]:disabled,
+    input[type="url"]:disabled,
+    input[type="password"]:disabled,
+    input[type="number"]:disabled,
+    input[type="search"]:disabled,
+    textarea:disabled,
+    select:disabled,
+    .crosspost-field:disabled {
+      background-color: @surface0 !important;
+      color: @inactive !important;
+    }
+
+    /* A label reddit greys out beside a control it has switched off, and the
+       permission rows on the authorization page, which carry the state on the
+       label rather than on an input. */
+    label.disabled {
+      color: @inactive !important;
+    }
+
+    .permission-selector label.disabled {
+      background-color: @surface0 !important;
+    }
+
+    /* The submit button while the form cannot be sent. The sprite gradient is
+       already cleared on `.morelink`; this is the label and the outline, which
+       reddit greys separately. */
+    .disabled .morelink {
+      border-color: @surface1 !important;
+
+      a {
+        color: @inactive !important;
+      }
     }
 
     /* The buttons on the authorization page. A pale blue gradient is the
