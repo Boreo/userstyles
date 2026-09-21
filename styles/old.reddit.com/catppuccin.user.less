@@ -340,6 +340,12 @@
       }
     }
 
+    /* The bare toggle reddit uses for unblock and unfriend, which carries a
+       literal black of its own and has none of the fancy toggle's plate. */
+    form.toggle .option {
+      color: @text !important;
+    }
+
     .fancy-toggle-button .option {
       color: @text !important;
 
@@ -371,9 +377,11 @@
     @inactive: if(@flavor = latte, mix(@text, @subtext1, 50%), @overlay1);
     @inactive-filter: if(@flavor = latte, @subtext1-filter, @overlay1-filter);
 
-    /* @peach is only 2.45:1 on Latte's @mantle; @red reaches 4.46:1 and keeps
-       the warm accent. The dark flavors clear 6.5:1 with @peach. */
-    @code-fg: if(@flavor = latte, @red, @peach);
+    /* @peach is only 2.45:1 on Latte's @mantle, where the code block's fill
+       puts this. @red keeps the warm accent but reaches 4.46:1 there, just
+       short, so it takes the same 4% @alert does and clears at 5.19:1. The
+       dark flavors are past 6.5:1 with @peach. */
+    @code-fg: if(@flavor = latte, darken(@red, 4%), @peach);
 
     /* Secondary text. @subtext0 reaches only 4.06:1 on Latte's @mantle and
        4.37:1 on its @base, both short of 4.5:1; @subtext1 clears both at
@@ -567,8 +575,15 @@
        an `!important` here outranks that and strands RES's background under
        this colour: white becomes @text on a dark tag colour at 1.2:1.
        Without it, RES's `!important` wins wherever RES paints and this still
-       beats reddit's own unprefixed rules on specificity. */
-    .tagline .author {
+       beats reddit's own unprefixed rules on specificity.
+
+       It matches the author link itself rather than the tagline's copy of
+       it, because an author also appears in a search result's byline, in the
+       parent line above a comment in a user's overview, and in wiki prose.
+       The floor rule at the top of this file excludes `.author` so as not to
+       outrank this one, so an author no selector here reaches keeps reddit's
+       own link blue. */
+    a.author {
       color: @text;
     }
 
@@ -711,8 +726,10 @@
       color: @muted !important;
     }
 
+    /* @red is 4.46:1 on Latte's @mantle, which the comment banding puts this
+       on, so it takes @alert's darkening there. */
     .score.likes {
-      color: @red !important;
+      color: @alert !important;
     }
 
     .score.dislikes {
@@ -898,6 +915,29 @@
       @svg-open: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><circle cx="11.5" cy="11.5" r="11.5" fill="@{surface0}"/><g stroke="@{text}" stroke-width="3.25" stroke-linecap="round"><line x1="7.5" y1="7.5" x2="15.5" y2="15.5"/><line x1="15.5" y1="7.5" x2="7.5" y2="15.5"/></g></svg>');
 
       background-image: url("data:image/svg+xml,@{svg-open}") !important;
+    }
+
+    /* Reddit's own video player, built into the expando when a video post is
+       opened, so no static pass reaches it. Its chrome sits on the frame
+       rather than on a page surface: white glyphs, a black scrim, a white
+       seek track. None of that follows the flavor, because the backdrop is
+       whatever the video is showing and a light control over a dark frame
+       reads no better than the reverse. What is themed is the one part
+       carrying a colour of reddit's own — the brand blue on the seek bar,
+       the buffering spinner and the quality label. */
+    .reddit-video-player-root {
+      .seek-bar-progress,
+      .volume-slider-progress {
+        background-color: @accent !important;
+      }
+
+      .buffering-indicator .circle {
+        border-color: @accent !important;
+      }
+
+      .settings-container .hd {
+        color: @accent !important;
+      }
     }
 
     .nsfw-stamp {
@@ -1226,8 +1266,13 @@
       border-color: @surface0 !important;
     }
 
+    /* Its glyph is a single-colour raster tile on a transparent ground, so
+       it takes a filter — and the plate reddit paints behind it has to come
+       off first, or the filter flattens the two together. */
     .dismiss-pinnable {
+      background-color: transparent !important;
       color: @dim !important;
+      filter: @dim-filter !important;
     }
 
     .nextprev {
@@ -1361,7 +1406,19 @@
       color: @subtext1 !important;
     }
 
+    /* The notice above the message list about private messages going away.
+       Its mark is an inline SVG carrying a near-black fill in an attribute,
+       which only a `fill` declaration can reach. */
+    .private-message-deprecation-banner .warning-icon path {
+      fill: @yellow !important;
+    }
+
     /* Tier 2 — forms */
+    /* Reddit writes some of its fields with no `type` at all — the app name
+       and description on /prefs/apps are `<input class="text">` — and a
+       field without one is a text field, so an attribute selector alone
+       leaves them carrying the browser's own white. */
+    input:not([type]),
     input[type="text"],
     input[type="url"],
     input[type="password"],
@@ -1374,7 +1431,12 @@
       color: @text !important;
     }
 
-    button,
+    /* Reddit's video controls are excluded because they are drawn on top of
+       the video rather than on a page surface: a white glyph with a dark
+       scrim under the two that need one. A plate from here lands under a
+       white glyph, and on Latte the plate is light. See the video player
+       below, which themes the parts of it that carry a colour of reddit's. */
+    button:not(.reddit-video-player-root *),
     input[type="submit"],
     input[type="button"] {
       background-color: @surface0 !important;
@@ -1529,6 +1591,12 @@
       filter: @dim-filter !important;
     }
 
+    /* A subreddit result's description, which reddit gives a grey of its
+       own rather than letting it inherit. */
+    .search-result-body {
+      color: @muted !important;
+    }
+
     /* The matched run inside a search result, which reddit marks up with
        <mark>; it takes the colour of the link it sits in. */
     mark {
@@ -1642,6 +1710,24 @@
       color: @muted !important;
     }
 
+    /* /prefs/apps, which is a page of its own rather than a preference
+       table: each app is a bordered card, its name is a heading reddit
+       colours as a link, and the permission popup is a literal yellow. */
+    .authorized-app,
+    .developed-app {
+      border-color: @surface0 !important;
+    }
+
+    .app-details h2 {
+      color: @accent-text !important;
+    }
+
+    .app-scope {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
+      color: @text !important;
+    }
+
     /* Tier 3 — wiki */
     /* `.wiki-page` is a class on <body> itself, not a wrapping element, so
        nesting under it would require the gate's body to be its own strict
@@ -1683,6 +1769,12 @@
     .collapse-button {
       background-color: @surface0 !important;
       border-color: @surface1 !important;
+      color: @text !important;
+    }
+
+    /* The revision list, which reddit gives a literal black rather than
+       letting the page colour through. */
+    .generic-table {
       color: @text !important;
     }
 
