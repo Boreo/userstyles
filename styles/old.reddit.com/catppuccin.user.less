@@ -1704,6 +1704,98 @@
       color: @inactive !important;
     }
 
+    /* Reddit builds its dialogs on a click, so nothing that reads a static
+       page has ever seen one. Two of them reach a reader in normal use and
+       they are not the same kind of thing: the crosspost dialog is reddit's
+       own markup all the way down, while the report dialog is a frame around
+       an iframe to another origin, which no page-injected stylesheet can
+       enter. The wrappers below are what the two share, and are all that is
+       reachable on the report flow. */
+    .modal-backdrop {
+      background-color: @crust !important;
+    }
+
+    .modal-content,
+    .modal-body {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
+      color: @text !important;
+    }
+
+    .modal-header {
+      background-color: @surface0 !important;
+      color: @text !important;
+    }
+
+    .modal-header-title {
+      color: @text !important;
+    }
+
+    /* The close glyph is a single-colour tile on a transparent background,
+       and RES night mode inverts it rather than recolouring it. A palette
+       filter replaces both. */
+    .modal-header-close .c-close {
+      filter: @dim-filter !important;
+    }
+
+    .crossposting-modal {
+      /* The dialog's heading, which reddit draws in its chrome blue. */
+      .crosspost-header-title {
+        color: @accent-text !important;
+      }
+
+      /* The notice above the fields, filled pale yellow and outlined orange.
+         It takes the surface and border `.infobar` takes. */
+      .crosspost-description {
+        background-color: @surface0 !important;
+        border-color: @yellow !important;
+        color: @text !important;
+      }
+
+      /* The post being crossposted, shown as a card on the dialog. */
+      .crosspost-thing-preview {
+        background-color: @surface0 !important;
+        border-color: @surface1 !important;
+        color: @text !important;
+      }
+
+      .crosspost-thing-preview-text,
+      .crosspost-label,
+      .crosspost-subreddit-rules li {
+        color: @text !important;
+      }
+
+      .crosspost-thing-preview-tagline {
+        color: @dim !important;
+      }
+
+      /* A long title is clipped behind a fade, which has to end on the card's
+         own fill or the text dissolves into a colour that is not there. */
+      .crosspost-thing-preview-text::after {
+        background-image: linear-gradient(
+          to bottom,
+          fade(@surface0, 0%) 0%,
+          fade(@surface0, 70%) 100%
+        ) !important;
+      }
+
+      /* Reddit draws the title box as a `div` rather than an `input`, so the
+         rule for a text field does not reach it. It takes the same pair. */
+      .crosspost-field {
+        background-color: @mantle !important;
+        border-color: @surface1 !important;
+        color: @text !important;
+      }
+
+      /* The fine print: the marker beside a required field and the line
+         saying what crossposting does. Reddit draws both in near-black,
+         which is the one colour a dark flavor cannot leave alone. */
+      .required,
+      .crosspost-warning {
+        color: @dim !important;
+      }
+    }
+
     /* Tier 2 — profile */
     /* The header on a user's own subreddit page, where reddit writes the
        name in black and the u/ path in a literal blue. */
