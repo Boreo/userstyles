@@ -2750,11 +2750,78 @@
       color: @alert !important;
     }
 
+    /* The traffic tables. Reddit leaves the rows to inherit the page and night
+       mode gives them a grey of its own, on the row rather than on the table,
+       so this has to name the row too. */
+    .traffic-table tr {
+      color: @text !important;
+    }
+
+    /* Reddit bands the rows in a light grey, which night mode replaces on the
+       month table and clears on the side ones. @band is the alternate step the
+       comment listing already stripes with, a stripe below the page rather
+       than a box on it. */
+    .traffic-table tbody tr:nth-child(even) {
+      background-color: @band !important;
+    }
+
+    /* The rule above the totals row, which reddit draws in a literal black.
+       Only the top edge carries a width; the rest follow the row's colour. */
+    .traffic-table tfoot tr {
+      border-top-color: @surface0 !important;
+    }
+
+    /* Each chart sits in a bordered box of its own. */
+    div.timeseries {
+      border-color: @surface0 !important;
+    }
+
+    /* The chart's axis and legend labels, which flot draws as text in a grey
+       that reaches 2.17:1 on the dark flavors. Both sets inherit rather than
+       declare, so naming the two wrappers reaches them; flot colours the
+       legend's table separately from the axis text. */
+    .flot-text,
+    .legend table {
+      color: @muted !important;
+    }
+
+    /* The frame flot draws around each legend key, written inline on the
+       element. The swatch inside keeps the colour flot plotted the line with:
+       the plot is a canvas this style cannot reach, so recolouring its key
+       would leave the two naming different things. */
+    .legendColorBox > div {
+      border-color: @surface1 !important;
+    }
+
+    /* The chart's hover readout, which reddit builds on the fly and tints a
+       pale pink. It is a floating control over the page, so it takes the pair
+       reddit's own tooltips take here. */
+    #graph-tooltip {
+      background-color: @surface0 !important;
+      border-color: @surface1 !important;
+      color: @text !important;
+    }
+
     /* The moderation log's rows take the page colour from reddit, which
        night mode overrides with a grey of its own on the line describing
        each action. */
     .modactionlisting .description {
       color: @text !important;
+    }
+
+    /* Night mode fills every element inside the log's table and gives it a
+       border, and a colour declared on the cell beats one inherited from the
+       table, so the selector is mirrored as it stands. Reddit paints nothing
+       here, so the cells go back to letting the page through. */
+    .modactionlisting table * {
+      background-color: transparent !important;
+      border-color: @surface0 !important;
+    }
+
+    /* The time beside each action, a byline one step under the description. */
+    .modactionlisting .timestamp,
+    .modactionlisting .timestamp time {
+      color: @dim !important;
     }
 
     /* Tier 4 — Reddit Enhancement Suite chrome */
