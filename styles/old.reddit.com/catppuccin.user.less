@@ -458,15 +458,21 @@
        what reddit's own light interface does — #0000ff unread, #551a8b
        visited — with the palette's blue and mauve standing in. The two
        darkest flavors change lightness instead, which is what RES night mode
-       does, and the step is measured against what RES draws rather than
-       chosen freely: RES puts a read title at 6.22:1 on its page and the
-       tagline below it at 3.94:1, so the title stays plainly above the line
-       under it. @subtext0 is the palette step that lands there — 6.62:1 on
-       Macchiato and 7.37:1 on Mocha, against @dim's 5.29:1 and 5.81:1.
-       @overlay1 was a step further down and inverted that ordering, leaving
-       the title quieter than its own tagline at 4.14:1 and 4.44:1. */
+       does.
+
+       The step is chosen for how far it sits from an unread title, not for
+       how far it sits from the page. Those pull in opposite directions and
+       the first is what the reader is actually doing: telling one row from
+       the next. @overlay1 separates from @text by 2.40:1 on Macchiato and
+       2.56:1 on Mocha, where RES's own pair manages 1.81:1. @subtext0 reads
+       better against the page — 6.62:1 and 7.37:1 against @overlay1's 4.14:1
+       and 4.44:1 — and was tried for that reason, but it closes the gap to
+       1.50:1 and 1.54:1 and the two states stop being tellable apart.
+
+       So this sits below 4.5:1 on those two flavors deliberately, the same
+       decision @inactive records, and `contrast.js` exempts it by name. */
     @read: if(@flavor = latte, darken(@mauve, 2%), if(@flavor = frappe, @mauve,
-      @subtext0));
+      @overlay1));
     @title: if(@flavor = latte, @link, if(@flavor = frappe, @link, @text));
     @band: if(@flavor = latte, mix(@crust, @base, 50%), mix(@mantle, @base,
       60%));
