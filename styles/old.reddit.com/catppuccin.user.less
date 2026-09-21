@@ -175,6 +175,21 @@
       border-color: @accent !important;
     }
 
+    /* The overflow control at the end of the tab strip, which reddit draws
+       as one more tab: outlined and carrying its brand orange when it is
+       open, filled when it is showing a title instead. Each takes the tab it
+       imitates. The drop arrow on it is redrawn with every other one. */
+    .dropdown.tabdrop .selected {
+      background-color: @base !important;
+      border-color: @accent !important;
+      color: @accent-text !important;
+    }
+
+    .dropdown.tabdrop .selected.title {
+      background-color: @surface0 !important;
+      color: @text !important;
+    }
+
     /* Tier 1 — sidebar */
     .side {
       background-color: transparent !important;
@@ -1496,6 +1511,40 @@
       }
     }
 
+    /* The bar reddit shows a new account above its first listing. It is a box
+       on the page, and reddit's orange outline is branding rather than a
+       state, so it becomes the accent. The two plates inside are raised
+       strips; their underlines keep what they mean — reddit's chrome blue on
+       the first, the upvote's orange on the second. The call to action is a
+       filled chip, and no Latte colour holds @base at full strength. */
+    .infobar.welcome {
+      background-color: @mantle !important;
+      border-color: @accent !important;
+      color: @text !important;
+    }
+
+    .infobar.welcome h1,
+    .infobar.welcome h2 {
+      background-color: @surface0 !important;
+      color: @text !important;
+    }
+
+    .infobar.welcome h1 {
+      border-bottom-color: @accent !important;
+    }
+
+    .infobar.welcome h2 {
+      border-bottom-color: @red !important;
+    }
+
+    .infobar.welcome a {
+      background-color: if(@flavor = latte, darken(@accent, 18%), @accent)
+        !important;
+      border-bottom-color: if(@flavor = latte, darken(@accent, 18%), @accent)
+        !important;
+      color: @base !important;
+    }
+
     /* An archived post's banner is grey; a timeout or a deprecation notice
        is red. Both take a surface for the same reason `.infobar` does — a
        tint over Latte's @base is indistinguishable from reddit's own — and
@@ -1677,6 +1726,31 @@
     .bottommenu .icon,
     .separator {
       color: @muted !important;
+    }
+
+    /* The freshness note in the bottom menu, which reddit draws in a literal
+       green. @sticky is the green this style puts on text; @green itself is
+       below 4.5:1 on Latte's @base. */
+    .bottommenu .updated {
+      color: @sticky !important;
+    }
+
+    /* Reddit's highlight on a newly added page link. The yellow is what says
+       "new", so it stays a yellow and becomes a tint rather than a surface —
+       a tint over Latte's @base is what @base is light enough to show. */
+    .newpagelink {
+      background-color: fade(@yellow, 20%) !important;
+    }
+
+    /* The category chip beside a saved item. */
+    .save-category {
+      background-color: @surface0 !important;
+    }
+
+    /* The subreddit's own description on the interstitial reddit puts in
+       front of a gated community. */
+    .interstitial-subreddit-description {
+      background-color: @mantle !important;
     }
 
     .usertext.grayed .usertext-body,
@@ -1863,6 +1937,48 @@
 
     .was-comment .subject {
       color: @subtext1 !important;
+    }
+
+    /* A message body, which reddit draws in a literal green-grey, and the
+       dashed rail beside a reply. */
+    .message.message-parent > .entry,
+    .message.message-reply > .entry {
+      color: @text !important;
+    }
+
+    .message.message-parent:not(.threaded) .entry,
+    .message.message-reply:not(.threaded) .entry {
+      border-left-color: @surface0 !important;
+    }
+
+    /* The pill naming the other party in a thread. Reddit draws it in its own
+       chrome blue, but it is a chip rather than a link, so it takes the
+       control surface and a control's border. Reddit names the pill itself,
+       so `.message .subject` above does not reach its label. */
+    .message .subject .correspondent {
+      background-color: @surface0 !important;
+      border-color: @surface1 !important;
+      color: @text !important;
+    }
+
+    /* The row beside the inbox's pagination. Reddit gives it and `.nextprev`
+       the same grey and the same outlined links, then takes the fill off this
+       one, so it keeps the border alone and the link colour falls to the
+       floor. The fill returns on hover. */
+    .next-suggestions {
+      color: @muted !important;
+    }
+
+    .next-suggestions a {
+      border-color: @surface1 !important;
+    }
+
+    .next-suggestions a:hover {
+      background-color: @surface0 !important;
+    }
+
+    .next-suggestions .separator {
+      border-color: @surface0 !important;
     }
 
     /* The notice above the message list about private messages going away.
@@ -2091,6 +2207,46 @@
     #image-name,
     #sr-drop-down {
       background-color: @mantle !important;
+    }
+
+    /* The subreddit autocomplete's rows. The one under the cursor takes the
+       control surface; the name row reddit fills with its chrome blue takes
+       the accent, darkened on Latte far enough to hold @base. */
+    .sr-row.sr-selected {
+      background-color: @surface0 !important;
+    }
+
+    .sr-name-row.sr-selected {
+      background-color: if(@flavor = latte, darken(@accent, 18%), @accent)
+        !important;
+      color: @base !important;
+    }
+
+    /* The field the multireddit form collects subreddits in, which is a field
+       without being an input, and the chip it draws for each one. */
+    #sr-autocomplete-area.multiple-subreddit {
+      background-color: @mantle !important;
+
+      .sr-span {
+        background-color: @surface0 !important;
+      }
+    }
+
+    /* The status reddit prints beside the submit form's URL field while it
+       fetches a title. */
+    #url-field .title-status {
+      color: @alert !important;
+    }
+
+    /* The hint under the compose form's recipient field, and the promo beside
+       it that offers to send the message to the admins instead. */
+    .pm_to_admins_prompt,
+    .pm_to_admins_promo__desc {
+      color: @muted !important;
+    }
+
+    .pm_to_admins_promo {
+      border-color: @accent !important;
     }
 
     #new-link-media-progress {
@@ -2537,6 +2693,12 @@
       color: @text !important;
     }
 
+    /* The notice on a traffic page that a day's figures are still being
+       counted, which reddit turns red once the wait is long. */
+    #timeseries-unprocessed.slow {
+      color: @alert !important;
+    }
+
     /* Tier 4 — Reddit Enhancement Suite chrome */
     /* The envelope is a sprite tile drawn in two colours — white with an
        orange flap when there is mail — so a single-colour filter flattens
@@ -2716,6 +2878,14 @@
 
       .author-tooltip__profile-link {
         color: @accent-text !important;
+      }
+
+      /* The beta mark on the card, a filled chip carrying reddit's own blue
+         behind white text. */
+      .author-tooltip__beta {
+        background-color: if(@flavor = latte, darken(@accent, 18%), @accent)
+          !important;
+        color: @base !important;
       }
 
       .author-tooltip__karma-details,
