@@ -442,6 +442,11 @@
     @alert: if(@flavor = latte, darken(@red, 4%), @red);
     @sticky: if(@flavor = latte, darken(@green, 10%), @green);
 
+    /* Reddit marks a pinned post in teal and a stickied one in green, and
+       keeps them apart. @teal is 3.31:1 on Latte's @base, so it takes the
+       least darkening that clears 4.5:1 on the comment banding's @mantle. */
+    @pin: if(@flavor = latte, darken(@teal, 8%), @teal);
+
     /* Thirteen of the fifteen accent choices fall below 4.5:1 on Latte's
        @base — yellow reaches only 2.31:1 — so an accent that carries text is
        darkened there. It has to clear @surface0 as well as @base, since the
@@ -537,6 +542,31 @@
     .link.stickied a.title,
     .thing.stickied a.title {
       color: @sticky !important;
+    }
+
+    /* A pinned post, which reddit marks in teal and keeps apart from a
+       stickied one. */
+    .thing.sticky-pinned.link a.title,
+    .tagline .pinned-tagline,
+    .search-result-meta .pinned-tagline {
+      color: @pin !important;
+    }
+
+    /* The URL under a title in reddit's compact listing. It is drawn as a
+       link and follows the title's read state, so it takes the title's
+       colours rather than the floor's. */
+    .thing .source-url {
+      color: @title !important;
+    }
+
+    .thing.visited .source-url {
+      color: @read !important;
+    }
+
+    /* A title reddit renders as plain text rather than as a link — a post
+       that has been removed, or one in a listing that does not link out. */
+    .thing .title-styled-as-text {
+      color: @text !important;
     }
 
     /* Two ways of drawing read from unread, one per half of the palette.
@@ -653,6 +683,53 @@
       color: @sticky !important;
     }
 
+    /* Account states reddit writes onto the author itself: banned, shadow
+       banned, and the two timeouts. Reddit draws all four in a red or an
+       orange, which is the distinction worth keeping — spam is the milder
+       one and takes the warmer colour. */
+    .author.user-banned,
+    .author.user-in-timeout-perma,
+    .author.user-in-timeout-temp {
+      color: @alert !important;
+    }
+
+    .author.user-spam {
+      color: @stamp !important;
+    }
+
+    /* A former employee's mark, beside a username in a tagline. */
+    .tagline .alum,
+    .search-result-meta .alum {
+      color: @alert !important;
+    }
+
+    /* The line under a comment that says who distinguished it, and the two
+       marks inside it. */
+    .user-distinction {
+      color: @muted !important;
+
+      .admin {
+        color: @alert !important;
+      }
+
+      .beta {
+        color: @stamp !important;
+      }
+    }
+
+    /* Reddit distinguishes a subreddit's name in a tagline when the post is
+       from its admins or its moderators. Same two colours as the marks
+       beside a distinguished author. */
+    .tagline .subreddit .admin-distinguish,
+    .search-result-meta .subreddit .admin-distinguish {
+      color: @alert !important;
+    }
+
+    .tagline .subreddit .moderator-distinguish,
+    .search-result-meta .subreddit .moderator-distinguish {
+      color: @green !important;
+    }
+
     /* Subreddit flair carries colours the subreddit chose, and those colours
        often mean something, so it is behind a switch. @subtext1 is 4.05:1 on
        Latte's @surface0, so flair text takes @text there for 5.17:1; the dark
@@ -750,7 +827,8 @@
     }
 
     /* Matches the tagline it sits in rather than dimming below it. */
-    .score.unvoted {
+    .score.unvoted,
+    .link.compressed .score {
       color: @muted !important;
     }
 
@@ -981,6 +1059,75 @@
 
     .nsfw-stamp {
       color: @red !important;
+    }
+
+    /* Reddit's chips: archived is a grey word, the other three are filled.
+       Latte has no palette colour light enough to carry @base at full
+       strength, so each fill is darkened there by the 18% the author pills
+       already use. */
+    .archived-stamp {
+      color: @muted !important;
+    }
+
+    .quarantine-stamp,
+    .btn-quarantine,
+    .quarantine-notice {
+      background-color: if(@flavor = latte, darken(@yellow, 18%), @yellow)
+        !important;
+      border-color: if(@flavor = latte, darken(@yellow, 18%), @yellow)
+        !important;
+      color: @base !important;
+    }
+
+    .moderator-stamp {
+      background-color: if(@flavor = latte, darken(@green, 18%), @green)
+        !important;
+      border-color: if(@flavor = latte, darken(@green, 18%), @green)
+        !important;
+      color: @base !important;
+    }
+
+    /* Reddit gives this one a literal black border with `!important`. */
+    .entry .buttons li.reported-stamp {
+      background-color: if(@flavor = latte, darken(@yellow, 18%), @yellow)
+        !important;
+      border-color: if(@flavor = latte, darken(@yellow, 18%), @yellow)
+        !important;
+      color: @base !important;
+    }
+
+    /* The note and the reason reddit puts on a removed post. */
+    .link-note {
+      background-color: transparent !important;
+      color: @alert !important;
+    }
+
+    .link-to-reason {
+      color: @link !important;
+    }
+
+    /* The panel reddit lays over a thumbnail behind an interstitial, and the
+       button inside it. The overlay form is a scrim on the media itself and
+       keeps reddit's own translucent black. */
+    .expando-gate.expando-gate--interstitial {
+      background-color: @surface0 !important;
+      color: @text !important;
+    }
+
+    .expando-gate .expando-gate__show-once {
+      border-color: @text !important;
+      color: @text !important;
+    }
+
+    /* The hash reddit shows over a thumbnail in a mod view. */
+    .thumbnail-hash {
+      border-color: @surface1 !important;
+      color: @muted !important;
+
+      &:hover {
+        border-color: @text !important;
+        color: @text !important;
+      }
     }
 
     .spoiler-stamp,
@@ -1279,6 +1426,36 @@
       }
     }
 
+    /* An archived post's banner is grey; a timeout or a deprecation notice
+       is red. Both take a surface for the same reason `.infobar` does — a
+       tint over Latte's @base is indistinguishable from reddit's own — and
+       keep the meaning in the border. */
+    .archived-infobar {
+      background-color: @surface0 !important;
+      border-color: @surface1 !important;
+      color: @text !important;
+    }
+
+    .timeout-infobar,
+    .deprecation-infobar {
+      background-color: @surface0 !important;
+      border-color: @red !important;
+      color: @text !important;
+    }
+
+    /* Each mark is a white glyph on a transparent ground with a coloured
+       tile behind it, and white on any of those tiles is below 3:1 on every
+       flavor. The tile is cleared and the glyph filtered instead. */
+    .archived-infobar.with-icon::before {
+      background-color: transparent !important;
+      filter: @text-filter !important;
+    }
+
+    .timeout-infobar.with-icon::before {
+      background-color: transparent !important;
+      filter: @red-filter !important;
+    }
+
     /* The banner reddit puts above a locked or quarantined post. Its icon is
        a pseudo-element with a colour of its own. */
     .reddit-infobar {
@@ -1303,6 +1480,18 @@
     .locked-tagline::before {
       background-color: transparent !important;
       filter: @red-filter !important;
+    }
+
+    /* A sponsored post, and the box a set of them sits in. Reddit outlines
+       the row and fills the external ones; RES night mode clears the fill
+       and greys the outline. Both take the surface the listing already uses
+       for a box. */
+    .organic-listing,
+    .link.promotedlink,
+    .link.promotedlink.external,
+    .profile-page .link.promotedlink.saved {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
     }
 
     /* The original-content badge, which ships white on reddit's own blue. */
@@ -1397,9 +1586,23 @@
       color: @muted !important;
     }
 
-    .usertext.grayed .usertext-body {
+    .usertext.grayed .usertext-body,
+    .commentbody.grayed {
       background-color: @mantle !important;
       color: @muted !important;
+    }
+
+    /* The comment a permalink points at, which reddit fills pale yellow and
+       RES night mode fills with its own blue. A tint of the accent marks it
+       without putting text on a fill. */
+    .commentbody.border {
+      background-color: fade(@accent, 15%) !important;
+    }
+
+    /* The box reddit draws around the comment a "jump to" landed on. */
+    .user-jumped-to {
+      background-color: @mantle !important;
+      border-color: @surface0 !important;
     }
 
     .debuginfo {
@@ -1409,6 +1612,16 @@
     }
 
     /* Tier 2 — profile */
+    /* The header on a user's own subreddit page, where reddit writes the
+       name in black and the u/ path in a literal blue. */
+    .user-subreddit .title {
+      color: @text !important;
+    }
+
+    .user-subreddit .path {
+      color: @link !important;
+    }
+
     .trophy-area .content {
       background-color: @mantle !important;
       border-color: @surface0 !important;
@@ -1424,6 +1637,14 @@
 
     .titlebox .karma {
       color: @accent-text !important;
+    }
+
+    /* The per-subreddit karma table on a profile marks a quarantined
+       subreddit's row with a literal yellow. */
+    #per-sr-karma th.subreddit-karma-quarantined {
+      background-color: if(@flavor = latte, darken(@yellow, 18%), @yellow)
+        !important;
+      color: @base !important;
     }
 
     /* Tier 2 — inbox */
@@ -2348,8 +2569,18 @@
       border-color: @surface0 !important;
     }
 
-    .crosspost-preview-tagline .dot {
+    .crosspost-preview-tagline .dot,
+    .crosspost-preview-tagline .comments,
+    .crosspost-preview-comment-parent,
+    .crosspost-preview-comment-parent a,
+    .crosspost-preview-comment-parent .md {
       color: @dim !important;
+    }
+
+    /* A crossposted video's panel fills behind the player rather than
+       letting the panel's own surface through. */
+    .crosspost-preview.video .crosspost-preview-content {
+      background-color: @mantle !important;
     }
 
     /* RES's controls over an expanded image — the settings gear, the two
