@@ -283,8 +283,10 @@
       }
 
       /* The handle's arrow, a single-colour tile on a pseudo-element that
-         paints nothing of its own. */
+         paints nothing of its own; the background is cleared so RES night
+         mode's own hover fill on this element cannot sit under the filter. */
       .grippy::before {
+        background-color: transparent !important;
         filter: @accent-filter !important;
       }
 
@@ -963,7 +965,12 @@
        `background-size` is reset with the position: reddit serves a second
        set of offsets to high-density screens under a media query that also
        scales the sheet, and a scaled sheet would stretch these. The guard
-       excludes a post that has a real thumbnail under the same class. */
+       excludes a post that has a real thumbnail under the same class.
+
+       Each selector calling this mixin also excludes a crosspost's
+       comments-page preview header, whose own 30×30 sprite reddit draws at
+       a different offset on the same classes; that sprite is left in
+       place there rather than redrawn at this mixin's 70×50 scale. */
     .thumbnail-art(@glyph) {
       @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="70" height="50" viewBox="0 0 70 50"><circle cx="35" cy="25" r="24" fill="@{surface0}"/>@{glyph}</svg>');
 
@@ -973,37 +980,37 @@
       filter: none !important;
     }
 
-    .thumbnail.default:not(:has(img)) {
+    .thumbnail.default:not(:has(img)):where(:not(.crosspost-comments-preview-header *)) {
       .thumbnail-art(
         ~'<g fill="none" stroke="@{overlay1}" stroke-width="3"><rect x="23" y="12" width="12" height="21" rx="6"/><rect x="35" y="17" width="12" height="21" rx="6"/></g>'
       );
     }
 
-    .thumbnail.self:not(:has(img)) {
+    .thumbnail.self:not(:has(img)):where(:not(.crosspost-comments-preview-header *)) {
       .thumbnail-art(
         ~'<rect x="22" y="11" width="26" height="28" rx="2" fill="@{overlay1}"/><path fill="@{surface0}" d="M26,17h18v2H26z M26,22h18v2H26z M26,27h18v2H26z M26,32h10v2H26z"/>'
       );
     }
 
-    .thumbnail.image:not(:has(img)) {
+    .thumbnail.image:not(:has(img)):where(:not(.crosspost-comments-preview-header *)) {
       .thumbnail-art(
         ~'<rect x="20" y="13" width="30" height="24" rx="2" fill="@{overlay1}"/><path fill="@{surface0}" d="M24,33l8,-11 5,6 4,-4 7,9z"/>'
       );
     }
 
-    .thumbnail.nsfw:not(:has(img)) {
+    .thumbnail.nsfw:not(:has(img)):where(:not(.crosspost-comments-preview-header *)) {
       .thumbnail-art(
         ~'<g fill="none" stroke="@{overlay1}" stroke-width="3"><circle cx="35" cy="25" r="11"/><path d="M27,17 43,33"/></g>'
       );
     }
 
-    .thumbnail.spoiler:not(:has(img)) {
+    .thumbnail.spoiler:not(:has(img)):where(:not(.crosspost-comments-preview-header *)) {
       .thumbnail-art(
         ~'<path fill="@{overlay1}" d="M32,10h6v19h-6z M32,33h6v6h-6z"/>'
       );
     }
 
-    .thumbnail.account:not(:has(img)) {
+    .thumbnail.account:not(:has(img)):where(:not(.crosspost-comments-preview-header *)) {
       .thumbnail-art(
         ~'<g fill="@{overlay1}"><circle cx="35" cy="19" r="7"/><path d="M22,40a13,11 0 0 1 26,0z"/></g>'
       );
@@ -1032,9 +1039,13 @@
        fills it in a moment later, so the rules below are reached only after
        that. These two carry a neutral plate for the gap, which is what the
        reader sees flash otherwise. */
+    /* Reddit rescales its sprite sheet under a high-density media query;
+       the rebuilt tile is a single 23×23 image, so that scaled size is
+       reset back to the tile's own dimensions. */
     .expando-button {
       background-color: transparent !important;
       border-color: @surface0 !important;
+      background-size: 23px 23px !important;
       filter: none !important;
     }
 
@@ -1045,9 +1056,12 @@
       background-position: 0 0 !important;
     }
 
-    .expando-button.expanded {
-      @svg-collapse: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><circle cx="11.5" cy="11.5" r="11.5" fill="@{surface0}"/><g stroke="@{text}" stroke-width="3.25" stroke-linecap="round"><line x1="7.5" y1="7.5" x2="15.5" y2="15.5"/><line x1="15.5" y1="7.5" x2="7.5" y2="15.5"/></g></svg>');
+    /* This is the same X-in-a-circle for every "expanded" state — plain
+       expando, selftext/video sprite tile, and image/video-muted/locked —
+       so one variable serves all three of the rules below. */
+    @svg-collapse: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><circle cx="11.5" cy="11.5" r="11.5" fill="@{surface0}"/><g stroke="@{text}" stroke-width="3.25" stroke-linecap="round"><line x1="7.5" y1="7.5" x2="15.5" y2="15.5"/><line x1="15.5" y1="7.5" x2="7.5" y2="15.5"/></g></svg>');
 
+    .expando-button.expanded {
       background-image: url("data:image/svg+xml,@{svg-collapse}") !important;
       background-position: 0 0 !important;
     }
@@ -1109,18 +1123,14 @@
 
     .expando-button.expanded.selftext,
     .expando-button.expanded.video {
-      @svg-sprite-open: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><circle cx="11.5" cy="11.5" r="11.5" fill="@{surface0}"/><g stroke="@{text}" stroke-width="3.25" stroke-linecap="round"><line x1="7.5" y1="7.5" x2="15.5" y2="15.5"/><line x1="15.5" y1="7.5" x2="7.5" y2="15.5"/></g></svg>');
-
-      background-image: url("data:image/svg+xml,@{svg-sprite-open}") !important;
+      background-image: url("data:image/svg+xml,@{svg-collapse}") !important;
       background-position: 0 0 !important;
     }
 
     .expando-button.expanded.image,
     .expando-button.expanded.video-muted,
     .expando-button.expanded.expando-button-requires-permission {
-      @svg-open: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><circle cx="11.5" cy="11.5" r="11.5" fill="@{surface0}"/><g stroke="@{text}" stroke-width="3.25" stroke-linecap="round"><line x1="7.5" y1="7.5" x2="15.5" y2="15.5"/><line x1="15.5" y1="7.5" x2="7.5" y2="15.5"/></g></svg>');
-
-      background-image: url("data:image/svg+xml,@{svg-open}") !important;
+      background-image: url("data:image/svg+xml,@{svg-collapse}") !important;
     }
 
     /* Reddit's own video player, built into the expando when a video post is
@@ -1263,8 +1273,8 @@
        behind it on every flavor, which is the direction RES draws it and the
        only direction Latte has — @base is its lightest colour. */
     /* The background alternates every level so that a reply is told from its
-       parent; the thread colour repeats every fourth, which is why the chain
-       has four steps rather than two. */
+       parent; the thread colour repeats every sixth, which is why the chain
+       has six steps rather than two. */
     .comment-level-1(@depth; @sel) when (@depth < 12) {
       @{sel} {
         background-color: @band !important;
@@ -1806,6 +1816,12 @@
       background-color: @crust !important;
     }
 
+    /* RES's rich-text editor for a wiki page or a subreddit's stylesheet,
+       which opens over the page behind the same scrim. */
+    #BigEditor {
+      background-color: fade(@crust, 75%) !important;
+    }
+
     .modal-content,
     .modal-body {
       background-color: @mantle !important;
@@ -1943,6 +1959,13 @@
       &.new,
       &.recipient {
         background-color: fade(@accent, 8%) !important;
+      }
+
+      /* Reddit fills an unread message's entry `#F7F7F7` and RES night mode
+         `#333`. */
+      &.new > .entry {
+        background-color: transparent !important;
+        border-color: @surface0 !important;
       }
 
       /* Reddit sets a literal black on a message you sent. */
@@ -2329,7 +2352,8 @@
     }
 
     #media-progress-bar {
-      background-color: @accent !important;
+      background-color: if(@flavor = latte, darken(@accent, 18%), @accent)
+        !important;
       color: @base !important;
     }
 
@@ -2341,7 +2365,7 @@
     .clear-input-button,
     .video-cancel-button,
     .media-file-cancel-upload-btn {
-      background-color: @surface1 !important;
+      background-color: @surface0 !important;
       color: @text !important;
     }
 
@@ -3402,6 +3426,16 @@
       }
     }
 
+    /* RES's image-gallery step arrows, an icon-font glyph in a literal
+       blue, present only after a gallery expando opens. */
+    .res-step::after {
+      color: @accent-icon !important;
+    }
+
+    .res-step:hover::after {
+      color: @text !important;
+    }
+
     .res-media-controls-clippy {
       color: @text !important;
 
@@ -3525,6 +3559,12 @@
 
     #editShortcutDialog .RESDescription {
       color: @dim !important;
+    }
+
+    /* RES declares its colour with two ids and `!important`. */
+    #editShortcutDialog #sortButton {
+      color: @text !important;
+      border-color: @surface1 !important;
     }
 
     /* /r/dashboard, which RES builds out of reddit's own page. Each widget is
