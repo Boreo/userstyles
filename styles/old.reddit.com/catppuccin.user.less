@@ -27,35 +27,20 @@
 @import "https://userstyles.catppuccin.com/lib/std/v1.less";
 
 @-moz-document domain("reddit.com") {
-  /* Old reddit is served from old.reddit.com and, for accounts with the
-     "use old reddit" preference, from www.reddit.com with no redirect, so the
-     domain cannot identify the interface. `body > #header` exists only on old
-     reddit; new reddit's shreddit markup has no such element, so the style
-     emits nothing there. */
-  /* Old reddit has no dark mode of its own, so Reddit Enhancement Suite's
-     night mode is the only light/dark state the interface has. Where RES is
-     loaded it is therefore the switch, and the system preference is consulted
-     only where it is not: a reader who turns night mode off is asking for
-     reddit's light interface and gets it whatever the desktop is set to.
-
-     The light flavor is the base rather than an arm of its own, because both
-     of the cases below are a reason to depart from it. */
+  /* `body > #header` exists only on old reddit, on either domain. */
+  /* RES night mode is the only light/dark state, so it decides the flavor. */
   body:has(> #header) {
     #catppuccin(@lightFlavor);
   }
 
-  /* No RES, so nothing on the page states a preference and the system's is
-     all there is. RES marks its own presence with a bare `res` class, beside
-     the versioned ones. */
+  /* No RES (bare `res` class), so the system preference is all there is. */
   @media (prefers-color-scheme: dark) {
     body:not(.res):has(> #header) {
       #catppuccin(@darkFlavor);
     }
   }
 
-  /* RES applies its classes to both documentElement and body, so this
-     body-scoped form matches. It comes last and carries a class the others do
-     not, so it wins on both order and specificity. */
+  /* RES classes body too; last and one class more specific, so it wins. */
   body.res-nightmode:has(> #header) {
     #catppuccin(@darkFlavor);
   }
@@ -67,25 +52,13 @@
     background-color: @base !important;
     color: @text !important;
 
-    /* Tier 1 — page chrome */
-
-    /* A floor for links that no more specific rule below reaches. The
-       exclusion is wrapped in `:where()`, which contributes no specificity
-       of its own, so this stays a bare element selector and every rule below
-       outranks it — a plain `:not(.author)` would count as a class and beat
-       any single-class rule in this file that happens to match an anchor,
-       which is what it did to the primary button in the sidebar. An author
-       and a vote weight are excluded because their own rules below
-       deliberately carry no `!important`, which this would otherwise
-       outrank. */
+    /* Floors */
+    /* Link floor in `:where()`; author and vote weight have no `!important`. */
     a:where(:not(.author, .voteWeight)) {
       color: @accent-text !important;
     }
 
-    /* Reddit serves `.content` with no background of its own, so the page
-       background shows through it. Reddit Enhancement Suite's night mode
-       paints it `hsl(0, 0%, 15%)`, which would cover the themed background
-       across the whole listing and comment column. */
+    /* RES night mode fills `.content`. */
     .content {
       background-color: transparent !important;
       color: @text !important;
@@ -126,17 +99,13 @@
       }
     }
 
+    /* Header */
     #header {
       background-color: @mantle !important;
       border-bottom-color: @accent !important;
     }
 
-    /* The header logo is a sprite whose wordmark is black, 1.14:1 against
-       @mantle, so it is recoloured with a palette filter rather than a colour
-       property. The tile holds two colours — the wordmark and the snoo beside
-       it — so the filter flattens the snoo to a silhouette in @text. That is
-       accepted: the wordmark is what carries the page's identity and has to
-       be legible on @mantle, and the snoo reads as a mark at this size. */
+    /* Black wordmark sprite; the snoo flattens to a silhouette, accepted. */
     #header-img.default-header {
       filter: @text-filter !important;
     }
@@ -147,8 +116,6 @@
       color: @text !important;
     }
 
-    /* The user strip reads as a layer above the header it sits on, so it
-       steps up to @surface0 rather than repeating the header's @mantle. */
     #header-bottom-right {
       background-color: @surface0 !important;
       color: @text !important;
@@ -158,16 +125,11 @@
         color: @text !important;
       }
 
-      /* A divider glyph, so 3:1 applies rather than 4.5:1. @subtext0 is the
-         dimmest step that clears it on @surface0 across all four flavors. */
       .separator {
         color: @subtext0 !important;
       }
     }
 
-    /* These tabs are primary navigation, so they take the full text colour
-       rather than a muted one: @text reaches 5.17:1 on Latte's @surface0 and
-       clears 9:1 on the dark flavors. */
     .tabmenu li a {
       background-color: @surface0 !important;
       color: @text !important;
@@ -179,10 +141,7 @@
       border-color: @accent !important;
     }
 
-    /* The overflow control at the end of the tab strip, which reddit draws
-       as one more tab: outlined and carrying its brand orange when it is
-       open, filled when it is showing a title instead. Each takes the tab it
-       imitates. The drop arrow on it is redrawn with every other one. */
+    /* The overflow tab: outlined when open, filled when showing a title. */
     .dropdown.tabdrop .selected {
       background-color: @base !important;
       border-color: @accent !important;
@@ -194,7 +153,7 @@
       color: @text !important;
     }
 
-    /* Tier 1 — sidebar */
+    /* Sidebar */
     .side {
       background-color: transparent !important;
       color: @text !important;
@@ -218,8 +177,7 @@
         color: @muted !important;
       }
 
-      /* "show my flair on this subreddit" and the moderator controls sit
-         inside the themed titlebox but carry a literal white of their own. */
+      /* Carry a white of reddit's own inside the themed titlebox. */
       .titlebox form.toggle,
       .titlebox form.flairtoggle,
       .leavemoderator,
@@ -228,22 +186,13 @@
         color: @muted !important;
       }
 
-      /* Sidebar lists are painted by Reddit Enhancement Suite's night mode,
-         which would break up the titlebox they sit in. */
+      /* RES night mode fills sidebar lists. */
       .md ol,
       .md ul {
         background-color: transparent !important;
       }
 
-      /* RES night mode sets a colour on every descendant of the sidebar,
-         which defeats inheritance from the surfaces themed above. Clearing
-         the blanket lets those colours reach the text again.
-
-         RES's vote weight appears beside a username in the moderator list
-         and states the balance in a colour it writes inline, so both rules
-         exclude it. `:where()` contributes no specificity, and a bare `*`
-         inside it contributes none either, so each selector still ranks
-         where it did. */
+      /* RES night mode colours every descendant; `:where(*)` adds nothing. */
       :where(*:not(.voteWeight)) {
         color: inherit !important;
       }
@@ -256,32 +205,20 @@
         color: @subtext1 !important;
       }
 
-      /* The notice reddit puts at the top of a sidebar, filled pale yellow
-         and outlined gold. A tint over Latte's @base is indistinguishable
-         from reddit's own bar, so this takes the surface `.infobar` takes
-         and keeps the meaning in the border. */
       .side-message {
         background-color: @surface0 !important;
         border-color: @yellow !important;
         color: @text !important;
       }
 
-      /* The subreddit suggestions reddit offers beside a listing. Each
-         suggestion is a chip on the transparent sidebar; the panel that
-         closes the list is a box. */
+      /* Subreddit suggestions beside a listing. */
       .recommend-box {
         .rec-item {
           background-color: @surface0 !important;
           border-color: @surface1 !important;
         }
 
-        /* The chip's add control is a plate of reddit's own with a plus
-           drawn as a sprite in a pseudo-element. The control floor gives
-           every button a surface, which here would sit as a second plate on
-           the chip, so this one clears back to the chip behind it and the
-           plus takes a filter. The rule names the chip and the class, which
-           puts it above the floor and above the floor's hover and disabled
-           arms, so the plate stays clear under the pointer too. */
+        /* Sprite plus on a plate; cleared so the floor adds no plate. */
         .rec-item button.add {
           background-color: transparent !important;
 
@@ -307,9 +244,7 @@
         border-color: @surface0 !important;
       }
 
-      /* The handle's arrow, a single-colour tile on a pseudo-element that
-         paints nothing of its own; the background is cleared so RES night
-         mode's own hover fill on this element cannot sit under the filter. */
+      /* Single-colour tile; cleared so RES's hover fill is not filtered too. */
       .grippy::before {
         background-color: transparent !important;
         filter: @accent-filter !important;
@@ -321,10 +256,6 @@
         color: @text !important;
       }
 
-      /* The chosen listing. It takes the page's own surface, the way every
-         other selected tab here does: the rail is @mantle, so the row reads
-         against it, and accent text on @surface0 falls below 4.5:1 on Frappé
-         for five of the fifteen accents. */
       li.selected {
         background-color: @base !important;
       }
@@ -333,8 +264,6 @@
         color: @accent-text !important;
       }
 
-      /* The line under each choice, which reddit greys to #808080: 3.25:1 on
-         Latte's @mantle. */
       .description {
         color: @muted !important;
       }
@@ -355,11 +284,7 @@
       color: @subtext1 !important;
     }
 
-    /* Reddit's primary button, which the sidebar uses for "message the
-       moderators". The sidebar's own link rule is a class and a type where
-       this is a class alone, so it outranks this one and hands the button
-       accent text on a surface: 4.3:1 on Frappé, and 3.57:1 with red as the
-       accent. The sidebar's copy is therefore named. */
+    /* `.side a` outranks a bare class, so the sidebar copy is named. */
     .c-btn-primary,
     .side .c-btn-primary {
       background-color: @surface0 !important;
@@ -374,9 +299,7 @@
       color: @text !important;
     }
 
-    /* The subscribe toggle's states are a sprite gradient rather than a
-       colour, so the image is cleared to let a palette colour through. The
-       two states stay apart by their labels, "subscribe" and "unsubscribe". */
+    /* The states are a sprite gradient; cleared so the fill shows through. */
     .fancy-toggle-button .add,
     .fancy-toggle-button .remove,
     .fancy-toggle-button .active {
@@ -386,7 +309,7 @@
       color: @text !important;
     }
 
-    /* Reddit paints the create-a-subreddit box a literal white. */
+    /* The create-a-subreddit box. */
     .sidebox,
     .sidebox .spacer {
       background-color: @mantle !important;
@@ -396,8 +319,6 @@
       color: @muted !important;
     }
 
-    /* The box reddit fills white to describe a subreddit, which RES night
-       mode paints along with its border and greys the text inside. */
     .subreddit-info {
       background-color: @mantle !important;
       border-color: @surface0 !important;
@@ -416,9 +337,7 @@
       color: @text !important;
     }
 
-    /* Reddit paints a gradient across this button as a sprite tile, which
-       sits over the fill below and is the button's whole appearance on the
-       light flavors, where nothing else is dark enough to hide it. */
+    /* A sprite gradient is the button's whole appearance, so it is cleared. */
     .morelink {
       background-color: @surface0 !important;
       background-image: none !important;
@@ -432,16 +351,14 @@
         background-color: @hover-bg !important;
       }
 
-      /* A raster sprite corner, so it is recoloured with the palette's filter
-         variables rather than a colour property. */
+      /* A raster sprite corner, so a filter. */
       .nub {
         background-color: transparent !important;
         filter: @surface0-filter !important;
       }
     }
 
-    /* The bare toggle reddit uses for unblock and unfriend, which carries a
-       literal black of its own and has none of the fancy toggle's plate. */
+    /* The bare toggle for unblock and unfriend, which carries a literal black. */
     form.toggle .option {
       color: @text !important;
     }
@@ -467,139 +384,54 @@
       }
     }
 
-    /* Tier 1 — link listing */
-    /* Inactive affordances sit one step below @dim, which is what puts the
-       author and the domain above the action row beneath them. On the dark
-       flavors that is @overlay1 against @dim's @overlay2. Latte has no step
-       below @subtext1 that holds 4.5:1 — @subtext0 reaches only 4.37:1 — so
-       it takes the step in the other direction, towards @text, and keeps the
-       same ordering at 6.24:1. */
+    /* Colour locals */
+    /* One step below @dim; Latte steps towards @text instead. */
     @inactive: if(@flavor = latte, mix(@text, @subtext1, 50%), @overlay1);
     @inactive-filter: if(@flavor = latte, @subtext1-filter, @overlay1-filter);
 
-    /* @peach is only 2.45:1 on Latte's @mantle, where the code block's fill
-       puts this. @red keeps the warm accent but reaches 4.46:1 there, just
-       short, so it takes the same 4% @alert does and clears at 5.19:1. The
-       dark flavors are past 6.5:1 with @peach. */
+    /* Inline code and pre blocks; @peach cannot reach 4.5:1 on Latte's @mantle. */
     @code-fg: if(@flavor = latte, darken(@red, 4%), @peach);
 
-    /* Secondary text. @subtext0 reaches only 4.06:1 on Latte's @mantle and
-       4.37:1 on its @base, both short of 4.5:1; @subtext1 clears both at
-       5.14:1 and 5.53:1. The dark flavors are already past 7:1 with
-       @subtext0, so they keep it. */
+    /* Scores and secondary labels; @subtext0 falls short on Latte. */
     @muted: if(@flavor = latte, @subtext1, @subtext0);
 
-    /* Hover background for controls whose label is @text. Stepping @surface0
-       -> @surface1 darkens Latte to 4.39:1, under 4.5:1; Latte instead
-       lightens to @crust for 6.04:1, the usual light-theme hover direction.
-       The dark flavors darken as before and clear 6.3:1. */
+    /* Latte lightens: @surface1 falls short there. */
     @hover-bg: if(@flavor = latte, @crust, @surface1);
 
-    /* Reddit Enhancement Suite's night mode renders the tagline at 3.94:1 and
-       its links at 4.85:1. These match that quieter reading order as closely
-       as 4.5:1 allows: @dim is the dimmest passing step on each flavor, and
-       Latte's neutrals cluster so tightly that it cannot go below @subtext1. */
+    /* Tagline text and the domain: the dimmest step that passes on each flavor. */
     @dim: if(@flavor = latte, @subtext1, @overlay2);
     @dim-filter: if(@flavor = latte, @subtext1-filter, @overlay2-filter);
 
-    /* Latte's saturated colours sit mid-tone, so several of them cannot reach
-       4.5:1 on its @base at full strength and are darkened instead. The dark
-       flavors have the opposite problem and are damped towards @base. */
+    /* The submitter, and the spoiler stamp and new-comment count. */
     @op: if(@flavor = latte, darken(@blue, 5%), @blue);
     @stamp: if(@flavor = latte, darken(@peach, 18%), @peach);
 
-    /* Prose links, and the two subscribe fills. Latte's surfaces are close
-       enough to white that each of these falls below 4.5:1 there at full
-       strength — the link reaches only 3.18:1 on @surface0, where the
-       dropdowns put it — so each is darkened by the least that clears it on
-       the darkest surface it lands on. */
+    /* Darkened on Latte to pass on @surface0, where the dropdowns put it. */
     @link: if(@flavor = latte, darken(@blue, 12%), @blue);
 
-    /* An icon-font glyph is a graphical object, so 3:1 applies to it rather
-       than the 4.5:1 `@accent-text` is darkened for. At 35% every accent
-       lands near black on Latte and the icon stops looking themed at all;
-       22% is the least that clears 3:1 for all fifteen on `@surface0`, the
-       darkest surface one of these sits on. */
+    /* Glyphs need 3:1; 22% is the least that clears it for every accent. */
     @accent-icon: if(@flavor = latte, darken(@accent, 22%), @accent);
     @join: if(@flavor = latte, darken(@green, 12%), @green);
     @alert: if(@flavor = latte, darken(@red, 4%), @red);
     @sticky: if(@flavor = latte, darken(@green, 10%), @green);
 
-    /* Reddit marks a pinned post in teal and a stickied one in green, and
-       keeps them apart. @teal is 3.31:1 on Latte's @base, so it takes the
-       least darkening that clears 4.5:1 on the comment banding's @mantle. */
+    /* A pinned or highlighted marker, kept apart from the stickied green. */
     @pin: if(@flavor = latte, darken(@teal, 8%), @teal);
 
-    /* Thirteen of the fifteen accent choices fall below 4.5:1 on Latte's
-       @base — yellow reaches only 2.31:1 — so an accent that carries text is
-       darkened there. 35% leaves the worst of the fifteen, pink, at 7.01:1 on
-       @base and 5.09:1 on @surface0, which is margin rather than a target:
-       accent text belongs on @base or @mantle, and no rule here puts it on a
-       surface. The dark flavors clear @base and @mantle undarkened. */
+    /* Accent text: @base or @mantle only, since Frappé fails on @surface0. */
     @accent-text: if(@flavor = latte, darken(@accent, 35%), @accent);
 
-    /* A filled chip carrying @base text — the welcome banner's link, the
-       OAuth allow button, a selected subreddit row, the media progress bar,
-       the author card's beta mark, RES's dashboard tab. No Latte accent is
-       dark enough to hold @base at full strength; 24% is the least that
-       clears 4.5:1 for all fifteen, with pink the worst at 4.54:1. The dark
-       flavors clear @base undarkened. */
+    /* Filled chip carrying @base text; 24% is the least that holds it. */
     @accent-fill: if(@flavor = latte, darken(@accent, 24%), @accent);
 
-    /* A title that has been followed. Latte and Frappé change hue, which is
-       what reddit's own light interface does — #0000ff unread, #551a8b
-       visited — with the palette's blue and mauve standing in. The two
-       darkest flavors change lightness instead, which is what RES night mode
-       does.
-
-       The step is chosen for how far it sits from an unread title, not for
-       how far it sits from the page. Those pull in opposite directions and
-       the first is what the reader is actually doing: telling one row from
-       the next. @overlay1 separates from @text by 2.40:1 on Macchiato and
-       2.56:1 on Mocha; RES night mode's own pair is 2.94:1, or 1.31:1 with
-       its coloured-links option on. @subtext0 reads better against the page
-       — 6.62:1 and 7.37:1 against @overlay1's 4.14:1 and 4.44:1 — but closes
-       the gap to 1.50:1 and 1.54:1, and the two states stop being tellable
-       apart.
-
-       So this sits below 4.5:1 on those two flavors deliberately, the same
-       decision @inactive records, and `contrast.js` exempts it by name. */
+    /* Visited title: hue on Latte/Frappé, lightness elsewhere (exempted). */
     @read: if(@flavor = latte, darken(@mauve, 2%), if(@flavor = frappe, @mauve,
       @overlay1));
     @title: if(@flavor = latte, @link, if(@flavor = frappe, @link, @text));
     @band: if(@flavor = latte, mix(@crust, @base, 50%), mix(@mantle, @base,
       60%));
 
-    /* A comment's nesting level is only expressible as a selector chain, so
-       the six thread colours repeat every sixth level. Each level resolves to
-       a palette key and is looked up the way the accent is. `custom` reads
-       the six selects; `shade` takes whatever the accent is set to for every
-       level and tells them apart by strength alone, which climbs level by
-       level, so it is the only setting that follows a choice made elsewhere
-       in the dialogue. Its per-level weights are written as multipliers
-       rather than as divisions: Less divides with `/` only under `math:
-       always`, and Stylus compiles a userstyle on the default setting, where
-       the same expression yields NaN and the rule is dropped.
-
-       Stylus keeps a select's saved value when a style's option list changes,
-       so any of the eight thread selects can be holding a value this list does
-       not offer, and none of them may fail on one. The mode is checked against
-       the six it draws; the strength is checked for being a number, which is
-       all `unit()` can take. Either failing reads as off. A custom colour is
-       checked against the fifteen keys its select offers before it reaches the
-       palette, since a key the palette does not hold is a hard failure in Less
-       and would stop the whole style compiling; an unrecognised one reads as
-       `@surface1`, the colour a rail carries with threads off. `#thread-key`
-       holds that check once, and each call is read back through a detached
-       ruleset, which is how Less carries a value out of a mixin.
-
-       Strength is how far a rail departs from `@surface1`, the border colour
-       every other box on the page already carries. Measuring it from there
-       rather than from the page behind the rail makes "off" the same thing
-       as strength zero, and gives every setting the same dial: fading a
-       neutral toward the page would erase it, since `@surface0` is barely a
-       step from the page to begin with. It also keeps a rail from washing
-       out on Latte, whose page is lighter than any of these colours. */
+    /* Thread rails; guards and arithmetic are explained in CLAUDE.md. */
     @thread-known: if(@threadColors = rainbow, 1, if(@threadColors = warm, 1,
       if(@threadColors = cool, 1, if(@threadColors = neutral, 1,
       if(@threadColors = shade, 1, if(@threadColors = custom, 1, 0))))));
@@ -632,10 +464,7 @@
     @thread-custom6: {
       #thread-key(@threadColor6);
     }
-    /* The neutral preset climbs the palette's greys from @surface2 to
-       @subtext1. It starts a step above @surface1 because that is the
-       colour a rail carries with threads off, and a level drawn in it would
-       read as no rail at all at any strength. */
+    /* Neutral starts above @surface1, the off colour. */
     @thread-name1: if(@threadColors = custom, @thread-custom1[@key],
       if(@threadColors = shade, @accentColor, if(@threadColors = warm, maroon,
       if(@threadColors = cool, teal, if(@threadColors = neutral, surface2,
@@ -673,17 +502,16 @@
     @thread6: mix(@catppuccin[@@flavor][@@thread-name6], @surface1,
       if(@threadColors = shade, (@thread-tint * 1), @thread-tint));
 
+    /* Listing */
     .link,
     .thing {
       background-color: transparent !important;
     }
 
-    /* Reddit frames the last-opened listing with a dashed grey border. */
     .last-clicked {
       border-color: @surface1 !important;
     }
 
-    /* The listing rank is ordinal decoration beside the title it numbers. */
     .rank {
       color: @inactive !important;
     }
@@ -693,17 +521,14 @@
       color: @sticky !important;
     }
 
-    /* A pinned post, which reddit marks in teal and keeps apart from a
-       stickied one. */
+    /* Pinned, which reddit keeps apart from stickied. */
     .thing.sticky-pinned.link a.title,
     .tagline .pinned-tagline,
     .search-result-meta .pinned-tagline {
       color: @pin !important;
     }
 
-    /* The URL under a title in reddit's compact listing. It is drawn as a
-       link and follows the title's read state, so it takes the title's
-       colours rather than the floor's. */
+    /* The compact listing's URL follows the title's read state. */
     .thing .source-url {
       color: @title !important;
     }
@@ -712,27 +537,11 @@
       color: @read !important;
     }
 
-    /* A title reddit renders as plain text rather than as a link — a post
-       that has been removed, or one in a listing that does not link out. */
+    /* A title rendered as plain text. */
     .thing .title-styled-as-text {
       color: @text !important;
     }
 
-    /* Two ways of drawing read from unread, one per half of the palette.
-
-       The dark flavors step down in lightness, from @text to @overlay1. That
-       is the quieter reading, and a saturated colour on every row of a
-       listing would overwhelm it.
-
-       Latte and Frappé have no room for that step. Latte's page is already
-       pale, so @text and the step below it sit a few points of luminance
-       apart, and @overlay0 — the next one down — falls to 3.13:1 there;
-       Frappé's surfaces cluster the same way. Those two use hue instead, the
-       way old reddit does it and the way a browser draws a link: `#0000ff`
-       unread and `#551a8b` visited, for which the palette's blue and mauve
-       stand in.
-
-       The stickied title keeps its green, which is also what reddit does. */
     .thing .title,
     a.title {
       color: @title !important;
@@ -752,24 +561,13 @@
       color: @dim !important;
     }
 
-    /* The line reads title, author, domain, then the action row. The author
-       is the row's other name and carries the title's colour; @dim and
-       @inactive are consecutive steps below it on the dark flavors. Latte
-       runs out of room — @subtext0 is 4.37:1 on its @base — so the domain
-       takes @subtext1 there and only the action row steps away.
-
-       Reddit Enhancement Suite appends its vote weight to this row and
-       states the balance in a colour it writes inline, so the weight is
-       excluded here as the author is. Both exclusions name a class, which
-       this selector already carries, so the specificity is unchanged. */
+    /* Author keeps the title colour; vote weight is RES's inline colour. */
     .tagline a:not(.author, .voteWeight),
     .domain a {
       color: @dim !important;
     }
 
-    /* A subreddit link written in prose carries no class of its own, so it
-       is matched on its target. A link into a subreddit's comments is a link
-       to a post, not to the subreddit, and keeps the prose colour. */
+    /* A prose subreddit link has no class; a comments link is a post link. */
     .tagline .subreddit,
     .thing .subreddit,
     a.subreddit,
@@ -779,36 +577,12 @@
       color: @accent-text !important;
     }
 
-    /* One of the two rules in this file with no `!important`. Reddit
-       Enhancement Suite's userHighlight paints a background on an author it
-       has been told to mark — a tagged user, a friend, the submitter — and
-       sets a foreground to read against it, both `!important` and selected
-       by username. The gate's `:has(> #header)` carries an id's specificity, so
-       an `!important` here outranks that and strands RES's background under
-       this colour: white becomes @text on a dark tag colour at 1.2:1.
-       Without it, RES's `!important` wins on an author this file paints no
-       further, and this still beats reddit's own unprefixed rules on
-       specificity. An author who is also the submitter, a moderator, an
-       admin or a friend takes a pill below instead, and those rules carry
-       `!important` and a class more than RES's own, so RES's highlight is
-       overridden there.
-
-       It matches the author link itself rather than the tagline's copy of
-       it, because an author also appears in a search result's byline, in the
-       parent line above a comment in a user's overview, and in wiki prose.
-       The floor rule at the top of this file excludes `.author` so as not to
-       outrank this one, so an author no selector here reaches keeps reddit's
-       own link blue. */
+    /* No `!important`: RES's userHighlight must keep its background. */
     a.author {
       color: @text;
     }
 
-    /* Reddit Enhancement Suite paints these author pills in colours of its
-       own, at `.tagline .author.moderator` with `!important`, and darkens
-       each on hover. Every rule here therefore carries one class more than
-       RES's does. The fill is the palette colour RES's own choice stands for;
-       Latte's four are too light to carry @base at full strength, so they are
-       darkened until each clears 4.5:1. */
+    /* RES paints these with `!important`; one class more here. */
     .author-pill(@fill) {
       &,
       &:hover {
@@ -841,10 +615,7 @@
       color: @sticky !important;
     }
 
-    /* Account states reddit writes onto the author itself: banned, shadow
-       banned, and the two timeouts. Reddit draws all four in a red or an
-       orange, which is the distinction worth keeping — spam is the milder
-       one and takes the warmer colour. */
+    /* Account states; spam is milder and takes the warmer colour. */
     .author.user-banned,
     .author.user-in-timeout-perma,
     .author.user-in-timeout-temp {
@@ -861,8 +632,7 @@
       color: @alert !important;
     }
 
-    /* The line under a comment that says who distinguished it, and the two
-       marks inside it. */
+    /* The line saying who distinguished a comment. */
     .user-distinction {
       color: @muted !important;
 
@@ -875,9 +645,7 @@
       }
     }
 
-    /* Reddit distinguishes a subreddit's name in a tagline when the post is
-       from its admins or its moderators. Same two colours as the marks
-       beside a distinguished author. */
+    /* A subreddit's name when the post is from its admins or moderators. */
     .tagline .subreddit .admin-distinguish,
     .search-result-meta .subreddit .admin-distinguish {
       color: @alert !important;
@@ -888,10 +656,7 @@
       color: @green !important;
     }
 
-    /* Subreddit flair carries colours the subreddit chose, and those colours
-       often mean something, so it is behind a switch. @subtext1 is 4.05:1 on
-       Latte's @surface0, so flair text takes @text there for 5.17:1; the dark
-       flavors keep the quieter @subtext1. */
+    /* Subreddit flair colours mean something, so this is a switch. */
     .flair-themed() {
       background-color: @surface0 !important;
       border-color: @surface1 !important;
@@ -906,14 +671,7 @@
       }
     }
 
-    /* With the switch off, a flair the subreddit gave no colour to is still
-       themed. Reddit puts a template's colours in the element's own `style`
-       attribute, so a flair with none, or one set to `transparent`, is
-       carrying reddit's default white box and would sit unreadable on a dark
-       flavor. Rich-text flair carries the attribute even when it is empty,
-       and an empty one matches `[style]`, so it is named here too — without
-       that it falls through to the rule below, has its box cleared, and is
-       left outlined in whatever RES gave it. */
+    /* Switch off: uncoloured flair (no/empty/default `style`) still themed. */
     & when (@flairColors = 0) {
       .linkflairlabel:not([style]),
       .flair:not([style]),
@@ -933,15 +691,7 @@
         .flair-themed();
       }
 
-      /* A flair the subreddit did colour cannot be handed back its colour
-         under RES night mode: RES declares `.res-nightmode .linkflairlabel`
-         with `!important`, which outranks reddit's inline style, and no
-         author rule can return the cascade to an inline value. What RES does
-         leave alone is the border, which reddit sets inline to the same
-         colour as the fill — so the box is cleared and the subreddit's own
-         colour identifies the flair from its outline. `#ffffff` and
-         `#edeff1` are reddit's own defaults rather than a subreddit's
-         choice, so they are themed above instead. */
+      /* RES's `!important` beats the inline fill; the inline border remains. */
       .linkflairlabel[style]:not([style=""]):not([style*="transparent"]):not([style*="#ffffff"]):not([style*="#edeff1"]),
       .flair[style]:not([style=""]):not([style*="transparent"]):not([style*="#ffffff"]):not([style*="#edeff1"]),
       .flairrichtext[style]:not([style=""]):not([style*="transparent"]):not([style*="#ffffff"]):not([style*="#edeff1"]) {
@@ -950,9 +700,7 @@
       }
     }
 
-    /* The bracketed mark beside a distinguished author — [A] for an admin,
-       [M] for a moderator. They carry the same colours as the author's own
-       name, which is the pill directly above. */
+    /* [A] and [M] beside a distinguished author, in the pill's colours. */
     .userattrs {
       .admin {
         color: @alert !important;
@@ -971,8 +719,7 @@
       }
     }
 
-    /* A tag that carries text is drawn as a pill, outlined in a grey of
-       Reddit Enhancement Suite's own. */
+    /* RES's user tag pill. */
     .RESUserTag,
     .RESUserTag a {
       border-color: @surface1 !important;
@@ -987,17 +734,13 @@
       }
     }
 
-    /* The source link reddit lifts out of the action row's grey into its own
-       link blue, to say it leads off this post. The row's rule names a class
-       and a type where this names a class alone, so the row's copy is named
-       too. */
+    /* The row's rule is a class and a type, so the row's copy is named. */
     .post-source-button,
     .flat-list.buttons li a.post-source-button {
       color: @link !important;
     }
 
-    /* The panel the share control opens out of the action row, and the
-       labels down its left edge. */
+    /* The share panel. */
     .post-sharing {
       background-color: @mantle !important;
       border-color: @surface0 !important;
@@ -1008,14 +751,11 @@
       }
     }
 
-    /* Matches the tagline it sits in rather than dimming below it. */
     .score.unvoted,
     .link.compressed .score {
       color: @muted !important;
     }
 
-    /* @red is 4.46:1 on Latte's @mantle, which the comment banding puts this
-       on, so it takes @alert's darkening there. */
     .score.likes,
     .linkinfo .upvotes {
       color: @alert !important;
@@ -1026,8 +766,7 @@
       color: @link !important;
     }
 
-    /* The vote arrows are a raster sprite, so they are recoloured with the
-       palette's filter variables rather than a colour property. */
+    /* A raster sprite, so a filter. */
     .arrow.up,
     .arrow.down {
       filter: @inactive-filter !important;
@@ -1041,29 +780,11 @@
       filter: @blue-filter !important;
     }
 
-    /* A thumbnail is an image that sits directly on the page, so it takes
-       the page background rather than a surface of its own. */
     .thumbnail {
       background-color: transparent !important;
     }
 
-    /* Reddit's placeholder thumbnails are a light disc with a white glyph cut
-       out of it, so a palette filter flattens the two into a plain disc, and
-       inverting keeps them apart but puts the glyph darker than the plate it
-       sits on. They are redrawn instead: the disc takes a surface and the
-       glyph a tone above it, which is the way round every other icon in the
-       style reads. The mark is plain geometry rather than reddit's own
-       drawing, so `spoiler` and `account` carry a generic glyph.
-
-       `background-size` is reset with the position: reddit serves a second
-       set of offsets to high-density screens under a media query that also
-       scales the sheet, and a scaled sheet would stretch these. The guard
-       excludes a post that has a real thumbnail under the same class.
-
-       Each selector calling this mixin also excludes a crosspost's
-       comments-page preview header, whose own 30×30 sprite reddit draws at
-       a different offset on the same classes; that sprite is left in
-       place there rather than redrawn at this mixin's 70×50 scale. */
+    /* Disc-and-glyph placeholders, redrawn; size reset undoes the 2x sheet. */
     .thumbnail-art(@glyph) {
       @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="70" height="50" viewBox="0 0 70 50"><circle cx="35" cy="25" r="24" fill="@{surface0}"/>@{glyph}</svg>');
 
@@ -1114,27 +835,13 @@
       border-color: @surface0 !important;
     }
 
-    /* The expanded self-text sits in the listing's own column rather than
-       on top of it, so it takes the page colour and is separated by its
-       border alone. */
+    /* Expanded self-text sits in the listing column. */
     .expando {
       background-color: transparent !important;
       border-color: @surface0 !important;
     }
 
-    /* Every one of these buttons is a plate with a white glyph on it, drawn
-       either as an SVG data URI or as a tile in a sprite sheet. A
-       single-colour filter flattens plate and glyph together and the button
-       reads as a plain square, so each is rebuilt in palette colours
-       instead and none of them carries a filter.
-
-       Reddit appends a listing's next page with the type class missing and
-       fills it in a moment later, so the rules below are reached only after
-       that. These two carry a neutral plate for the gap, which is what the
-       reader sees flash otherwise. Reddit also rescales its sprite sheet
-       under a high-density media query; the rebuilt tile is a single 23×23
-       image, so that scaled size is reset back to the tile's own
-       dimensions. */
+    /* Plate-and-glyph buttons, rebuilt; neutral plate until the type lands. */
     .expando-button {
       background-color: transparent !important;
       border-color: @surface0 !important;
@@ -1149,11 +856,7 @@
       background-position: 0 0 !important;
     }
 
-    /* This is the same X-in-a-circle for every "expanded" state — plain
-       expando, selftext/video sprite tile, and image/video-muted/locked —
-       so one mixin draws it for all three of the rules below. It is a mixin
-       rather than a variable at this scope because `catppuccin/optimized-svgs`
-       reads an `@svg` declared inside a rule, and a mixin body is one. */
+    /* A mixin: `catppuccin/optimized-svgs` reads `@svg` inside a rule. */
     .collapse-art() {
       @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><circle cx="11.5" cy="11.5" r="11.5" fill="@{surface0}"/><g stroke="@{text}" stroke-width="3.25" stroke-linecap="round"><line x1="7.5" y1="7.5" x2="15.5" y2="15.5"/><line x1="15.5" y1="7.5" x2="7.5" y2="15.5"/></g></svg>');
 
@@ -1189,13 +892,7 @@
       background-image: url("data:image/svg+xml,@{svg}") !important;
     }
 
-    /* These are sprite tiles: the button scrolls to an offset inside a
-       sheet, and to a second one on hover. The replacement is a single
-       tile, so the rule resets the offset with it — one of the sprite-
-       geometry resets in this style, alongside background-size, and the
-       alternative is carrying reddit's sprite geometry in every rule and
-       re-deriving it whenever reddit rebuilds the sheet, which has already
-       happened once. */
+    /* Sprite tiles, so the offset is reset with the replacement. */
     .expando-button.collapsed.selftext {
       @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M4 5h15v2H4zm0 4h15v2H4zm0 4h15v2H4zm0 4h9v2H4z"/></svg>');
 
@@ -1203,10 +900,7 @@
       background-position: 0 0 !important;
     }
 
-    /* A crosspost is a type of its own, and reddit draws it as a branching
-       arrow rather than as the content behind it. Without this the button
-       keeps the neutral plate above, which is meant to cover the moment
-       before reddit fills in a type class, not to stand as one. */
+    /* A crosspost; without this it keeps the neutral plate above. */
     .expando-button.collapsed.crosspost {
       @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="none" stroke="@{text}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3.5 11.5H7L11 7h3.5M7 11.5l4 4.5h3.5"/><path fill="@{text}" d="m14.5 3.5 5 3.5-5 3.5zm0 9 5 3.5-5 3.5z"/></svg>');
 
@@ -1233,14 +927,7 @@
       .collapse-art();
     }
 
-    /* Reddit's own video player, built into the expando when a video post is
-       opened, so no static pass reaches it. Its chrome sits on the frame
-       rather than on a page surface: white glyphs, a black scrim, a white
-       seek track. None of that follows the flavor, because the backdrop is
-       whatever the video is showing and a light control over a dark frame
-       reads no better than the reverse. What is themed is the one part
-       carrying a colour of reddit's own — the brand blue on the seek bar,
-       the buffering spinner and the quality label. */
+    /* Video chrome sits on the frame; only the brand blue is themed. */
     .reddit-video-player-root {
       .seek-bar-progress,
       .volume-slider-progress {
@@ -1260,10 +947,7 @@
       color: @red !important;
     }
 
-    /* Reddit's chips: archived is a grey word, the other three are filled.
-       Latte has no palette colour light enough to carry @base at full
-       strength, so each fill is darkened there by the 18% the author pills
-       already use. */
+    /* Stamps. Latte's fills are darkened to hold @base. */
     .archived-stamp {
       color: @muted !important;
     }
@@ -1295,7 +979,7 @@
       color: @base !important;
     }
 
-    /* The note and the reason reddit puts on a removed post. */
+    /* The note and reason on a removed post. */
     .link-note {
       background-color: transparent !important;
       color: @alert !important;
@@ -1305,9 +989,7 @@
       color: @link !important;
     }
 
-    /* The panel reddit lays over a thumbnail behind an interstitial, and the
-       button inside it. The overlay form is a scrim on the media itself and
-       keeps reddit's own translucent black. */
+    /* Interstitial panel; the scrim keeps reddit's translucent black. */
     .expando-gate.expando-gate--interstitial {
       background-color: @surface0 !important;
       color: @text !important;
@@ -1339,7 +1021,7 @@
       color: @text !important;
     }
 
-    /* Tier 1 — comments */
+    /* Comments */
     .menuarea {
       border-color: @surface0 !important;
     }
@@ -1367,20 +1049,7 @@
       }
     }
 
-    /* Two Reddit Enhancement Suite options state themselves in a colour on a
-       comment, and both are declared on classes alone, so the gate's
-       id-level specificity leaves the rules above painting over them.
-
-       The first outlines the comment under the pointer, which it only does
-       where its comment boxes are on; it names both classes and so does
-       this. RES draws that outline in a light blue of its own — a mark of
-       RES's chrome rather than a state of the comment — so it takes the
-       accent.
-
-       The second hides the collapse toggle for readers who collapse from
-       the comment's left edge instead. RES does that by colour rather than
-       by layout, drawing the toggle in `transparent`, so handing it back is
-       a colour as well. */
+    /* RES options on bare classes, restated above the gate's specificity. */
     &.res-commentBoxes.res-commentHoverBorder .comment:hover {
       border-color: @accent !important;
     }
@@ -1389,24 +1058,14 @@
       color: transparent !important;
     }
 
-    /* Nesting is read from indentation alone, which is hard to follow once a
-       thread runs deep, so each level takes a band and the next steps back to
-       the page. The band steps away from @base towards the darker surface
-       behind it on every flavor, which is the direction RES draws it and the
-       only direction Latte has — @base is its lightest colour. */
-    /* The background alternates every level so that a reply is told from its
-       parent; the thread colour repeats every sixth, which is why the chain
-       has six steps rather than two. */
+    /* Banding: rail colour repeats every sixth level, capped at twelve. */
     .comment-level-1(@depth; @sel) when (@depth < 12) {
       @{sel} {
         background-color: @band !important;
         border-left-color: @thread1 !important;
       }
 
-      /* The comment-hover outline above is declared on body classes alone, so
-         from nesting level two down this chain outranks it on the left edge
-         and a hovered comment carries the accent on three sides. This arm
-         restates it at the chain's own specificity. */
+      /* The chain outranks the hover outline, so it is restated here. */
       &.res-commentBoxes.res-commentHoverBorder @{sel}:hover {
         border-left-color: @accent !important;
       }
@@ -1493,31 +1152,19 @@
       color: @text !important;
     }
 
-    /* The focus ring is drawn outside the box, and reddit's comment form
-       scrolls, so the ring is clipped along the edge the field is flush
-       with. Colouring the border as well marks the focused field on every
-       side, since a border is inside the box and cannot be clipped. */
+    /* The ring is clipped by the scrolling form, so the border marks focus. */
     .usertext-edit textarea:focus {
       border-color: @accent !important;
 
-      /* The ring is drawn outside the box and the form clips it along the
-         edge the field is flush with, so it is cleared and the border alone
-         marks the focus, the same width on all four sides. */
       outline-color: transparent !important;
     }
 
-    /* Each formatting button is a black glyph on a transparent sprite, drawn
-       as the button's own background image, so the button takes a filter and
-       no colour of its own — a filter flattens whatever it is applied to,
-       border included. The wrapper above is the surface they sit on. */
+    /* Black glyph on a transparent sprite; the filter tones the border too. */
     .markdownEditor > .edit-btn {
       background-color: transparent !important;
       border-color: @accent !important;
       filter: @accent-filter !important;
 
-      /* The filter flattens the border along with the glyph, so the border's
-         own colour only has to be visible — the filter is what sets the tone
-         of both. */
       &:hover {
         filter: @text-filter !important;
       }
@@ -1536,8 +1183,7 @@
       border-color: @surface1 !important;
     }
 
-    /* Clicking the label opens the list and marks the label itself, which RES
-       fills to match the panel below it so the two read as one surface. */
+    /* The open label fills to match the panel below it. */
     .RESMacroWrappingSpan .openMacro {
       background-color: @mantle !important;
       color: @text !important;
@@ -1552,10 +1198,7 @@
       }
     }
 
-    /* Reddit and RES both mark a dropdown with a grey triangle drawn as the
-       label's background image. The label carries text, which a filter would
-       flatten along with the triangle, so the triangle is redrawn. Both
-       images are the same size and sit where their own rule puts them. */
+    /* The dropdown triangle sits behind text, so redrawn, not filtered. */
     .dropdown .selected,
     .RESMacroDropdownTitle {
       @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="21" height="16" viewBox="0 0 21 16"><path fill="@{dim}" d="M5 5h11l-5.5 7z"/></svg>');
@@ -1567,14 +1210,12 @@
       color: @accent-text !important;
     }
 
-    /* The comment count beside a recently viewed link. The title next to it
-       carries the accent; two accents on one line read as one control. */
+    /* The comment count beside a recently viewed link. */
     .reddit-comment-link {
       color: @muted !important;
     }
 
-    /* The byline under each entry in the recently-viewed gadget, which
-       reddit writes in a literal grey. */
+    /* The byline in the recently-viewed gadget. */
     .gadget small {
       color: @dim !important;
     }
@@ -1589,10 +1230,8 @@
       border-left-color: @yellow !important;
     }
 
-    /* Tier 1 — markdown prose */
-    /* Reddit gives self-post bodies and subreddit descriptions the literal
-       #fafafa, which leaves @text at 1.39:1 on Mocha. The rule sits on the
-       inner .md, so clearing .usertext-body alone does not reach it. */
+    /* Markdown prose */
+    /* Reddit fills the inner .md, so .usertext-body alone does not reach it. */
     .md {
       background-color: transparent !important;
       color: @text !important;
@@ -1602,9 +1241,7 @@
         color: inherit !important;
       }
 
-      /* Reddit Enhancement Suite's vote weight also appears beside a
-         username written in prose, and it is excluded in the `:where()`
-         form so the prose link keeps its specificity. */
+      /* Vote weight excluded in `:where()` to keep the specificity. */
       a:where(:not(.voteWeight)) {
         color: @link !important;
       }
@@ -1657,9 +1294,7 @@
       }
     }
 
-    /* A heading in the aside reddit's policy and help pages set beside their
-       prose. It sits outside the `.md` body, so the heading rule above does
-       not reach it. */
+    /* A heading in the aside on reddit's policy pages, outside `.md`. */
     .sidebar h1 {
       color: @text !important;
     }
@@ -1674,13 +1309,7 @@
       }
     }
 
-    /* Reddit Enhancement Suite's own spoiler tag, which it conceals the same
-       way reddit does: the text is drawn in `transparent` on a plate and the
-       pointer reveals it. RES declares that with `!important` on a class and
-       an attribute, which the gate's id-level specificity outranks, so the
-       concealment is handed back here. RES draws the plate as a literal
-       black and rings it in another, so the plate takes the surface
-       reddit's own spoiler above takes and the ring the step above that. */
+    /* RES hides spoiler text with `!important`; restated above the gate. */
     &.res-spoilerTags .md a:is([href="/s"], [href="/spoiler"], [href="#s"], [href="#spoiler"]) {
       background-color: @surface0 !important;
       color: transparent !important;
@@ -1692,13 +1321,8 @@
       }
     }
 
-    /* Tier 1 — page furniture */
-    /* A tint of @yellow over @base is indistinguishable from reddit's own
-       infobar on Latte, so the bar takes a surface instead and keeps the
-       yellow only as its border. @base is Latte's lightest colour, so any
-       surface darkens the ground under the bar's links: @blue is 4.47:1 on
-       @base and 3.18:1 on @surface0, and has to be darkened to clear 4.5:1
-       there. */
+    /* Infobars and page furniture */
+    /* A tint reads as reddit's own bar on Latte, so a surface. */
     .infobar {
       background-color: @surface0 !important;
       border-color: @yellow !important;
@@ -1709,12 +1333,7 @@
       }
     }
 
-    /* The bar reddit shows a new account above its first listing. It is a box
-       on the page, and reddit's orange outline is branding rather than a
-       state, so it becomes the accent. The two plates inside are raised
-       strips; their underlines keep what they mean — reddit's chrome blue on
-       the first, the upvote's orange on the second. The call to action is a
-       filled chip, and no Latte colour holds @base at full strength. */
+    /* Welcome bar; the orange outline is branding, so accent. */
     .infobar.welcome {
       background-color: @mantle !important;
       border-color: @accent !important;
@@ -1741,10 +1360,7 @@
       color: @base !important;
     }
 
-    /* An archived post's banner is grey; a timeout or a deprecation notice
-       is red. Both take a surface for the same reason `.infobar` does — a
-       tint over Latte's @base is indistinguishable from reddit's own — and
-       keep the meaning in the border. */
+    /* Surface with the meaning kept in the border. */
     .archived-infobar {
       background-color: @surface0 !important;
       border-color: @surface1 !important;
@@ -1758,9 +1374,7 @@
       color: @text !important;
     }
 
-    /* Each mark is a white glyph on a transparent ground with a coloured
-       tile behind it, and white on any of those tiles is below 3:1 on every
-       flavor. The tile is cleared and the glyph filtered instead. */
+    /* White glyph on a coloured tile; tile cleared, glyph filtered. */
     .archived-infobar.with-icon::before {
       background-color: transparent !important;
       filter: @text-filter !important;
@@ -1771,36 +1385,26 @@
       filter: @red-filter !important;
     }
 
-    /* The banner reddit puts above a locked or quarantined post. Its icon is
-       a pseudo-element with a colour of its own. */
+    /* The banner above a locked or quarantined post. */
     .reddit-infobar {
       background-color: @surface0 !important;
       border-color: @blue !important;
       color: @text !important;
     }
 
-    /* The banner's mark is a white padlock on a transparent ground, so the
-       tile behind it carries the contrast — and white on @yellow is 2.62:1
-       on Latte and 1.27:1 on Mocha. The tile is cleared and the glyph takes
-       a filter instead, which is the only thing the element then paints.
-       @red is the one warm palette colour that clears 3:1 on @surface0 on
-       all four flavors; @yellow is 1.7:1 on Latte's. */
+    /* White padlock on a coloured tile; @red clears 3:1 on every @surface0. */
     .reddit-infobar.with-icon::before {
       background-color: transparent !important;
       filter: @red-filter !important;
     }
 
-    /* The padlock beside a locked comment's tagline, a single-colour glyph
-       on a transparent ground and reddit's own gold. */
+    /* The padlock beside a locked comment's tagline. */
     .locked-tagline::before {
       background-color: transparent !important;
       filter: @red-filter !important;
     }
 
-    /* A sponsored post, and the box a set of them sits in. Reddit outlines
-       the row and fills the external ones; RES night mode clears the fill
-       and greys the outline. Both take the surface the listing already uses
-       for a box. */
+    /* Sponsored posts and their box; RES night mode clears reddit's fill. */
     .organic-listing,
     .link.promotedlink,
     .link.promotedlink.external,
@@ -1809,20 +1413,13 @@
       border-color: @surface0 !important;
     }
 
-    /* "Are you interested in these subreddits?", a strip reddit fills with
-       its own pale blue and outlines in its chrome blue. The fill is the
-       raised step above the sponsored box the rule above paints, and the
-       outline is the accent, which is where reddit's own blue goes. The
-       upside-down snoo behind it is full-colour art, so only the colour half
-       of reddit's shorthand is replaced. */
+    /* Interest strip; the snoo behind it is full-colour art. */
     .sr-interest-bar {
       background-color: @surface0 !important;
       border-color: @accent !important;
       color: @text !important;
 
-      /* The speech bubble on the strip, whose tail is a border triangle and
-         has to carry the fill or it detaches from the box. RES night mode
-         fills the bubble black, which is darker than any surface here. */
+      /* The bubble's tail is a border triangle and has to carry the fill. */
       .bubble {
         background-color: @base !important;
 
@@ -1838,17 +1435,13 @@
       color: @base !important;
     }
 
-    /* Scrolling a comments page lifts the post into a window pinned to the
-       top of the viewport. It sits over the listing, so it takes a surface
-       rather than the page colour. */
+    /* The post pinned to the top of a scrolled comments page. */
     .pinnable-content.pinned {
       background-color: @mantle !important;
       border-color: @surface0 !important;
     }
 
-    /* Its glyph is a single-colour raster tile on a transparent ground, so
-       it takes a filter — and the plate reddit paints behind it has to come
-       off first, or the filter flattens the two together. */
+    /* Raster tile; the plate comes off first or the filter flattens both. */
     .dismiss-pinnable {
       background-color: transparent !important;
       color: @dim !important;
@@ -1863,8 +1456,7 @@
       border-color: @surface0 !important;
     }
 
-    /* The subreddit filter's add button draws a black plus over the fill
-       set beneath it. */
+    /* Black plus over a fill, redrawn. */
     .add-sr .add {
       @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15"><path fill="@{text}" d="M6 2h3v11H6zM2 6h11v3H2z"/></svg>');
 
@@ -1873,9 +1465,7 @@
       filter: none !important;
     }
 
-    /* The cross beside each filtered subreddit. Reddit's tile is black, and
-       the button carries a fill and a three-pixel border, so a filter would
-       flatten all three together. */
+    /* Black cross on a filled, bordered button, redrawn. */
     .remove-sr {
       @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 9 9"><path stroke="@{text}" stroke-width="2" d="m1 1 7 7m0-7L1 8"/></svg>');
 
@@ -1912,9 +1502,7 @@
       }
     }
 
-    /* Reddit's own literals on surfaces this style otherwise owns: `.gray`
-       and the footer menus are #808080, and a removed comment's body is gray
-       text on #f0f0f0, which leaves @text at 1.27:1 on the dark flavors. */
+    /* Reddit's own greys on surfaces this style owns. */
     .gray,
     .footer,
     .bottommenu,
@@ -1924,16 +1512,12 @@
       color: @muted !important;
     }
 
-    /* The freshness note in the bottom menu, which reddit draws in a literal
-       green. @sticky is the green this style puts on text; @green itself is
-       below 4.5:1 on Latte's @base. */
+    /* The freshness note; @sticky is the green that carries text. */
     .bottommenu .updated {
       color: @sticky !important;
     }
 
-    /* Reddit's highlight on a newly added page link. The yellow is what says
-       "new", so it stays a yellow and becomes a tint rather than a surface —
-       a tint over Latte's @base is what @base is light enough to show. */
+    /* New page link; the yellow says "new", so it stays a tint. */
     .newpagelink {
       background-color: fade(@yellow, 20%) !important;
     }
@@ -1943,8 +1527,7 @@
       background-color: @surface0 !important;
     }
 
-    /* The subreddit's own description on the interstitial reddit puts in
-       front of a gated community. */
+    /* The subreddit description on a gate interstitial. */
     .interstitial-subreddit-description {
       background-color: @mantle !important;
     }
@@ -1955,9 +1538,7 @@
       color: @muted !important;
     }
 
-    /* The comment a permalink points at, which reddit fills pale yellow and
-       RES night mode fills with its own blue. A tint of the accent marks it
-       without putting text on a fill. */
+    /* The comment a permalink points at, which RES night mode fills blue. */
     .commentbody.border {
       background-color: fade(@accent, 15%) !important;
     }
@@ -1974,19 +1555,13 @@
       color: @inactive !important;
     }
 
-    /* Reddit builds its dialogs on a click, so nothing that reads a static
-       page has ever seen one. Two of them reach a reader in normal use and
-       they are not the same kind of thing: the crosspost dialog is reddit's
-       own markup all the way down, while the report dialog is a frame around
-       an iframe to another origin, which no page-injected stylesheet can
-       enter. The wrappers below are what the two share, and are all that is
-       reachable on the report flow. */
+    /* Dialogs */
+    /* Dialog wrappers; the report dialog is a cross-origin iframe. */
     .modal-backdrop {
       background-color: @crust !important;
     }
 
-    /* RES's rich-text editor for a wiki page or a subreddit's stylesheet,
-       which opens over the page behind the same scrim. */
+    /* RES's editor for wiki pages and stylesheets, over the same scrim. */
     #BigEditor {
       background-color: fade(@crust, 75%) !important;
     }
@@ -2007,21 +1582,17 @@
       color: @text !important;
     }
 
-    /* The close glyph is a single-colour tile on a transparent background,
-       and RES night mode inverts it rather than recolouring it. A palette
-       filter replaces both. */
+    /* RES night mode inverts this tile; the filter replaces both. */
     .modal-header-close .c-close {
       filter: @dim-filter !important;
     }
 
     .crossposting-modal {
-      /* The dialog's heading, which reddit draws in its chrome blue. */
       .crosspost-header-title {
         color: @accent-text !important;
       }
 
-      /* The notice above the fields, filled pale yellow and outlined orange.
-         It takes the surface and border `.infobar` takes. */
+      /* The notice above the fields. */
       .crosspost-description {
         background-color: @surface0 !important;
         border-color: @yellow !important;
@@ -2045,8 +1616,7 @@
         color: @dim !important;
       }
 
-      /* A long title is clipped behind a fade, which has to end on the card's
-         own fill or the text dissolves into a colour that is not there. */
+      /* The title fade has to end on the card's own fill. */
       .crosspost-thing-preview-text::after {
         background-image: linear-gradient(
           to bottom,
@@ -2055,26 +1625,22 @@
         ) !important;
       }
 
-      /* Reddit draws the title box as a `div` rather than an `input`, so the
-         rule for a text field does not reach it. It takes the same pair. */
+      /* A div, not an input, so the field floor misses it. */
       .crosspost-field {
         background-color: @mantle !important;
         border-color: @surface1 !important;
         color: @text !important;
       }
 
-      /* The fine print: the marker beside a required field and the line
-         saying what crossposting does. Reddit draws both in near-black,
-         which is the one colour a dark flavor cannot leave alone. */
+      /* Fine print reddit draws near-black. */
       .required,
       .crosspost-warning {
         color: @dim !important;
       }
     }
 
-    /* Tier 2 — profile */
-    /* The header on a user's own subreddit page, where reddit writes the
-       name in black and the u/ path in a literal blue. */
+    /* Profile */
+    /* The user subreddit header. */
     .user-subreddit .title {
       color: @text !important;
     }
@@ -2100,15 +1666,14 @@
       color: @accent-text !important;
     }
 
-    /* The per-subreddit karma table on a profile marks a quarantined
-       subreddit's row with a literal yellow. */
+    /* A quarantined subreddit's row in the karma table. */
     #per-sr-karma th.subreddit-karma-quarantined {
       background-color: if(@flavor = latte, darken(@yellow, 18%), @yellow)
         !important;
       color: @base !important;
     }
 
-    /* Tier 2 — inbox */
+    /* Inbox */
     .message {
       background-color: transparent !important;
 
@@ -2130,14 +1695,13 @@
         background-color: fade(@accent, 8%) !important;
       }
 
-      /* Reddit fills an unread message's entry `#F7F7F7` and RES night mode
-         `#333`. */
+      /* Reddit and RES night mode both fill an unread entry. */
       &.new > .entry {
         background-color: transparent !important;
         border-color: @surface0 !important;
       }
 
-      /* Reddit sets a literal black on a message you sent. */
+      /* Reddit sets a black on a sent message. */
       &.recipient > .entry,
       &.recipient > .entry .head {
         color: @text !important;
@@ -2148,8 +1712,7 @@
       color: @subtext1 !important;
     }
 
-    /* A message body, which reddit draws in a literal green-grey, and the
-       dashed rail beside a reply. */
+    /* A message body, and the rail beside a reply. */
     .message.message-parent > .entry,
     .message.message-reply > .entry {
       color: @text !important;
@@ -2160,20 +1723,14 @@
       border-left-color: @surface0 !important;
     }
 
-    /* The pill naming the other party in a thread. Reddit draws it in its own
-       chrome blue, but it is a chip rather than a link, so it takes the
-       control surface and a control's border. Reddit names the pill itself,
-       so `.message .subject` above does not reach its label. */
+    /* Correspondent pill; reddit names it, so `.subject` misses it. */
     .message .subject .correspondent {
       background-color: @surface0 !important;
       border-color: @surface1 !important;
       color: @text !important;
     }
 
-    /* The row beside the inbox's pagination. Reddit gives it and `.nextprev`
-       the same grey and the same outlined links, then takes the fill off this
-       one, so it keeps the border alone and the link colour falls to the
-       floor. The fill returns on hover. */
+    /* The row beside the inbox's pagination: outlined links, fill on hover. */
     .next-suggestions {
       color: @muted !important;
     }
@@ -2190,20 +1747,13 @@
       border-color: @surface0 !important;
     }
 
-    /* The notice above the message list about private messages going away.
-       Its mark is an inline SVG carrying a near-black fill in an attribute,
-       which only a `fill` declaration can reach. */
+    /* An inline SVG whose fill is an attribute, so only `fill` reaches it. */
     .private-message-deprecation-banner .warning-icon path {
       fill: @yellow !important;
     }
 
-    /* Tier 2 — forms */
-    /* Reddit writes some of its fields with no `type` at all — the app name
-       and description on /prefs/apps are `<input class="text">` — and a
-       field without one is a text field, so an attribute selector alone
-       leaves them carrying the browser's own white. Every arm is wrapped in
-       `:where()`, which contributes no specificity of its own, so this floor
-       stays at element level and every class rule below outranks it. */
+    /* Forms */
+    /* Field floor; some fields have no `type` (/prefs/apps). */
     input:where(:not([type])),
     input:where([type="text"]),
     input:where([type="url"]),
@@ -2216,24 +1766,11 @@
       border-color: @surface1 !important;
       color: @text !important;
 
-      /* The ring the browser draws on a focused field, which is otherwise a
-         colour of the browser's own. A focus indicator is a graphical
-         object, so it takes the 3:1 form of the accent rather than the 4.5:1
-         one, which on Latte would be near black. */
+      /* The focus ring is a graphical object, so the 3:1 form of the accent. */
       outline-color: @accent-icon !important;
     }
 
-    /* Reddit's video controls are excluded because they are drawn on top of
-       the video rather than on a page surface: a white glyph with a dark
-       scrim under the two that need one. A plate from here lands under a
-       white glyph, and on Latte the plate is light. See the video player
-       below, which themes the parts of it that carry a colour of reddit's.
-
-       The exclusion and both type attributes are wrapped in `:where()`,
-       which contributes no specificity of its own, so this floor stays at
-       element level and every single-class rule in this file that names a
-       button or a submit input outranks it. Bare, they count as a class and
-       take the fill back off RES's widget confirm buttons. */
+    /* Control floor; video controls excluded, in `:where()`. */
     button:where(:not(.reddit-video-player-root *)),
     input:where([type="submit"]),
     input:where([type="button"]) {
@@ -2246,14 +1783,7 @@
       }
     }
 
-    /* A disabled control keeps the plate every button here carries and steps
-       its label back to @inactive, the one tone in the palette meant to
-       recede. Reddit greys the fill instead, which the rule above paints over,
-       so without this a disabled button looks live. `.c-btn` marks the state
-       with a class because it is sometimes an anchor, and the crosspost
-       dialog's submit button with the attribute. `:disabled` sits outside
-       the `:where()` so this outranks the live rules above and below: a
-       disabled control reads as disabled whatever else names it. */
+    /* Disabled; `:disabled` outside `:where()` outranks the live rules. */
     button:where(:not(.reddit-video-player-root *)):disabled,
     input:where([type="submit"]):disabled,
     input:where([type="button"]):disabled,
@@ -2267,11 +1797,7 @@
       color: @inactive !important;
     }
 
-    /* A disabled field says so the same way: the fill steps off @mantle onto
-       the control surface, so it stops reading as somewhere to type, and the
-       value recedes with it. Reddit darkens the fill to say this, which only
-       reads as inert on a light flavor. `:disabled` sits outside the
-       `:where()` so this outranks the live rule for the same field. */
+    /* Disabled field; `:disabled` outside `:where()`. */
     input:where(:not([type])):disabled,
     input:where([type="text"]):disabled,
     input:where([type="url"]):disabled,
@@ -2285,9 +1811,7 @@
       color: @inactive !important;
     }
 
-    /* A label reddit greys out beside a control it has switched off, and the
-       permission rows on the authorization page, which carry the state on the
-       label rather than on an input. */
+    /* Disabled labels, and permission rows carrying the state on the label. */
     label.disabled {
       color: @inactive !important;
     }
@@ -2296,9 +1820,7 @@
       background-color: @surface0 !important;
     }
 
-    /* The submit button while the form cannot be sent. The sprite gradient is
-       already cleared on `.morelink`; this is the label and the outline, which
-       reddit greys separately. */
+    /* The submit button while the form cannot be sent. */
     .disabled .morelink {
       border-color: @surface1 !important;
 
@@ -2307,9 +1829,7 @@
       }
     }
 
-    /* The buttons on the authorization page. A pale blue gradient is the
-       button's whole appearance, so the image is cleared the way `.morelink`'s
-       is and a flat surface takes its place. */
+    /* The OAuth page's buttons; the gradient is cleared as `.morelink`'s is. */
     .fancybutton {
       background-color: @surface0 !important;
       background-image: none !important;
@@ -2321,22 +1841,14 @@
       }
     }
 
-    /* The grant button, which reddit fills with its own orangered against a
-       near-white decline. The plate above is the right answer for the decline,
-       so only the affirmative is named, and it takes the accent because the
-       colour is reddit's branding rather than a state. The fill carries @base,
-       which no Latte colour is dark enough to hold at full strength. */
+    /* The grant button. Reddit's orangered is branding, so it takes the accent. */
     .oauth2-authorize .fancybutton.allow {
       background-color: @accent-fill !important;
       border-color: @accent-fill !important;
       color: @base !important;
     }
 
-    /* The moderation queue's approve, remove and spam controls. Each state is
-       a gradient strip stretched across the plate rather than an icon — a pale
-       tint at rest, a saturated fill once the action is taken — so the image
-       is cleared and both are drawn from the palette. The hue is what says
-       which action it was, so it is kept. */
+    /* Mod queue actions: gradient strips cleared, hue kept. */
     .pretty-button {
       background-color: @surface0 !important;
       background-image: none !important;
@@ -2409,12 +1921,7 @@
       color: @red !important;
     }
 
-    /* Reddit's other reds, all of them the literal `red`: the inline
-       "are you sure?" prompt on a destructive action and the line that
-       confirms it, the marker on a field that failed validation, and the
-       heading on an error page. They are states, so they keep the family the
-       rule above uses. `.green` is the moderator green reddit shares between
-       `.tagline .moderator` and this utility class. */
+    /* Reddit's other literal reds, all states; `.green` is the mod green. */
     .confirm-button .confirmation,
     .question,
     .wrong,
@@ -2425,9 +1932,7 @@
       color: @red !important;
     }
 
-    /* The raw detail under a failed submission, which reddit draws in black
-       rather than in the red its messages carry, to keep it apart from them.
-       Black is the one colour a dark flavor cannot leave alone. */
+    /* Raw detail under a failed submission, black to differ from the red. */
     #validation-errors pre {
       color: @text !important;
     }
@@ -2456,10 +1961,7 @@
       color: @red !important;
     }
 
-    /* The field headings on the create-a-subreddit form, which reddit writes
-       in a literal blue. They take the step the submit form's field titles
-       take. RES night mode lays a translucent dark strip behind each one,
-       which reddit itself does not draw. */
+    /* Field headings; RES night mode lays a dark strip behind each. */
     .create-reddit .title {
       background-color: transparent !important;
       color: @subtext1 !important;
@@ -2469,17 +1971,14 @@
       color: @stamp !important;
     }
 
-    /* The media uploader, which reddit builds only once a file or a video is
-       attached, so none of it is on the page the audit walks. */
+    /* The media uploader. */
     #new-link-preview,
     #image-name,
     #sr-drop-down {
       background-color: @mantle !important;
     }
 
-    /* The subreddit autocomplete's rows. The one under the cursor takes the
-       control surface; the name row reddit fills with its chrome blue takes
-       the accent, darkened on Latte far enough to hold @base. */
+    /* The subreddit autocomplete's rows. */
     .sr-row.sr-selected {
       background-color: @surface0 !important;
     }
@@ -2489,8 +1988,7 @@
       color: @base !important;
     }
 
-    /* The field the multireddit form collects subreddits in, which is a field
-       without being an input, and the chip it draws for each one. */
+    /* The multireddit form's subreddit field and its chips. */
     #sr-autocomplete-area.multiple-subreddit {
       background-color: @mantle !important;
 
@@ -2499,14 +1997,12 @@
       }
     }
 
-    /* The status reddit prints beside the submit form's URL field while it
-       fetches a title. */
+    /* The title-fetch status beside the URL field. */
     #url-field .title-status {
       color: @alert !important;
     }
 
-    /* The hint under the compose form's recipient field, and the promo beside
-       it that offers to send the message to the admins instead. */
+    /* The compose form's recipient hint and the admins promo. */
     .pm_to_admins_prompt,
     .pm_to_admins_promo__desc {
       color: @muted !important;
@@ -2549,8 +2045,7 @@
       border-color: @accent !important;
     }
 
-    /* The flair chooser is fetched when its button is clicked, so it is not
-       in the DOM for either audit pass. */
+    /* The flair chooser. */
     .flairselector {
       h2 {
         background-color: @surface0 !important;
@@ -2573,26 +2068,20 @@
       color: @text !important;
     }
 
-    /* The inline report form, which reddit fills pale yellow and outlines in a
-       darker one. It takes the surface and border `.infobar` takes: a tint
-       over Latte's @base is indistinguishable from reddit's own. */
+    /* The inline report form. */
     .action-form {
       background-color: @surface0 !important;
       border-color: @yellow !important;
       color: @text !important;
     }
 
-    /* The strip under an expando that carries its submit button. Its mark is
-       reddit's full-colour confirmation tick, which is left alone. */
+    /* Expando submit strip; its tick is full-colour art. */
     .form-bar {
       background-color: @surface0 !important;
       border-color: @surface1 !important;
     }
 
-    /* The field rows on the create-a-subreddit and subreddit-settings forms.
-       Reddit draws the row a saturated pale blue and the panel nested in it a
-       lighter one on a border of the row's colour; a surface and the step
-       below it keep the same relation. */
+    /* Field rows on the subreddit forms; the nested panel takes the step below. */
     .linefield {
       background-color: @surface0 !important;
       color: @text !important;
@@ -2603,10 +2092,7 @@
       }
     }
 
-    /* An information box outlined in reddit's chrome blue: the explanatory
-       panels inside a field row, and the notice above the submit form. A link
-       inside is left to the prose rule, whose blue is darkened far enough to
-       clear 4.5:1 on @surface0. */
+    /* Info boxes outlined in reddit's chrome blue. */
     .infotext,
     .content.submit .info-notice {
       background-color: @surface0 !important;
@@ -2622,40 +2108,30 @@
       color: @dim !important;
     }
 
-    /* Tier 2 — search */
+    /* Search */
     #search input {
       background-color: @mantle !important;
       border-color: @surface1 !important;
       color: @text !important;
     }
 
-    /* The magnifier is a borderless sprite tile of one colour, so it takes a
-       filter — but only once the box fill above is off it. */
+    /* A borderless single-colour tile, filtered once the fill is off it. */
     #search input[type="submit"] {
       background-color: transparent !important;
       filter: @dim-filter !important;
     }
 
-    /* A subreddit result's description, which reddit gives a grey of its
-       own rather than letting it inherit. */
     .search-result-body {
       color: @muted !important;
     }
 
-    /* The matched run inside a search result, which reddit marks up with
-       <mark>; it takes the colour of the link it sits in. */
+    /* Reddit's <mark> on a matched run takes the colour of its link. */
     mark {
       background-color: transparent !important;
       color: inherit !important;
     }
 
-    /* The search panel at the top of /subreddits and /search. Reddit fills
-       and outlines the box but no longer draws the large magnifier behind
-       it: the panel's left gutter is thirty pixels now and the glyph is
-       forty-eight, so it lands on the controls rather than beside them. RES
-       night mode rewrites the whole `background` shorthand and brings the
-       image back, so it is cleared here. The submit button beside the field
-       carries a magnifier of its own. */
+    /* RES night mode's `background` brings back a magnifier reddit dropped. */
     .searchpane,
     .raisedbox {
       background-color: @mantle !important;
@@ -2705,8 +2181,7 @@
       }
     }
 
-    /* Each of these is a single-colour glyph on a transparent tile, drawn on
-       an element that paints nothing else, so a filter is all they need. */
+    /* Single-colour glyphs on transparent tiles. */
     .search-icon,
     .search-result-icon-score {
       filter: @dim-filter !important;
@@ -2739,8 +2214,7 @@
       border-bottom-color: @surface0 !important;
     }
 
-    /* The facet box beside a search result list. Reddit outlines it in a
-       literal grey and, on the legacy path, fills it a near-white. */
+    /* Search facets. */
     .searchfacets {
       background-color: @mantle !important;
       border-color: @surface0 !important;
@@ -2750,15 +2224,11 @@
       }
     }
 
-    /* The count beside a facet, which reddit greys away from the facet link
-       it follows. */
     .facet.count {
       color: @muted !important;
     }
 
-    /* Search's failure notice. It reports a state, so it keeps the red
-       family rather than dropping to prose; the link inside it is part of
-       the same message and takes the same colour. */
+    /* Search's failure notice; the link inside is part of the message. */
     .searchfail {
       color: @alert !important;
 
@@ -2767,16 +2237,13 @@
       }
     }
 
-    /* The label tab on the search menu strip: a raised plate carrying
-       reddit's chrome blue, which this style spends on the accent. The plate
-       is @mantle rather than @surface0 because accent text on @surface0 falls
-       below 4.5:1 on Frappé for five of the fifteen accents. */
+    /* Search label tab; @mantle so accent text passes on Frappé. */
     #searchmenu .searchlabel {
       background-color: @mantle !important;
       color: @accent-text !important;
     }
 
-    /* Tier 3 — preferences */
+    /* Preferences */
     .pretty-form,
     .preftable {
       color: @text !important;
@@ -2792,16 +2259,12 @@
       color: @muted !important;
     }
 
-    /* The chosen theme in the preferences page's theme picker, which reddit
-       marks with a pale blue fill. The table sits on @base, so a surface is
-       what says "selected". */
+    /* The chosen theme in the theme picker. */
     .preftable .container.reddit-themes .theme.selected {
       background-color: @surface0 !important;
     }
 
-    /* Reddit greys these headings and darkens the emphasised word inside them.
-       The heading takes the step a form's field titles take and the emphasis
-       the body colour, which keeps the two a step apart. */
+    /* Reddit greys these headings and darkens the emphasised word inside them. */
     .fancy-settings h1,
     .fancy-settings h2 {
       color: @subtext1 !important;
@@ -2811,9 +2274,7 @@
       color: @text !important;
     }
 
-    /* /prefs/apps, which is a page of its own rather than a preference
-       table: each app is a bordered card, its name is a heading reddit
-       colours as a link, and the permission popup is a literal yellow. */
+    /* /prefs/apps: the app cards and the permission popup. */
     .authorized-app,
     .developed-app {
       border-color: @surface0 !important;
@@ -2829,10 +2290,8 @@
       color: @text !important;
     }
 
-    /* Tier 3 — wiki */
-    /* `.wiki-page` is a class on <body> itself, not a wrapping element, so
-       nesting under it would require the gate's body to be its own strict
-       ancestor and match nothing; these stay unnested. */
+    /* Wiki */
+    /* `.wiki-page` is on body itself, so it cannot be nested under. */
     .wiki-page-content,
     .wiki-page-content .pagelisting {
       background-color: transparent !important;
@@ -2874,8 +2333,7 @@
       color: @text !important;
     }
 
-    /* The revision list, which reddit gives a literal black rather than
-       letting the page colour through. */
+    /* The revision list, a literal black. */
     .generic-table {
       color: @text !important;
     }
@@ -2895,15 +2353,14 @@
       color: @text !important;
     }
 
-    /* Reddit gives these the literal colour `lightgrey`, which survives the
-       dark flavors untouched. */
+    /* A literal `lightgrey`. */
     .diff .diff_header,
     .diff .diff_next {
       background-color: @surface0 !important;
       color: @text !important;
     }
 
-    /* Tier 3 — public about pages */
+    /* About, moderation and traffic pages */
     .subreddit-rule-item {
       color: @text !important;
 
@@ -2923,8 +2380,7 @@
       color: @text !important;
     }
 
-    /* The karma figure beside a name carries a colour of night mode's own,
-       so the name's rule has to name it rather than be inherited from. */
+    /* The karma figure carries a colour of night mode's own, so it is named. */
     .usertable .user,
     .usertable .user .userkarma {
       color: @muted !important;
@@ -2934,15 +2390,12 @@
       color: @muted !important;
     }
 
-    /* Reddit's row highlight is the literal #e5efff, which leaves @text at
-       1.25:1 on the dark flavors. @mantle is one step from the @base the table
-       sits on and keeps @text past 6:1 on both. */
+    /* Row highlight. */
     .usertable tr:hover {
       background-color: @mantle !important;
     }
 
-    /* Reddit marks banned rows with the literal `red`, 3.54:1 on Latte and
-       4.10:1 on Mocha. @red reaches 4.80:1 and 7.08:1 at rest. */
+    /* Banned rows. */
     .usertable tr.banned-user,
     .usertable tr.banned-user a,
     .usertable tr.banned-user .user,
@@ -2955,9 +2408,7 @@
       color: @dim !important;
     }
 
-    /* The subreddit description an error page shows for a private or banned
-       subreddit. Reddit rules it off in black and writes the heading in black
-       too. */
+    /* The error page's subreddit description. */
     .errorpage-message.sr-description {
       border-color: @surface0 !important;
     }
@@ -2966,29 +2417,22 @@
       color: @text !important;
     }
 
-    /* The notice on a traffic page that a day's figures are still being
-       counted, which reddit turns red once the wait is long. */
+    /* The traffic-page notice that turns red when the wait is long. */
     #timeseries-unprocessed.slow {
       color: @alert !important;
     }
 
-    /* The traffic tables. Reddit leaves the rows to inherit the page and night
-       mode gives them a grey of its own, on the row rather than on the table,
-       so this has to name the row too. */
+    /* Night mode greys the rows rather than the table, so the row is named. */
     .traffic-table tr {
       color: @text !important;
     }
 
-    /* Reddit bands the rows in a light grey, which night mode replaces on the
-       month table and clears on the side ones. @band is the alternate step the
-       comment listing already stripes with, a stripe below the page rather
-       than a box on it. */
+    /* Row banding, with the comment listing's stripe. */
     .traffic-table tbody tr:nth-child(even) {
       background-color: @band !important;
     }
 
-    /* The rule above the totals row, which reddit draws in a literal black.
-       Only the top edge carries a width; the rest follow the row's colour. */
+    /* The rule above the totals row. */
     .traffic-table tfoot tr {
       border-top-color: @surface0 !important;
     }
@@ -2998,43 +2442,30 @@
       border-color: @surface0 !important;
     }
 
-    /* The chart's axis and legend labels, which flot draws as text in a grey
-       that reaches 2.17:1 on the dark flavors. Both sets inherit rather than
-       declare, so naming the two wrappers reaches them; flot colours the
-       legend's table separately from the axis text. */
+    /* flot's axis and legend labels inherit, so the wrappers are named. */
     .flot-text,
     .legend table {
       color: @muted !important;
     }
 
-    /* The frame flot draws around each legend key, written inline on the
-       element. The swatch inside keeps the colour flot plotted the line with:
-       the plot is a canvas this style cannot reach, so recolouring its key
-       would leave the two naming different things. */
+    /* Legend key frame; the swatch keeps flot's plotted colour. */
     .legendColorBox > div {
       border-color: @surface1 !important;
     }
 
-    /* The chart's hover readout, which reddit builds on the fly and tints a
-       pale pink. It is a floating control over the page, so it takes the pair
-       reddit's own tooltips take here. */
+    /* The chart's hover readout. */
     #graph-tooltip {
       background-color: @surface0 !important;
       border-color: @surface1 !important;
       color: @text !important;
     }
 
-    /* The moderation log's rows take the page colour from reddit, which
-       night mode overrides with a grey of its own on the line describing
-       each action. */
+    /* Night mode greys the mod log's description. */
     .modactionlisting .description {
       color: @text !important;
     }
 
-    /* Night mode fills every element inside the log's table and gives it a
-       border, and a colour declared on the cell beats one inherited from the
-       table, so the selector is mirrored as it stands. Reddit paints nothing
-       here, so the cells go back to letting the page through. */
+    /* Night mode fills and borders every cell, so the selector is mirrored. */
     .modactionlisting table * {
       background-color: transparent !important;
       border-color: @surface0 !important;
@@ -3046,14 +2477,8 @@
       color: @dim !important;
     }
 
-    /* Tier 4 — Reddit Enhancement Suite chrome */
-    /* The envelope is a sprite tile drawn in two colours — white with an
-       orange flap when there is mail — so a single-colour filter flattens
-       it into a block. It is redrawn as an outline, unread in @red and
-       read in the tagline's grey, and the sprite offset is reset with it.
-       RES draws its own envelope in the bar that follows a scrolled page,
-       from images of its own; it shares these rules so that both are one
-       image, already painted by the time the bar appears. */
+    /* Reddit Enhancement Suite */
+    /* Two-colour sprite tile, redrawn; RES's floating copy shares it. */
     #mail.havemail,
     #NREMail.havemail {
       @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="15" height="10" viewBox="0 0 15 10"><g fill="none" stroke="@{red}"><rect x=".5" y=".5" width="14" height="9"/><path d="m.5.5 7 5.5 7-5.5"/></g></svg>');
@@ -3070,8 +2495,7 @@
       background-position: 0 0 !important;
     }
 
-    /* The comment navigator's fly-out. Its rows are built on hover, so
-       neither the visible nor the hidden audit pass reaches them. */
+    /* The comment navigator's fly-out. */
     .res-commentNavToggle-type {
       color: @text !important;
 
@@ -3080,8 +2504,7 @@
       }
     }
 
-    /* The rest of the user bar's icons are single-colour sprite tiles, or
-       close enough that flattening them reads as a filled silhouette. */
+    /* Single-colour sprite tiles. */
     #notifications,
     #chat,
     #modmail,
@@ -3090,18 +2513,7 @@
       filter: @dim-filter !important;
     }
 
-    /* Each of the first four swaps its sprite tile for a lit one when there
-       is something waiting, and the tile is the whole of the signal: the
-       glyph is the same shape either way and only its colour says so. A
-       filter flattens that, so the state takes a filter of its own and keeps
-       what the colour meant. The lit bell and the lit chat icon are marks of
-       reddit's own chrome and take the accent with the rest of it; modmail's
-       envelope is orange, so it keeps the tone every other orange marker
-       here keeps; the new modmail tile is green and keeps its green.
-
-       Each of these elements paints a sprite and nothing else — reddit
-       gives them no background colour and no border — so the filter has
-       nothing of its own to flatten. */
+    /* A lit tile is the whole signal, so each state keeps its meaning. */
     #notifications.active,
     #chat.active {
       filter: @accent-filter !important;
@@ -3115,10 +2527,7 @@
       filter: @green-filter !important;
     }
 
-    /* The unread count beside the envelope, and RES's copy of it. The
-       header's own link colour reaches this one through
-       `#header-bottom-right a`, which outranks a bare class, so the rule
-       carries the id too. */
+    /* `#header-bottom-right a` outranks a bare class, so the id is carried. */
     #header-bottom-right .message-count,
     .message-count,
     #NREMailCount {
@@ -3126,9 +2535,7 @@
       color: @base !important;
     }
 
-    /* The current RES settings console renders in a cross-origin
-       `chrome-extension://` iframe (`#console-container`), not in the page
-       DOM, so a page-injected stylesheet cannot reach into it. */
+    /* The RES settings console is a cross-origin iframe and cannot be reached. */
     .RESDropdownList {
       background-color: @mantle !important;
       border-color: @surface0 !important;
@@ -3152,8 +2559,7 @@
       color: @text !important;
     }
 
-    /* RES's switches: a track that turns blue when on and red when the
-       setting it guards is inverted, with a thumb riding on top. */
+    /* RES's switches: blue when on, red when the setting is inverted. */
     .toggleButton .toggleThumb {
       background-color: @surface2 !important;
       border-color: @surface2 !important;
@@ -3173,41 +2579,21 @@
       background-color: @base !important;
     }
 
-    /* The highlight sits behind a whole entry, so every foreground inside it
-       — link titles, authors, taglines, scores — moves off @base onto this
-       colour, and it has to be far enough from @base to read as a selection
-       at a glance. @mantle is only 1.07:1 from @base on Mocha, which is not
-       a highlight at all. @surface0 is the visible step in the other
-       direction but costs the recessive foregrounds — @dim falls to 3.48:1
-       on Frappé and the taglines to 4.05:1 on Latte. @crust is 1.14:1 to
-       1.22:1 from @base on every flavor and raises every foreground on the
-       three dark ones, since it is darker than the page there. */
+    /* Keyboard-nav highlight; @crust reads as selected on every flavor. */
     .RES-keyNav-activeElement,
     .RES-keyNav-activeElement .md-container,
     .entry.res-selected {
       background-color: @crust !important;
     }
 
-    /* RES repaints the selected comment's body text, which defeats the
-       markdown colours themed above. It names the body and its paragraphs,
-       so this names the same two: anything broader also flattens the links,
-       code and quotes inside them to the body colour. */
+    /* RES repaints the body and paragraphs; the same two are named. */
     .entry.res-selected .md-container,
     .entry.res-selected .md-container > .md,
     .entry.res-selected .md-container > .md p {
       color: inherit !important;
     }
 
-    /* The vote weight Reddit Enhancement Suite appends to an author, which
-       states how the reader has voted on that user before: it tints towards
-       green where the reader has upvoted them and towards red where they
-       have downvoted, as a foreground under night mode and as a fill
-       otherwise. RES writes that colour inline, and an `!important` here
-       would outrank it and leave every weight the same tone, so this rule
-       carries none — the second in this file to do so, for the same reason
-       `a.author` does. Without `!important` it still beats RES's own
-       `a.voteWeight`, and the anchor floor, the tagline and the prose link
-       exclude the class so their `!important` does not reach it. */
+    /* RES's inline vote colour, so no `!important` (see `a.author`). */
     a.voteWeight {
       color: @link;
     }
@@ -3218,23 +2604,18 @@
       color: @text !important;
     }
 
-    /* These sit on @base with nothing around them, so @surface0 alone reads
-       as flat. An accent tint and an accent border separate them at any
-       accent: 20% is the strongest tint that keeps @text above 4.5:1 for all
-       fifteen choices, the worst being Frappé's rosewater at 4.83:1. */
+    /* Alone on @base; 20% keeps @text above 4.5:1 for every accent. */
     .res-fancy-toggle-button,
     .RESshortcutside,
     .RESDashboardToggle {
-      /* RES paints these with a gradient, which covers any background colour
-         set under it. */
+      /* RES paints a gradient over these. */
       background-image: none !important;
       background-color: fade(@accent, 20%) !important;
       border-color: @accent !important;
       color: @text !important;
     }
 
-    /* Reddit's own hover bubbles: the author card, the multireddit picker
-       and the subreddit card. */
+    /* Reddit's hover bubbles: author card, multireddit and subreddit cards. */
     .author-tooltip,
     .hover-bubble,
     .hover-bubble .title,
@@ -3244,10 +2625,7 @@
       color: @text !important;
     }
 
-    /* Reddit's author card fills the bubble with sections of its own, each
-       carrying its own fill and text colour. It is built on demand and is
-       absent from this development profile, so the selectors come from the
-       card's markup rather than from a computed-style reading of it. */
+    /* The author card's sections carry their own fills. */
     .author-tooltip {
       .author-tooltip__head,
       .author-tooltip__credentials-list,
@@ -3267,8 +2645,7 @@
         color: @accent-text !important;
       }
 
-      /* The beta mark on the card, a filled chip carrying reddit's own blue
-         behind white text. */
+      /* The card's beta mark. */
       .author-tooltip__beta {
         background-color: @accent-fill !important;
         color: @base !important;
@@ -3291,9 +2668,7 @@
       }
     }
 
-    /* The bubble's pointer is two stacked triangles drawn as borders: the
-       ::before is the outline and the ::after the fill, and which side of
-       each carries the colour depends on where the bubble is anchored. */
+    /* Pointer: ::before outline, ::after fill, on the anchored side. */
     .hover-bubble {
       &.anchor-top::before,
       &.anchor-top-left::before,
@@ -3338,13 +2713,7 @@
       }
     }
 
-    /* Reddit's tooltip, drawn as a filled box with a triangle borrowed from a
-       border. It ships two ways — a black bubble with white text on the page,
-       and a white one inside the share panel — which land on the same pair
-       here, since both are a floating control over a surface. The arrow's
-       colour has to follow the fill or the pointer detaches from the box, and
-       which border side carries it depends on where the tooltip is anchored.
-       The error variant keeps its red, which is what it is there to say. */
+    /* Tooltip; the arrow follows the fill, the error variant keeps its red. */
     .c-tooltip {
       .tooltip-inner {
         background-color: @surface0 !important;
@@ -3385,10 +2754,7 @@
       }
     }
 
-    /* RES's own buttons, shared by the user fly-out's ignore and tag
-       controls and by the subreddit info card. Each ships a saturated fill
-       with white text; the palette equivalents are light, so the label
-       inverts to @base. */
+    /* RES's own filled buttons; the label inverts to @base. */
     .blueButton {
       background-color: @op !important;
       border-color: @op !important;
@@ -3411,8 +2777,7 @@
       }
     }
 
-    /* The user tag dialog and the hover card behind it. Its colour picker is
-       left alone: those swatches are the tag colours themselves. */
+    /* User tag dialog; the colour picker's swatches are the tag colours. */
     .RESHover,
     .RESDialog,
     .RESDialogSmall,
@@ -3464,19 +2829,14 @@
       color: @text !important;
     }
 
-    /* The primary button in a RES notification. It is an anchor, and the
-       rule for a link inside a notification is a class and a type where this
-       is a class alone, so that one won: accent text on an accent fill, 1:1
-       on the dark flavors. The fill takes @accent-text, which is darkened on
-       Latte by exactly the amount that carries @base against it. */
+    /* `.RESNotification a` outranks a bare class, so it is named. */
     .RESNotification a.RESNotificationButtonBlue,
     .RESNotificationButtonBlue {
       background-color: @accent-text !important;
       color: @base !important;
     }
 
-    /* The floating controls at the corner of a comments page, and the comment
-       navigator's choices, which open over the page. */
+    /* The floating corner controls and the comment navigator's choices. */
     .res-wheel-browse-gallery {
       background-color: fade(@red, 24%) !important;
     }
@@ -3507,11 +2867,7 @@
       background-color: @crust !important;
     }
 
-    /* The guider's Next and Close buttons, which RES fills with a blue
-       gradient. The gradient is a background image and covers any fill set
-       under it, so it is cleared first. These are anchors, so the link floor
-       reaches them, which puts accent text on an accent fill; the label is
-       named here instead. */
+    /* Guider buttons; gradient cleared, label named over the link floor. */
     .guiders_button {
       background-image: none !important;
       background-color: @accent-text !important;
@@ -3519,8 +2875,7 @@
       color: @base !important;
     }
 
-    /* These are icon-font glyphs drawn in a pseudo-element, so they take a
-       colour; a filter on the element would flatten the glyph with it. */
+    /* Icon-font glyphs in a pseudo-element take a colour, not a filter. */
     #RESSettingsButton::after,
     .gearIcon::after,
     .RESUserTagImage::after {
@@ -3531,15 +2886,12 @@
       color: @dim !important;
     }
 
-    /* The follow control beside a subreddit is a raster icon drawn in a
-       pseudo-element, dark on a transparent background, so it takes a palette
-       filter rather than a colour. */
+    /* A raster icon in a pseudo-element, so a filter. */
     .subreddit-subscribe::before {
       filter: @dim-filter !important;
     }
 
-    /* Reddit marks the followed state by swapping the follow icon for a
-       green tick and disables the control, so the tick keeps the green. */
+    /* Followed: reddit swaps in a green tick. */
     .subreddit-subscribe[disabled]::before {
       filter: @green-filter !important;
     }
@@ -3550,8 +2902,7 @@
       color: @sticky !important;
     }
 
-    /* The subreddit shortcut bar and its editing controls sit in the themed
-       header strip. */
+    /* The shortcut bar in the header strip. */
     #RESShortcutsEditContainer,
     #RESShortcutsSort,
     #RESShortcutsRight,
@@ -3588,17 +2939,12 @@
       color: @text !important;
     }
 
-    /* The badge beside a crosspost's title: one colour on a transparent
-       tile, on an element that paints nothing else. */
+    /* One colour on a transparent tile. */
     .crosspost-badge {
       filter: @dim-filter !important;
     }
 
-    /* Reddit fetches a crosspost's preview when the expando opens, so it is
-       not in the markup a static pass reads. The panel carries a surface and
-       a border of reddit's own, its rule divider is drawn as a filled `hr`
-       rather than a line, and the separator between the tagline's items is a
-       grey of its own. */
+    /* Crosspost preview; its divider is a filled `hr`. */
     .crosspost-preview {
       background-color: @mantle !important;
       border-color: @surface0 !important;
@@ -3617,21 +2963,12 @@
       color: @dim !important;
     }
 
-    /* A crossposted video's panel fills behind the player rather than
-       letting the panel's own surface through. */
+    /* A crossposted video fills behind the player. */
     .crosspost-preview.video .crosspost-preview-content {
       background-color: @mantle !important;
     }
 
-    /* RES's controls over an expanded image — the settings gear, the two
-       rotates, save and reverse lookup. They sit on a scrim laid over the
-       picture, and each glyph is an icon-font character drawn in a
-       pseudo-element.
-
-       Every button is cleared: the generic button rule paints a plate, and
-       here that breaks the strip into separate tiles over the image. RES
-       desaturates them too, which would drain whatever palette colour is set
-       on the glyph, so the filter goes with it. */
+    /* Image controls; the floor's plate and RES's desaturation cleared. */
     .res-media-controls {
       background-color: fade(@crust, 70%) !important;
 
@@ -3649,8 +2986,7 @@
       }
     }
 
-    /* RES's image-gallery step arrows, an icon-font glyph in a literal
-       blue, present only after a gallery expando opens. */
+    /* The gallery step arrows, icon-font glyphs. */
     .res-step::after {
       color: @accent-icon !important;
     }
@@ -3667,9 +3003,7 @@
       }
     }
 
-    /* The spinner shown while Never Ending Reddit fetches the next page. RES
-       draws it as a half-circle border that it rotates, so it carries no
-       image and its colour is all there is to set. */
+    /* Never Ending Reddit's spinner is a rotated half-circle border. */
     .RESLoadingSpinner {
       border-color: @accent !important;
       color: @accent !important;
@@ -3715,8 +3049,7 @@
       border-bottom-color: @surface1 !important;
     }
 
-    /* The bottom rule is how an active filter reads as active, so it takes
-       the accent rather than RES's greenyellow. */
+    /* The bottom rule marks an active filter. */
     .res-filterline-filter-hiding,
     .res-filterline-filter-hiding:hover {
       border-bottom-color: @accent !important;
@@ -3741,27 +3074,18 @@
       }
     }
 
-    /* The condition builder. It is an option type in the settings console,
-       which is out of reach, but the same markup is built into the page
-       twice: inside a filter's hover card on the filter line, and inside the
-       comment navigator's conditions panel. Both of those sit on @mantle. */
+    /* Condition builder, in the filter card and comment navigator. */
     .builderItem {
       background-color: @surface0 !important;
       border-color: @surface1 !important;
     }
 
-    /* RES's own subreddit, user and wiki autocomplete, which it appends to
-       the body as a `.drop-choices` list. Only the keyboard cursor's row is
-       named: the list and its text already follow the header's dropdown
-       rules, and the row under the pointer already takes @surface0 there. */
+    /* RES autocomplete; only the keyboard cursor's row needs naming. */
     #autocomplete_dropdown .selectedItem {
       background-color: @surface0 !important;
     }
 
-    /* The subscribe control RES adds to a comments page. Inside the
-       dashboard's new-comments table RES draws the same control as a bare
-       glyph with no plate, and the rule above outranks that, so the fill is
-       handed back. */
+    /* The dashboard table draws this as a bare glyph. */
     .RESSubscriptionButton {
       background-color: @surface0 !important;
       border-color: @surface1 !important;
@@ -3772,8 +3096,7 @@
       background-color: transparent !important;
     }
 
-    /* The dialog behind a subreddit shortcut's edit control, which opens
-       over the page from the shortcut bar. */
+    /* The shortcut edit dialog. */
     #editShortcutDialog {
       background-color: @mantle !important;
       border-color: @surface0 !important;
@@ -3790,9 +3113,7 @@
       border-color: @surface1 !important;
     }
 
-    /* /r/dashboard, which RES builds out of reddit's own page. Each widget is
-       a box with a raised header strip; the loader is a plate RES floats over
-       the box while the widget refreshes. */
+    /* /r/dashboard widgets: box, raised header, loader plate. */
     .RESDashboardComponent {
       background-color: @mantle !important;
       border-color: @surface0 !important;
@@ -3808,23 +3129,14 @@
       border-color: @surface1 !important;
     }
 
-    /* The dashboard's actions are divs rather than anchors, so the floor for
-       a link does not reach them. */
+    /* Divs, not anchors, so the link floor misses them. */
     .addNewWidget,
     .editWidget,
     .backToWidgetTypes {
       color: @accent-text !important;
     }
 
-    /* The widget forms' confirm and cancel, which RES fills green and red
-       behind white. The palette greens and reds are light, so the label
-       inverts to @crust, as it does on the subscribe and unsubscribe
-       fills. The confirm is a submit input, so the control floor's hover
-       reaches it and would otherwise pull the green off under the pointer;
-       RES declares no hover of its own, so the fill is named there too and
-       stays put. @crust holds 4.60:1 on Latte's @join, the closest of the
-       four flavors. The cancel is `<input type="cancel">`, a type no floor
-       here names, so nothing reaches it on hover. */
+    /* Confirm is a submit input the floor hovers; cancel is `type="cancel"`. */
     .addButton,
     .addButton:hover,
     .updateButton,
@@ -3840,12 +3152,7 @@
       color: @crust !important;
     }
 
-    /* The chips along a widget's header: the sort controls on one side and
-       the refresh, minimise and close on the other. RES draws them white on
-       the strip, so they take the page's own surface, which reads as a chip
-       against the strip from either side of the palette; @surface1 leaves
-       @text at 4.39:1 on Latte. The selected one takes the accent, which is
-       where its blue goes. */
+    /* Header chips; @base reads as a chip against the strip. */
     .RESDashboardComponentHeader ul li {
       background-color: @base !important;
       border-color: @surface1 !important;
@@ -3859,17 +3166,13 @@
       }
     }
 
-    /* A chip's label is sometimes an icon-font glyph rather than a word, and
-       the rule above sets the colour on the chip while the glyph declares
-       its own. On the accent fill it has to invert with the label beside
-       it. */
+    /* An icon-font label declares its own colour, so it inverts with the chip. */
     .RESDashboardComponentHeader ul li.active .res-icon,
     .RESDashboardComponentHeader ul li:hover .res-icon {
       color: @base !important;
     }
 
-    /* A chip RES has switched off reads as switched off, the way every other
-       disabled control here does. */
+    /* A switched-off chip. */
     ul.widgetStateButtons li.disabled,
     ul.widgetStateButtons li.disabled:hover {
       background-color: @surface0 !important;
@@ -3877,10 +3180,7 @@
       color: @inactive !important;
     }
 
-    /* The refresh timestamp in a widget's header. RES draws it as bare text
-       rather than a chip, so the plate above is taken back off it. @muted is
-       the local for a secondary line, but it reaches only 4.05:1 on Latte's
-       @surface0, which is the surface this strip carries. */
+    /* Bare text, so the plate comes off; @muted fails on Latte's @surface0. */
     ul.widgetStateButtons li.updateTime,
     ul.widgetStateButtons li.updateTime:hover {
       background-color: transparent !important;
@@ -3894,8 +3194,7 @@
       color: @text !important;
     }
 
-    /* The control that adds a widget, and the one that edits the set. Reddit's
-       chrome blue outlines both. */
+    /* The add and edit widget controls. */
     #RESDashboardAddComponent,
     #RESDashboardEditComponent {
       background-color: @surface0 !important;
@@ -3903,9 +3202,7 @@
       color: @text !important;
     }
 
-    /* Reddit's own read-next card, a panel it floats at the foot of a
-       comments page. It declares a colour on itself, so the page's own text
-       colour does not reach it. */
+    /* The read-next card declares its own colour. */
     .read-next {
       background-color: @mantle !important;
       border-color: @surface0 !important;
