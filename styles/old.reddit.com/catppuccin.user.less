@@ -505,10 +505,10 @@
 
     /* Thirteen of the fifteen accent choices fall below 4.5:1 on Latte's
        @base — yellow reaches only 2.31:1 — so an accent that carries text is
-       darkened there. It has to clear @surface0 as well as @base, since the
-       dropdowns and the tab strip put accent text on it: 35% leaves the worst
-       of the fifteen, pink, at 5.09:1 there and 7.01:1 on @base. The dark
-       flavors clear both already. */
+       darkened there. 35% leaves the worst of the fifteen, pink, at 7.01:1 on
+       @base and 5.09:1 on @surface0, which is margin rather than a target:
+       accent text belongs on @base or @mantle, and no rule here puts it on a
+       surface. The dark flavors clear @base and @mantle undarkened. */
     @accent-text: if(@flavor = latte, darken(@accent, 35%), @accent);
     /* A title that has been followed. Latte and Frappé change hue, which is
        what reddit's own light interface does — #0000ff unread, #551a8b
@@ -520,10 +520,11 @@
        how far it sits from the page. Those pull in opposite directions and
        the first is what the reader is actually doing: telling one row from
        the next. @overlay1 separates from @text by 2.40:1 on Macchiato and
-       2.56:1 on Mocha, where RES's own pair manages 1.81:1. @subtext0 reads
-       better against the page — 6.62:1 and 7.37:1 against @overlay1's 4.14:1
-       and 4.44:1 — and was tried for that reason, but it closes the gap to
-       1.50:1 and 1.54:1 and the two states stop being tellable apart.
+       2.56:1 on Mocha; RES night mode's own pair is 2.94:1, or 1.31:1 with
+       its coloured-links option on. @subtext0 reads better against the page
+       — 6.62:1 and 7.37:1 against @overlay1's 4.14:1 and 4.44:1 — but closes
+       the gap to 1.50:1 and 1.54:1, and the two states stop being tellable
+       apart.
 
        So this sits below 4.5:1 on those two flavors deliberately, the same
        decision @inactive records, and `contrast.js` exempts it by name. */
@@ -546,8 +547,8 @@
 
        A value this does not recognise is treated as off. Stylus keeps a
        select's saved value when a style's option list changes, so a reader
-       who set this before the list was rewritten still has the old value,
-       and nothing here may fail on it.
+       can be holding a value this list does not offer, and nothing here may
+       fail on it.
 
        Strength is how far a rail departs from `@surface1`, the border colour
        every other box on the page already carries. Measuring it from there
