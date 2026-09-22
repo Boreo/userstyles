@@ -545,6 +545,7 @@
        clears 4.5:1 for all fifteen, with pink the worst at 4.54:1. The dark
        flavors clear @base undarkened. */
     @accent-fill: if(@flavor = latte, darken(@accent, 24%), @accent);
+
     /* A title that has been followed. Latte and Frappé change hue, which is
        what reddit's own light interface does — #0000ff unread, #551a8b
        visited — with the palette's blue and mauve standing in. The two
@@ -675,6 +676,11 @@
     .link,
     .thing {
       background-color: transparent !important;
+    }
+
+    /* Reddit frames the last-opened listing with a dashed grey border. */
+    .last-clicked {
+      border-color: @surface1 !important;
     }
 
     /* The listing rank is ordinal decoration beside the title it numbers. */
@@ -1125,10 +1131,10 @@
        Reddit appends a listing's next page with the type class missing and
        fills it in a moment later, so the rules below are reached only after
        that. These two carry a neutral plate for the gap, which is what the
-       reader sees flash otherwise. */
-    /* Reddit rescales its sprite sheet under a high-density media query;
-       the rebuilt tile is a single 23×23 image, so that scaled size is
-       reset back to the tile's own dimensions. */
+       reader sees flash otherwise. Reddit also rescales its sprite sheet
+       under a high-density media query; the rebuilt tile is a single 23×23
+       image, so that scaled size is reset back to the tile's own
+       dimensions. */
     .expando-button {
       background-color: transparent !important;
       border-color: @surface0 !important;
@@ -1185,10 +1191,11 @@
 
     /* These are sprite tiles: the button scrolls to an offset inside a
        sheet, and to a second one on hover. The replacement is a single
-       tile, so the rule resets the offset with it — the one non-colour
-       declaration in this style, and the alternative is carrying reddit's
-       sprite geometry in every rule and re-deriving it whenever reddit
-       rebuilds the sheet, which has already happened once. */
+       tile, so the rule resets the offset with it — one of the sprite-
+       geometry resets in this style, alongside background-size, and the
+       alternative is carrying reddit's sprite geometry in every rule and
+       re-deriving it whenever reddit rebuilds the sheet, which has already
+       happened once. */
     .expando-button.collapsed.selftext {
       @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M4 5h15v2H4zm0 4h15v2H4zm0 4h15v2H4zm0 4h9v2H4z"/></svg>');
 
@@ -1729,10 +1736,8 @@
     }
 
     .infobar.welcome a {
-      background-color: @accent-fill
-        !important;
-      border-bottom-color: @accent-fill
-        !important;
+      background-color: @accent-fill !important;
+      border-bottom-color: @accent-fill !important;
       color: @base !important;
     }
 
@@ -2322,10 +2327,8 @@
        colour is reddit's branding rather than a state. The fill carries @base,
        which no Latte colour is dark enough to hold at full strength. */
     .oauth2-authorize .fancybutton.allow {
-      background-color: @accent-fill
-        !important;
-      border-color: @accent-fill
-        !important;
+      background-color: @accent-fill !important;
+      border-color: @accent-fill !important;
       color: @base !important;
     }
 
@@ -2482,8 +2485,7 @@
     }
 
     .sr-name-row.sr-selected {
-      background-color: @accent-fill
-        !important;
+      background-color: @accent-fill !important;
       color: @base !important;
     }
 
@@ -2527,8 +2529,7 @@
     }
 
     #media-progress-bar {
-      background-color: @accent-fill
-        !important;
+      background-color: @accent-fill !important;
       color: @base !important;
     }
 
@@ -3269,8 +3270,7 @@
       /* The beta mark on the card, a filled chip carrying reddit's own blue
          behind white text. */
       .author-tooltip__beta {
-        background-color: @accent-fill
-          !important;
+        background-color: @accent-fill !important;
         color: @base !important;
       }
 
@@ -3542,6 +3542,12 @@
        green tick and disables the control, so the tick keeps the green. */
     .subreddit-subscribe[disabled]::before {
       filter: @green-filter !important;
+    }
+
+    /* Reddit marks a followed subreddit's name green beside the tick. */
+    .tagline .subreddit-subscribe[disabled] ~ .subreddit,
+    .tagline .subreddit-subscribe:hover ~ .subreddit {
+      color: @sticky !important;
     }
 
     /* The subreddit shortcut bar and its editing controls sit in the themed
@@ -3847,10 +3853,8 @@
 
       &.active,
       &:hover {
-        background-color: @accent-fill
-          !important;
-        border-color: @accent-fill
-          !important;
+        background-color: @accent-fill !important;
+        border-color: @accent-fill !important;
         color: @base !important;
       }
     }
