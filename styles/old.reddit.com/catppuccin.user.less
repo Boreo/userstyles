@@ -547,10 +547,17 @@
        always`, and Stylus compiles a userstyle on the default setting, where
        the same expression yields NaN and the rule is dropped.
 
-       A value this does not recognise is treated as off. Stylus keeps a
-       select's saved value when a style's option list changes, so a reader
-       can be holding a value this list does not offer, and nothing here may
-       fail on it.
+       Stylus keeps a select's saved value when a style's option list changes,
+       so any of the eight thread selects can be holding a value this list does
+       not offer, and none of them may fail on one. The mode is checked against
+       the six it draws; the strength is checked for being a number, which is
+       all `unit()` can take. Either failing reads as off. A custom colour is
+       checked against the fifteen keys its select offers before it reaches the
+       palette, since a key the palette does not hold is a hard failure in Less
+       and would stop the whole style compiling; an unrecognised one reads as
+       `@surface1`, the colour a rail carries with threads off. `#thread-key`
+       holds that check once, and each call is read back through a detached
+       ruleset, which is how Less carries a value out of a mixin.
 
        Strength is how far a rail departs from `@surface1`, the border colour
        every other box on the page already carries. Measuring it from there
@@ -562,25 +569,59 @@
     @thread-known: if(@threadColors = rainbow, 1, if(@threadColors = warm, 1,
       if(@threadColors = cool, 1, if(@threadColors = neutral, 1,
       if(@threadColors = shade, 1, if(@threadColors = custom, 1, 0))))));
-    @thread-tint: if(@thread-known = 1, unit(@threadStrength, %), 0%);
-    @thread-name1: if(@threadColors = custom, @threadColor1, if(@threadColors =
-      shade, @accentColor, if(@threadColors = warm, maroon, if(@threadColors =
-      cool, teal, if(@threadColors = neutral, surface0, red)))));
-    @thread-name2: if(@threadColors = custom, @threadColor2, if(@threadColors =
-      shade, @accentColor, if(@threadColors = warm, red, if(@threadColors =
-      cool, sky, if(@threadColors = neutral, surface1, peach)))));
-    @thread-name3: if(@threadColors = custom, @threadColor3, if(@threadColors =
-      shade, @accentColor, if(@threadColors = warm, peach, if(@threadColors =
-      cool, sapphire, if(@threadColors = neutral, surface2, yellow)))));
-    @thread-name4: if(@threadColors = custom, @threadColor4, if(@threadColors =
-      shade, @accentColor, if(@threadColors = warm, yellow, if(@threadColors =
-      cool, blue, if(@threadColors = neutral, overlay0, green)))));
-    @thread-name5: if(@threadColors = custom, @threadColor5, if(@threadColors =
-      shade, @accentColor, if(@threadColors = warm, flamingo, if(@threadColors =
-      cool, lavender, if(@threadColors = neutral, overlay1, blue)))));
-    @thread-name6: if(@threadColors = custom, @threadColor6, if(@threadColors =
-      shade, @accentColor, if(@threadColors = warm, rosewater, if(@threadColors
-      = cool, mauve, if(@threadColors = neutral, overlay2, mauve)))));
+    @thread-tint: if(@thread-known = 1, if(isnumber(@threadStrength),
+      unit(@threadStrength, %), 0%), 0%);
+    #thread-key(@choice) {
+      @key: if(@choice = rosewater, rosewater, if(@choice = flamingo, flamingo,
+        if(@choice = pink, pink, if(@choice = mauve, mauve, if(@choice = red,
+        red, if(@choice = maroon, maroon, if(@choice = peach, peach, if(@choice
+        = yellow, yellow, if(@choice = green, green, if(@choice = teal, teal,
+        if(@choice = blue, blue, if(@choice = sapphire, sapphire, if(@choice =
+        sky, sky, if(@choice = lavender, lavender, if(@choice = subtext0,
+        subtext0, surface1)))))))))))))));
+    }
+    @thread-custom1: {
+      #thread-key(@threadColor1);
+    }
+    @thread-custom2: {
+      #thread-key(@threadColor2);
+    }
+    @thread-custom3: {
+      #thread-key(@threadColor3);
+    }
+    @thread-custom4: {
+      #thread-key(@threadColor4);
+    }
+    @thread-custom5: {
+      #thread-key(@threadColor5);
+    }
+    @thread-custom6: {
+      #thread-key(@threadColor6);
+    }
+    @thread-name1: if(@threadColors = custom, @thread-custom1[@key],
+      if(@threadColors = shade, @accentColor, if(@threadColors = warm, maroon,
+      if(@threadColors = cool, teal, if(@threadColors = neutral, surface0,
+      red)))));
+    @thread-name2: if(@threadColors = custom, @thread-custom2[@key],
+      if(@threadColors = shade, @accentColor, if(@threadColors = warm, red,
+      if(@threadColors = cool, sky, if(@threadColors = neutral, surface1,
+      peach)))));
+    @thread-name3: if(@threadColors = custom, @thread-custom3[@key],
+      if(@threadColors = shade, @accentColor, if(@threadColors = warm, peach,
+      if(@threadColors = cool, sapphire, if(@threadColors = neutral, surface2,
+      yellow)))));
+    @thread-name4: if(@threadColors = custom, @thread-custom4[@key],
+      if(@threadColors = shade, @accentColor, if(@threadColors = warm, yellow,
+      if(@threadColors = cool, blue, if(@threadColors = neutral, overlay0,
+      green)))));
+    @thread-name5: if(@threadColors = custom, @thread-custom5[@key],
+      if(@threadColors = shade, @accentColor, if(@threadColors = warm, flamingo,
+      if(@threadColors = cool, lavender, if(@threadColors = neutral, overlay1,
+      blue)))));
+    @thread-name6: if(@threadColors = custom, @thread-custom6[@key],
+      if(@threadColors = shade, @accentColor, if(@threadColors = warm,
+      rosewater, if(@threadColors = cool, mauve, if(@threadColors = neutral,
+      overlay2, mauve)))));
     @thread1: mix(@catppuccin[@@flavor][@@thread-name1], @surface1,
       if(@threadColors = shade, (@thread-tint * 0.375), @thread-tint));
     @thread2: mix(@catppuccin[@@flavor][@@thread-name2], @surface1,
