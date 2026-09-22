@@ -133,7 +133,10 @@
 
     /* The header logo is a sprite whose wordmark is black, 1.14:1 against
        @mantle, so it is recoloured with a palette filter rather than a colour
-       property. */
+       property. The tile holds two colours — the wordmark and the snoo beside
+       it — so the filter flattens the snoo to a silhouette in @text. That is
+       accepted: the wordmark is what carries the page's identity and has to
+       be legible on @mantle, and the snoo reads as a mark at this size. */
     #header-img.default-header {
       filter: @text-filter !important;
     }
@@ -234,12 +237,18 @@
 
       /* RES night mode sets a colour on every descendant of the sidebar,
          which defeats inheritance from the surfaces themed above. Clearing
-         the blanket lets those colours reach the text again. */
-      * {
+         the blanket lets those colours reach the text again.
+
+         RES's vote weight appears beside a username in the moderator list
+         and states the balance in a colour it writes inline, so both rules
+         exclude it. `:where()` contributes no specificity, and a bare `*`
+         inside it contributes none either, so each selector still ranks
+         where it did. */
+      :where(*:not(.voteWeight)) {
         color: inherit !important;
       }
 
-      a {
+      a:where(:not(.voteWeight)) {
         color: @accent-text !important;
       }
 
@@ -764,15 +773,19 @@
       color: @accent-text !important;
     }
 
-    /* The one rule in this file with no `!important`. Reddit Enhancement
-       Suite's userHighlight paints a background on an author it has been
-       told to mark — a tagged user, a friend, the submitter — and sets a
-       foreground to read against it, both `!important` and selected by
-       username. The gate's `:has(> #header)` carries an id's specificity, so
+    /* One of the two rules in this file with no `!important`. Reddit
+       Enhancement Suite's userHighlight paints a background on an author it
+       has been told to mark — a tagged user, a friend, the submitter — and
+       sets a foreground to read against it, both `!important` and selected
+       by username. The gate's `:has(> #header)` carries an id's specificity, so
        an `!important` here outranks that and strands RES's background under
        this colour: white becomes @text on a dark tag colour at 1.2:1.
-       Without it, RES's `!important` wins wherever RES paints and this still
-       beats reddit's own unprefixed rules on specificity.
+       Without it, RES's `!important` wins on an author this file paints no
+       further, and this still beats reddit's own unprefixed rules on
+       specificity. An author who is also the submitter, a moderator, an
+       admin or a friend takes a pill below instead, and those rules carry
+       `!important` and a class more than RES's own, so RES's highlight is
+       overridden there.
 
        It matches the author link itself rather than the tagline's copy of
        it, because an author also appears in a search result's byline, in the
@@ -1124,44 +1137,50 @@
     }
 
     .expando-button.collapsed {
-      @svg-expand: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M10,5 h3 v13 h-3z M5,10 h13 v3 h-13z"/></svg>');
+      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M10 5h3v13h-3zm-5 5h13v3H5z"/></svg>');
 
-      background-image: url("data:image/svg+xml,@{svg-expand}") !important;
+      background-image: url("data:image/svg+xml,@{svg}") !important;
       background-position: 0 0 !important;
     }
 
     /* This is the same X-in-a-circle for every "expanded" state — plain
        expando, selftext/video sprite tile, and image/video-muted/locked —
-       so one variable serves all three of the rules below. */
-    @svg-collapse: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><circle cx="11.5" cy="11.5" r="11.5" fill="@{surface0}"/><g stroke="@{text}" stroke-width="3.25" stroke-linecap="round"><line x1="7.5" y1="7.5" x2="15.5" y2="15.5"/><line x1="15.5" y1="7.5" x2="7.5" y2="15.5"/></g></svg>');
+       so one mixin draws it for all three of the rules below. It is a mixin
+       rather than a variable at this scope because `catppuccin/optimized-svgs`
+       reads an `@svg` declared inside a rule, and a mixin body is one. */
+    .collapse-art() {
+      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><circle cx="11.5" cy="11.5" r="11.5" fill="@{surface0}"/><g stroke="@{text}" stroke-width="3.25" stroke-linecap="round"><line x1="7.5" y1="7.5" x2="15.5" y2="15.5"/><line x1="15.5" y1="7.5" x2="7.5" y2="15.5"/></g></svg>');
+
+      background-image: url("data:image/svg+xml,@{svg}") !important;
+    }
 
     .expando-button.expanded {
-      background-image: url("data:image/svg+xml,@{svg-collapse}") !important;
+      .collapse-art();
       background-position: 0 0 !important;
     }
 
     .expando-button.collapsed.image {
-      @svg-image: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" fill-rule="evenodd" d="M4,5 l1,-.5 h2 l1,.5 h1 l1,-1 h3 l2,2 h2 v8 h-13z M5,6 h2 v1 h-2 v-1z M 11.5 9.5 m -3.5, 0 a 3.5,3.5 0 1,0 7,0 a 3.5,3.5 0 1,0 -7,0 M 11.5 9.5 m -2.5, 0 a 2.5,2.5 0 1,0 5,0 a 2.5,2.5 0 1,0 -5,0"/><g stroke="@{text}" stroke-width="1.5" stroke-linecap="round"><line x1="18.75" y1="16.5" x2="18.75" y2="21"/><line x1="16.5" y1="18.75" x2="21" y2="18.75"/></g></svg>');
+      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" fill-rule="evenodd" d="m4 5 1-.5h2L8 5h1l1-1h3l2 2h2v8H4zm1 1h2v1H5zm3 3.5a3.5 3.5 0 1 0 7 0 3.5 3.5 0 1 0-7 0m1 0a2.5 2.5 0 1 0 5 0 2.5 2.5 0 1 0-5 0"/><g stroke="@{text}" stroke-width="1.5" stroke-linecap="round"><line x1="18.75" y1="16.5" x2="18.75" y2="21"/><line x1="16.5" y1="18.75" x2="21" y2="18.75"/></g></svg>');
 
-      background-image: url("data:image/svg+xml,@{svg-image}") !important;
+      background-image: url("data:image/svg+xml,@{svg}") !important;
     }
 
     .expando-button.collapsed.image.gallery {
-      @svg-gallery: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" fill-rule="evenodd" d="M4,3 h10 v10 h-10z M5,4 h8 v3.5 l-3,1.75 l-5,.25z M 7 6 m -1.25, 0 a 1.25,1.25 0 1,0 2.5,0 a 1.25,1.25 0 1,0 -2.5,0"/><path fill="none" stroke="@{text}" stroke-dasharray="1.25 .5" d="M15.5 5 v9.5 h-9.5"/><g stroke="@{text}" stroke-width="1.5" stroke-linecap="round"><line x1="18.75" y1="16.5" x2="18.75" y2="21"/><line x1="16.5" y1="18.75" x2="21" y2="18.75"/></g></svg>');
+      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" fill-rule="evenodd" d="M4 3h10v10H4zm1 1h8v3.5l-3 1.75-5 .25zm.75 2a1.25 1.25 0 1 0 2.5 0 1.25 1.25 0 1 0-2.5 0"/><path fill="none" stroke="@{text}" stroke-dasharray="1.25 .5" d="M15.5 5v9.5H6"/><g stroke="@{text}" stroke-width="1.5" stroke-linecap="round"><line x1="18.75" y1="16.5" x2="18.75" y2="21"/><line x1="16.5" y1="18.75" x2="21" y2="18.75"/></g></svg>');
 
-      background-image: url("data:image/svg+xml,@{svg-gallery}") !important;
+      background-image: url("data:image/svg+xml,@{svg}") !important;
     }
 
     .expando-button.collapsed.video-muted {
-      @svg-video: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" fill-rule="evenodd" d="M4,4 h11 v11 h-11z M7,7 l5,2.5 l-5,2.5z"/><g stroke="@{text}" stroke-width="1.5" stroke-linecap="round"><line x1="18.75" y1="16.5" x2="18.75" y2="21"/><line x1="16.5" y1="18.75" x2="21" y2="18.75"/></g></svg>');
+      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" fill-rule="evenodd" d="M4 4h11v11H4zm3 3 5 2.5L7 12z"/><g stroke="@{text}" stroke-width="1.5" stroke-linecap="round"><line x1="18.75" y1="16.5" x2="18.75" y2="21"/><line x1="16.5" y1="18.75" x2="21" y2="18.75"/></g></svg>');
 
-      background-image: url("data:image/svg+xml,@{svg-video}") !important;
+      background-image: url("data:image/svg+xml,@{svg}") !important;
     }
 
     .expando-button.collapsed.expando-button-requires-permission {
-      @svg-locked: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="none" stroke="@{text}" stroke-width="2" d="M6,10 h8 v5 h-8z M7,10 v-2 c0-4, 6-4, 6,0 v2"/><g stroke="@{text}" stroke-width="1.5" stroke-linecap="round"><line x1="18.75" y1="16.5" x2="18.75" y2="21"/><line x1="16.5" y1="18.75" x2="21" y2="18.75"/></g></svg>');
+      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="none" stroke="@{text}" stroke-width="2" d="M6 10h8v5H6zm1 0V8c0-4 6-4 6 0v2"/><g stroke="@{text}" stroke-width="1.5" stroke-linecap="round"><line x1="18.75" y1="16.5" x2="18.75" y2="21"/><line x1="16.5" y1="18.75" x2="21" y2="18.75"/></g></svg>');
 
-      background-image: url("data:image/svg+xml,@{svg-locked}") !important;
+      background-image: url("data:image/svg+xml,@{svg}") !important;
     }
 
     /* These are sprite tiles: the button scrolls to an offset inside a
@@ -1171,9 +1190,9 @@
        sprite geometry in every rule and re-deriving it whenever reddit
        rebuilds the sheet, which has already happened once. */
     .expando-button.collapsed.selftext {
-      @svg-text: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M4,5 h15 v2 h-15z M4,9 h15 v2 h-15z M4,13 h15 v2 h-15z M4,17 h9 v2 h-9z"/></svg>');
+      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M4 5h15v2H4zm0 4h15v2H4zm0 4h15v2H4zm0 4h9v2H4z"/></svg>');
 
-      background-image: url("data:image/svg+xml,@{svg-text}") !important;
+      background-image: url("data:image/svg+xml,@{svg}") !important;
       background-position: 0 0 !important;
     }
 
@@ -1182,29 +1201,29 @@
        keeps the neutral plate above, which is meant to cover the moment
        before reddit fills in a type class, not to stand as one. */
     .expando-button.collapsed.crosspost {
-      @svg-crosspost: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="none" stroke="@{text}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3.5,11.5 h3.5 l4,-4.5 h3.5 M7,11.5 l4,4.5 h3.5"/><path fill="@{text}" d="M14.5,3.5 l5,3.5 l-5,3.5z M14.5,12.5 l5,3.5 l-5,3.5z"/></svg>');
+      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="none" stroke="@{text}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3.5 11.5H7L11 7h3.5M7 11.5l4 4.5h3.5"/><path fill="@{text}" d="m14.5 3.5 5 3.5-5 3.5zm0 9 5 3.5-5 3.5z"/></svg>');
 
-      background-image: url("data:image/svg+xml,@{svg-crosspost}") !important;
+      background-image: url("data:image/svg+xml,@{svg}") !important;
       background-position: 0 0 !important;
     }
 
     .expando-button.collapsed.video {
-      @svg-play: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M8,5 l10,6.5 l-10,6.5z"/></svg>');
+      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="m8 5 10 6.5L8 18z"/></svg>');
 
-      background-image: url("data:image/svg+xml,@{svg-play}") !important;
+      background-image: url("data:image/svg+xml,@{svg}") !important;
       background-position: 0 0 !important;
     }
 
     .expando-button.expanded.selftext,
     .expando-button.expanded.video {
-      background-image: url("data:image/svg+xml,@{svg-collapse}") !important;
+      .collapse-art();
       background-position: 0 0 !important;
     }
 
     .expando-button.expanded.image,
     .expando-button.expanded.video-muted,
     .expando-button.expanded.expando-button-requires-permission {
-      background-image: url("data:image/svg+xml,@{svg-collapse}") !important;
+      .collapse-art();
     }
 
     /* Reddit's own video player, built into the expando when a video post is
@@ -1377,6 +1396,14 @@
         border-left-color: @thread1 !important;
       }
 
+      /* The comment-hover outline above is declared on body classes alone, so
+         from nesting level two down this chain outranks it on the left edge
+         and a hovered comment carries the accent on three sides. This arm
+         restates it at the chain's own specificity. */
+      &.res-commentBoxes.res-commentHoverBorder @{sel}:hover {
+        border-left-color: @accent !important;
+      }
+
       .comment-level-2(@depth + 1; ~"@{sel} > .child > .listing > .comment");
     }
 
@@ -1384,6 +1411,10 @@
       @{sel} {
         background-color: @base !important;
         border-left-color: @thread2 !important;
+      }
+
+      &.res-commentBoxes.res-commentHoverBorder @{sel}:hover {
+        border-left-color: @accent !important;
       }
 
       .comment-level-3(@depth + 1; ~"@{sel} > .child > .listing > .comment");
@@ -1395,6 +1426,10 @@
         border-left-color: @thread3 !important;
       }
 
+      &.res-commentBoxes.res-commentHoverBorder @{sel}:hover {
+        border-left-color: @accent !important;
+      }
+
       .comment-level-4(@depth + 1; ~"@{sel} > .child > .listing > .comment");
     }
 
@@ -1402,6 +1437,10 @@
       @{sel} {
         background-color: @base !important;
         border-left-color: @thread4 !important;
+      }
+
+      &.res-commentBoxes.res-commentHoverBorder @{sel}:hover {
+        border-left-color: @accent !important;
       }
 
       .comment-level-5(@depth + 1; ~"@{sel} > .child > .listing > .comment");
@@ -1413,6 +1452,10 @@
         border-left-color: @thread5 !important;
       }
 
+      &.res-commentBoxes.res-commentHoverBorder @{sel}:hover {
+        border-left-color: @accent !important;
+      }
+
       .comment-level-6(@depth + 1; ~"@{sel} > .child > .listing > .comment");
     }
 
@@ -1420,6 +1463,10 @@
       @{sel} {
         background-color: @base !important;
         border-left-color: @thread6 !important;
+      }
+
+      &.res-commentBoxes.res-commentHoverBorder @{sel}:hover {
+        border-left-color: @accent !important;
       }
 
       .comment-level-1(@depth + 1; ~"@{sel} > .child > .listing > .comment");
@@ -1504,9 +1551,9 @@
        images are the same size and sit where their own rule puts them. */
     .dropdown .selected,
     .RESMacroDropdownTitle {
-      @svg-drop: escape('<svg xmlns="http://www.w3.org/2000/svg" width="21" height="16" viewBox="0 0 21 16"><path fill="@{dim}" d="M5,5 h11 l-5.5,7z"/></svg>');
+      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="21" height="16" viewBox="0 0 21 16"><path fill="@{dim}" d="M5 5h11l-5.5 7z"/></svg>');
 
-      background-image: url("data:image/svg+xml,@{svg-drop}") !important;
+      background-image: url("data:image/svg+xml,@{svg}") !important;
     }
 
     .morecomments a {
@@ -1814,9 +1861,9 @@
     /* The subreddit filter's add button draws a black plus over the fill
        set beneath it. */
     .add-sr .add {
-      @svg-add: escape('<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15"><path fill="@{text}" d="M6,2 h3 v11 h-3z M2,6 h11 v3 h-11z"/></svg>');
+      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15"><path fill="@{text}" d="M6 2h3v11H6zM2 6h11v3H2z"/></svg>');
 
-      background-image: url("data:image/svg+xml,@{svg-add}") !important;
+      background-image: url("data:image/svg+xml,@{svg}") !important;
       background-position: 0 0 !important;
       filter: none !important;
     }
@@ -1825,10 +1872,10 @@
        the button carries a fill and a three-pixel border, so a filter would
        flatten all three together. */
     .remove-sr {
-      @svg-remove: escape('<svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 9 9"><path stroke="@{text}" stroke-width="2" d="M1,1 L8,8 M8,1 L1,8"/></svg>');
+      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 9 9"><path stroke="@{text}" stroke-width="2" d="m1 1 7 7m0-7L1 8"/></svg>');
 
       background-color: transparent !important;
-      background-image: url("data:image/svg+xml,@{svg-remove}") !important;
+      background-image: url("data:image/svg+xml,@{svg}") !important;
       background-position: 0 0 !important;
       border-color: transparent !important;
       filter: none !important;
@@ -3008,17 +3055,17 @@
        image, already painted by the time the bar appears. */
     #mail.havemail,
     #NREMail.havemail {
-      @svg-mail: escape('<svg xmlns="http://www.w3.org/2000/svg" width="15" height="10" viewBox="0 0 15 10"><g fill="none" stroke="@{red}"><rect x=".5" y=".5" width="14" height="9"/><path d="M.5 .5 L7.5 6 L14.5 .5"/></g></svg>');
+      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="15" height="10" viewBox="0 0 15 10"><g fill="none" stroke="@{red}"><rect x=".5" y=".5" width="14" height="9"/><path d="m.5.5 7 5.5 7-5.5"/></g></svg>');
 
-      background-image: url("data:image/svg+xml,@{svg-mail}") !important;
+      background-image: url("data:image/svg+xml,@{svg}") !important;
       background-position: 0 0 !important;
     }
 
     #mail.nohavemail,
     #NREMail.nohavemail {
-      @svg-nomail: escape('<svg xmlns="http://www.w3.org/2000/svg" width="15" height="10" viewBox="0 0 15 10"><g fill="none" stroke="@{dim}"><rect x=".5" y=".5" width="14" height="9"/><path d="M.5 .5 L7.5 6 L14.5 .5"/></g></svg>');
+      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="15" height="10" viewBox="0 0 15 10"><g fill="none" stroke="@{dim}"><rect x=".5" y=".5" width="14" height="9"/><path d="m.5.5 7 5.5 7-5.5"/></g></svg>');
 
-      background-image: url("data:image/svg+xml,@{svg-nomail}") !important;
+      background-image: url("data:image/svg+xml,@{svg}") !important;
       background-position: 0 0 !important;
     }
 
