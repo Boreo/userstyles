@@ -75,9 +75,10 @@
        outranks it — a plain `:not(.author)` would count as a class and beat
        any single-class rule in this file that happens to match an anchor,
        which is what it did to the primary button in the sidebar. An author
-       is excluded because its own rule below deliberately carries no
-       `!important`, which this would otherwise outrank. */
-    a:where(:not(.author)) {
+       and a vote weight are excluded because their own rules below
+       deliberately carry no `!important`, which this would otherwise
+       outrank. */
+    a:where(:not(.author, .voteWeight)) {
       color: @accent-text !important;
     }
 
@@ -263,6 +264,21 @@
         .rec-item {
           background-color: @surface0 !important;
           border-color: @surface1 !important;
+        }
+
+        /* The chip's add control is a plate of reddit's own with a plus
+           drawn as a sprite in a pseudo-element. The control floor gives
+           every button a surface, which here would sit as a second plate on
+           the chip, so this one clears back to the chip behind it and the
+           plus takes a filter. The rule names the chip and the class, which
+           puts it above the floor and above the floor's hover and disabled
+           arms, so the plate stays clear under the pointer too. */
+        .rec-item button.add {
+          background-color: transparent !important;
+
+          &::after {
+            filter: @text-filter !important;
+          }
         }
 
         .endoflist {
@@ -606,30 +622,34 @@
     @thread-custom6: {
       #thread-key(@threadColor6);
     }
+    /* The neutral preset climbs the palette's greys from @surface2 to
+       @subtext1. It starts a step above @surface1 because that is the
+       colour a rail carries with threads off, and a level drawn in it would
+       read as no rail at all at any strength. */
     @thread-name1: if(@threadColors = custom, @thread-custom1[@key],
       if(@threadColors = shade, @accentColor, if(@threadColors = warm, maroon,
-      if(@threadColors = cool, teal, if(@threadColors = neutral, surface0,
+      if(@threadColors = cool, teal, if(@threadColors = neutral, surface2,
       red)))));
     @thread-name2: if(@threadColors = custom, @thread-custom2[@key],
       if(@threadColors = shade, @accentColor, if(@threadColors = warm, red,
-      if(@threadColors = cool, sky, if(@threadColors = neutral, surface1,
+      if(@threadColors = cool, sky, if(@threadColors = neutral, overlay0,
       peach)))));
     @thread-name3: if(@threadColors = custom, @thread-custom3[@key],
       if(@threadColors = shade, @accentColor, if(@threadColors = warm, peach,
-      if(@threadColors = cool, sapphire, if(@threadColors = neutral, surface2,
+      if(@threadColors = cool, sapphire, if(@threadColors = neutral, overlay1,
       yellow)))));
     @thread-name4: if(@threadColors = custom, @thread-custom4[@key],
       if(@threadColors = shade, @accentColor, if(@threadColors = warm, yellow,
-      if(@threadColors = cool, blue, if(@threadColors = neutral, overlay0,
+      if(@threadColors = cool, blue, if(@threadColors = neutral, overlay2,
       green)))));
     @thread-name5: if(@threadColors = custom, @thread-custom5[@key],
       if(@threadColors = shade, @accentColor, if(@threadColors = warm, flamingo,
-      if(@threadColors = cool, lavender, if(@threadColors = neutral, overlay1,
+      if(@threadColors = cool, lavender, if(@threadColors = neutral, subtext0,
       blue)))));
     @thread-name6: if(@threadColors = custom, @thread-custom6[@key],
       if(@threadColors = shade, @accentColor, if(@threadColors = warm,
       rosewater, if(@threadColors = cool, mauve, if(@threadColors = neutral,
-      overlay2, mauve)))));
+      subtext1, mauve)))));
     @thread1: mix(@catppuccin[@@flavor][@@thread-name1], @surface1,
       if(@threadColors = shade, (@thread-tint * 0.375), @thread-tint));
     @thread2: mix(@catppuccin[@@flavor][@@thread-name2], @surface1,
@@ -721,8 +741,13 @@
        is the row's other name and carries the title's colour; @dim and
        @inactive are consecutive steps below it on the dark flavors. Latte
        runs out of room — @subtext0 is 4.37:1 on its @base — so the domain
-       takes @subtext1 there and only the action row steps away. */
-    .tagline a:not(.author),
+       takes @subtext1 there and only the action row steps away.
+
+       Reddit Enhancement Suite appends its vote weight to this row and
+       states the balance in a colour it writes inline, so the weight is
+       excluded here as the author is. Both exclusions name a class, which
+       this selector already carries, so the specificity is unchanged. */
+    .tagline a:not(.author, .voteWeight),
     .domain a {
       color: @dim !important;
     }
@@ -1316,6 +1341,28 @@
       }
     }
 
+    /* Two Reddit Enhancement Suite options state themselves in a colour on a
+       comment, and both are declared on classes alone, so the gate's
+       id-level specificity leaves the rules above painting over them.
+
+       The first outlines the comment under the pointer, which it only does
+       where its comment boxes are on; it names both classes and so does
+       this. RES draws that outline in a light blue of its own — a mark of
+       RES's chrome rather than a state of the comment — so it takes the
+       accent.
+
+       The second hides the collapse toggle for readers who collapse from
+       the comment's left edge instead. RES does that by colour rather than
+       by layout, drawing the toggle in `transparent`, so handing it back is
+       a colour as well. */
+    &.res-commentBoxes.res-commentHoverBorder .comment:hover {
+      border-color: @accent !important;
+    }
+
+    &.res-commentQuickCollapse-hideCollapseButton .comment .tagline .expand {
+      color: transparent !important;
+    }
+
     /* Nesting is read from indentation alone, which is hard to follow once a
        thread runs deep, so each level takes a band and the next steps back to
        the page. The band steps away from @base towards the darker surface
@@ -1501,7 +1548,10 @@
         color: inherit !important;
       }
 
-      a {
+      /* Reddit Enhancement Suite's vote weight also appears beside a
+         username written in prose, and it is excluded in the `:where()`
+         form so the prose link keeps its specificity. */
+      a:where(:not(.voteWeight)) {
         color: @link !important;
       }
 
@@ -1566,6 +1616,24 @@
 
       &:hover,
       &.revealed {
+        color: @text !important;
+      }
+    }
+
+    /* Reddit Enhancement Suite's own spoiler tag, which it conceals the same
+       way reddit does: the text is drawn in `transparent` on a plate and the
+       pointer reveals it. RES declares that with `!important` on a class and
+       an attribute, which the gate's id-level specificity outranks, so the
+       concealment is handed back here. RES draws the plate as a literal
+       black and rings it in another, so the plate takes the surface
+       reddit's own spoiler above takes and the ring the step above that. */
+    &.res-spoilerTags .md a:is([href="/s"], [href="/spoiler"], [href="#s"], [href="#spoiler"]) {
+      background-color: @surface0 !important;
+      color: transparent !important;
+      outline-color: @surface1 !important;
+
+      &:hover,
+      &:active {
         color: @text !important;
       }
     }
@@ -2974,6 +3042,31 @@
       filter: @dim-filter !important;
     }
 
+    /* Each of the first four swaps its sprite tile for a lit one when there
+       is something waiting, and the tile is the whole of the signal: the
+       glyph is the same shape either way and only its colour says so. A
+       filter flattens that, so the state takes a filter of its own and keeps
+       what the colour meant. The lit bell and the lit chat icon are marks of
+       reddit's own chrome and take the accent with the rest of it; modmail's
+       envelope is orange, so it keeps the tone every other orange marker
+       here keeps; the new modmail tile is green and keeps its green.
+
+       Each of these elements paints a sprite and nothing else — reddit
+       gives them no background colour and no border — so the filter has
+       nothing of its own to flatten. */
+    #notifications.active,
+    #chat.active {
+      filter: @accent-filter !important;
+    }
+
+    #modmail.havemail {
+      filter: @peach-filter !important;
+    }
+
+    #new_modmail.havemail {
+      filter: @green-filter !important;
+    }
+
     /* The unread count beside the envelope, and RES's copy of it. The
        header's own link colour reaches this one through
        `#header-bottom-right a`, which outranks a bare class, so the rule
@@ -3057,14 +3150,24 @@
       color: inherit !important;
     }
 
+    /* The vote weight Reddit Enhancement Suite appends to an author, which
+       states how the reader has voted on that user before: it tints towards
+       green where the reader has upvoted them and towards red where they
+       have downvoted, as a foreground under night mode and as a fill
+       otherwise. RES writes that colour inline, and an `!important` here
+       would outrank it and leave every weight the same tone, so this rule
+       carries none — the second in this file to do so, for the same reason
+       `a.author` does. Without `!important` it still beats RES's own
+       `a.voteWeight`, and the anchor floor, the tagline and the prose link
+       exclude the class so their `!important` does not reach it. */
+    a.voteWeight {
+      color: @link;
+    }
+
     #REScommentSubToggle {
       background-color: @surface0 !important;
       border-color: @surface1 !important;
       color: @text !important;
-    }
-
-    .voteWeight {
-      color: @accent-text !important;
     }
 
     /* These sit on @base with nothing around them, so @surface0 alone reads
@@ -3273,8 +3376,9 @@
       color: @text !important;
     }
 
+    /* An icon-font glyph, so it takes the 3:1 form of the accent. */
     .res-icon {
-      color: @accent-text !important;
+      color: @accent-icon !important;
     }
 
     /* The dialog's close glyph is drawn entirely in a pseudo-element. */
@@ -3385,6 +3489,12 @@
        filter rather than a colour. */
     .subreddit-subscribe::before {
       filter: @dim-filter !important;
+    }
+
+    /* Reddit marks the followed state by swapping the follow icon for a
+       green tick and disables the control, so the tick keeps the green. */
+    .subreddit-subscribe[disabled]::before {
+      filter: @green-filter !important;
     }
 
     /* The subreddit shortcut bar and its editing controls sit in the themed
@@ -3696,6 +3806,15 @@
           !important;
         color: @base !important;
       }
+    }
+
+    /* A chip's label is sometimes an icon-font glyph rather than a word, and
+       the rule above sets the colour on the chip while the glyph declares
+       its own. On the accent fill it has to invert with the label beside
+       it. */
+    .RESDashboardComponentHeader ul li.active .res-icon,
+    .RESDashboardComponentHeader ul li:hover .res-icon {
+      color: @base !important;
     }
 
     /* A chip RES has switched off reads as switched off, the way every other
