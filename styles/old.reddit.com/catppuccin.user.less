@@ -2032,16 +2032,15 @@
     /* Reddit writes some of its fields with no `type` at all — the app name
        and description on /prefs/apps are `<input class="text">` — and a
        field without one is a text field, so an attribute selector alone
-       leaves them carrying the browser's own white. The exclusion is
-       wrapped in `:where()`, which contributes no specificity of its own, so
-       this arm stays a bare element selector and every class rule below
-       outranks it. */
+       leaves them carrying the browser's own white. Every arm is wrapped in
+       `:where()`, which contributes no specificity of its own, so this floor
+       stays at element level and every class rule below outranks it. */
     input:where(:not([type])),
-    input[type="text"],
-    input[type="url"],
-    input[type="password"],
-    input[type="number"],
-    input[type="search"],
+    input:where([type="text"]),
+    input:where([type="url"]),
+    input:where([type="password"]),
+    input:where([type="number"]),
+    input:where([type="search"]),
     textarea,
     select {
       background-color: @mantle !important;
@@ -2061,14 +2060,14 @@
        white glyph, and on Latte the plate is light. See the video player
        below, which themes the parts of it that carry a colour of reddit's.
 
-       Both the exclusion and the type attribute are wrapped in `:where()`,
+       The exclusion and both type attributes are wrapped in `:where()`,
        which contributes no specificity of its own, so this floor stays at
        element level and every single-class rule in this file that names a
        button or a submit input outranks it. Bare, they count as a class and
-       take the fill back off RES's update and delete buttons. */
+       take the fill back off RES's widget confirm buttons. */
     button:where(:not(.reddit-video-player-root *)),
     input:where([type="submit"]),
-    input[type="button"] {
+    input:where([type="button"]) {
       background-color: @surface0 !important;
       border-color: @surface1 !important;
       color: @text !important;
@@ -2088,7 +2087,7 @@
        disabled control reads as disabled whatever else names it. */
     button:where(:not(.reddit-video-player-root *)):disabled,
     input:where([type="submit"]):disabled,
-    input[type="button"]:disabled,
+    input:where([type="button"]):disabled,
     .c-btn.disabled,
     .c-btn[disabled],
     .fancybutton.disabled,
@@ -2105,11 +2104,11 @@
        reads as inert on a light flavor. `:disabled` sits outside the
        `:where()` so this outranks the live rule for the same field. */
     input:where(:not([type])):disabled,
-    input[type="text"]:disabled,
-    input[type="url"]:disabled,
-    input[type="password"]:disabled,
-    input[type="number"]:disabled,
-    input[type="search"]:disabled,
+    input:where([type="text"]):disabled,
+    input:where([type="url"]):disabled,
+    input:where([type="password"]):disabled,
+    input:where([type="number"]):disabled,
+    input:where([type="search"]):disabled,
     textarea:disabled,
     select:disabled,
     .crosspost-field:disabled {
@@ -3608,9 +3607,16 @@
     /* The widget forms' confirm and cancel, which RES fills green and red
        behind white. The palette greens and reds are light, so the label
        inverts to @crust, as it does on the subscribe and unsubscribe
-       fills. */
+       fills. The confirm is a submit input, so the control floor's hover
+       reaches it and would otherwise pull the green off under the pointer;
+       RES declares no hover of its own, so the fill is named there too and
+       stays put. @crust holds 4.60:1 on Latte's @join, the closest of the
+       four flavors. The cancel is `<input type="cancel">`, a type no floor
+       here names, so nothing reaches it on hover. */
     .addButton,
-    .updateButton {
+    .addButton:hover,
+    .updateButton,
+    .updateButton:hover {
       background-color: @join !important;
       border-color: @join !important;
       color: @crust !important;
