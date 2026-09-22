@@ -2032,8 +2032,11 @@
     /* Reddit writes some of its fields with no `type` at all — the app name
        and description on /prefs/apps are `<input class="text">` — and a
        field without one is a text field, so an attribute selector alone
-       leaves them carrying the browser's own white. */
-    input:not([type]),
+       leaves them carrying the browser's own white. The exclusion is
+       wrapped in `:where()`, which contributes no specificity of its own, so
+       this arm stays a bare element selector and every class rule below
+       outranks it. */
+    input:where(:not([type])),
     input[type="text"],
     input[type="url"],
     input[type="password"],
@@ -2056,9 +2059,15 @@
        the video rather than on a page surface: a white glyph with a dark
        scrim under the two that need one. A plate from here lands under a
        white glyph, and on Latte the plate is light. See the video player
-       below, which themes the parts of it that carry a colour of reddit's. */
-    button:not(.reddit-video-player-root *),
-    input[type="submit"],
+       below, which themes the parts of it that carry a colour of reddit's.
+
+       Both the exclusion and the type attribute are wrapped in `:where()`,
+       which contributes no specificity of its own, so this floor stays at
+       element level and every single-class rule in this file that names a
+       button or a submit input outranks it. Bare, they count as a class and
+       take the fill back off RES's update and delete buttons. */
+    button:where(:not(.reddit-video-player-root *)),
+    input:where([type="submit"]),
     input[type="button"] {
       background-color: @surface0 !important;
       border-color: @surface1 !important;
@@ -2074,9 +2083,11 @@
        recede. Reddit greys the fill instead, which the rule above paints over,
        so without this a disabled button looks live. `.c-btn` marks the state
        with a class because it is sometimes an anchor, and the crosspost
-       dialog's submit button with the attribute. */
-    button:disabled:not(.reddit-video-player-root *),
-    input[type="submit"]:disabled,
+       dialog's submit button with the attribute. `:disabled` sits outside
+       the `:where()` so this outranks the live rules above and below: a
+       disabled control reads as disabled whatever else names it. */
+    button:where(:not(.reddit-video-player-root *)):disabled,
+    input:where([type="submit"]):disabled,
     input[type="button"]:disabled,
     .c-btn.disabled,
     .c-btn[disabled],
@@ -2091,8 +2102,9 @@
     /* A disabled field says so the same way: the fill steps off @mantle onto
        the control surface, so it stops reading as somewhere to type, and the
        value recedes with it. Reddit darkens the fill to say this, which only
-       reads as inert on a light flavor. */
-    input:not([type]):disabled,
+       reads as inert on a light flavor. `:disabled` sits outside the
+       `:where()` so this outranks the live rule for the same field. */
+    input:where(:not([type])):disabled,
     input[type="text"]:disabled,
     input[type="url"]:disabled,
     input[type="password"]:disabled,
