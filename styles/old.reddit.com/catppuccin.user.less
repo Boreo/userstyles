@@ -1412,6 +1412,12 @@
       color: @muted !important;
     }
 
+    /* The byline under each entry in the recently-viewed gadget, which
+       reddit writes in a literal grey. */
+    .gadget small {
+      color: @dim !important;
+    }
+
     .comment-visits-box {
       background-color: @mantle !important;
       border-color: @surface0 !important;
@@ -2943,21 +2949,26 @@
 
     /* The highlight sits behind a whole entry, so every foreground inside it
        — link titles, authors, taglines, scores — moves off @base onto this
-       colour. @surface0 dropped five of them below 4.5:1 on Latte (@blue
-       3.18:1, @sapphire 2.03:1). @mantle is the gentlest visible step: it
-       leaves each foreground at its existing baseline on Latte and raises
-       every one of them on the dark flavors, where @mantle is darker than
-       @base. */
+       colour, and it has to be far enough from @base to read as a selection
+       at a glance. @mantle is only 1.07:1 from @base on Mocha, which is not
+       a highlight at all. @surface0 is the visible step in the other
+       direction but costs the recessive foregrounds — @dim falls to 3.48:1
+       on Frappé and the taglines to 4.05:1 on Latte. @crust is 1.14:1 to
+       1.22:1 from @base on every flavor and raises every foreground on the
+       three dark ones, since it is darker than the page there. */
     .RES-keyNav-activeElement,
     .RES-keyNav-activeElement .md-container,
     .entry.res-selected {
-      background-color: @mantle !important;
+      background-color: @crust !important;
     }
 
-    /* RES paints every node inside the selected entry's body, which defeats
-       inheritance from the markdown colours themed above. */
+    /* RES repaints the selected comment's body text, which defeats the
+       markdown colours themed above. It names the body and its paragraphs,
+       so this names the same two: anything broader also flattens the links,
+       code and quotes inside them to the body colour. */
     .entry.res-selected .md-container,
-    .entry.res-selected .md-container * {
+    .entry.res-selected .md-container > .md,
+    .entry.res-selected .md-container > .md p {
       color: inherit !important;
     }
 
