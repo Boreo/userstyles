@@ -512,6 +512,14 @@
        accent text belongs on @base or @mantle, and no rule here puts it on a
        surface. The dark flavors clear @base and @mantle undarkened. */
     @accent-text: if(@flavor = latte, darken(@accent, 35%), @accent);
+
+    /* A filled chip carrying @base text — the welcome banner's link, the
+       OAuth allow button, a selected subreddit row, the media progress bar,
+       the author card's beta mark, RES's dashboard tab. No Latte accent is
+       dark enough to hold @base at full strength; 24% is the least that
+       clears 4.5:1 for all fifteen, with pink the worst at 4.54:1. The dark
+       flavors clear @base undarkened. */
+    @accent-fill: if(@flavor = latte, darken(@accent, 24%), @accent);
     /* A title that has been followed. Latte and Frappé change hue, which is
        what reddit's own light interface does — #0000ff unread, #551a8b
        visited — with the palette's blue and mauve standing in. The two
@@ -1606,9 +1614,9 @@
     }
 
     .infobar.welcome a {
-      background-color: if(@flavor = latte, darken(@accent, 18%), @accent)
+      background-color: @accent-fill
         !important;
-      border-bottom-color: if(@flavor = latte, darken(@accent, 18%), @accent)
+      border-bottom-color: @accent-fill
         !important;
       color: @base !important;
     }
@@ -2199,9 +2207,9 @@
        colour is reddit's branding rather than a state. The fill carries @base,
        which no Latte colour is dark enough to hold at full strength. */
     .oauth2-authorize .fancybutton.allow {
-      background-color: if(@flavor = latte, darken(@accent, 18%), @accent)
+      background-color: @accent-fill
         !important;
-      border-color: if(@flavor = latte, darken(@accent, 18%), @accent)
+      border-color: @accent-fill
         !important;
       color: @base !important;
     }
@@ -2359,7 +2367,7 @@
     }
 
     .sr-name-row.sr-selected {
-      background-color: if(@flavor = latte, darken(@accent, 18%), @accent)
+      background-color: @accent-fill
         !important;
       color: @base !important;
     }
@@ -2404,7 +2412,7 @@
     }
 
     #media-progress-bar {
-      background-color: if(@flavor = latte, darken(@accent, 18%), @accent)
+      background-color: @accent-fill
         !important;
       color: @base !important;
     }
@@ -3111,7 +3119,7 @@
       /* The beta mark on the card, a filled chip carrying reddit's own blue
          behind white text. */
       .author-tooltip__beta {
-        background-color: if(@flavor = latte, darken(@accent, 18%), @accent)
+        background-color: @accent-fill
           !important;
         color: @base !important;
       }
@@ -3682,9 +3690,9 @@
 
       &.active,
       &:hover {
-        background-color: if(@flavor = latte, darken(@accent, 18%), @accent)
+        background-color: @accent-fill
           !important;
-        border-color: if(@flavor = latte, darken(@accent, 18%), @accent)
+        border-color: @accent-fill
           !important;
         color: @base !important;
       }
