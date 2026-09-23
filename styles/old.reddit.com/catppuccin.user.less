@@ -427,82 +427,255 @@
     @accent-fill: if(@flavor = latte, darken(@accent, 24%), @accent);
 
     // Visited title: hue on Latte/Frappé, a lightness step elsewhere.
-    @read: if(@flavor = latte, darken(@mauve, 2%), if(@flavor = frappe, @mauve,
-      @overlay1));
+    @read: if(
+      @flavor = latte,
+      darken(@mauve, 2%),
+      if(@flavor = frappe, @mauve, @overlay1)
+    );
     @title: if(@flavor = latte, @link, if(@flavor = frappe, @link, @text));
-    @band: if(@flavor = latte, mix(@crust, @base, 50%), mix(@mantle, @base,
-      60%));
+    @band: if(
+      @flavor = latte,
+      mix(@crust, @base, 50%),
+      mix(@mantle, @base, 60%)
+    );
 
     // Thread rails; every select is guarded because Stylus keeps stale values.
-    @thread-known: if(@threadColors = rainbow, 1, if(@threadColors = warm, 1,
-      if(@threadColors = cool, 1, if(@threadColors = neutral, 1,
-      if(@threadColors = shade, 1, if(@threadColors = custom, 1, 0))))));
-    @thread-tint: if(@thread-known = 1, if((isnumber(@threadStrength)) and
-      (@threadStrength <= 100), unit(@threadStrength, %), 0%), 0%);
+    @thread-known: if(
+      @threadColors = rainbow,
+      1,
+      if(
+        @threadColors = warm,
+        1,
+        if(
+          @threadColors = cool,
+          1,
+          if(
+            @threadColors = neutral,
+            1,
+            if(@threadColors = shade, 1, if(@threadColors = custom, 1, 0))
+          )
+        )
+      )
+    );
+    @thread-tint: if(
+      @thread-known = 1,
+      if(
+        (isnumber(@threadStrength)) and (@threadStrength <= 100),
+        unit(@threadStrength, %),
+        0%
+      ),
+      0%
+    );
     #thread-key(@choice) {
-      @key: if(@choice = rosewater, rosewater, if(@choice = flamingo, flamingo,
-        if(@choice = pink, pink, if(@choice = mauve, mauve, if(@choice = red,
-        red, if(@choice = maroon, maroon, if(@choice = peach, peach, if(@choice
-        = yellow, yellow, if(@choice = green, green, if(@choice = teal, teal,
-        if(@choice = blue, blue, if(@choice = sapphire, sapphire, if(@choice =
-        sky, sky, if(@choice = lavender, lavender, if(@choice = subtext0,
-        subtext0, surface1)))))))))))))));
+      @key: if(
+        @choice = rosewater,
+        rosewater,
+        if(
+          @choice = flamingo,
+          flamingo,
+          if(
+            @choice = pink,
+            pink,
+            if(
+              @choice = mauve,
+              mauve,
+              if(
+                @choice = red,
+                red,
+                if(
+                  @choice = maroon,
+                  maroon,
+                  if(
+                    @choice = peach,
+                    peach,
+                    if(
+                      @choice = yellow,
+                      yellow,
+                      if(
+                        @choice = green,
+                        green,
+                        if(
+                          @choice = teal,
+                          teal,
+                          if(
+                            @choice = blue,
+                            blue,
+                            if(
+                              @choice = sapphire,
+                              sapphire,
+                              if(
+                                @choice = sky,
+                                sky,
+                                if(
+                                  @choice = lavender,
+                                  lavender,
+                                  if(@choice = subtext0, subtext0, surface1)
+                                )
+                              )
+                            )
+                          )
+                        )
+                      )
+                    )
+                  )
+                )
+              )
+            )
+          )
+        )
+      );
     }
     @thread-custom1: {
       #thread-key(@threadColor1);
-    }
+    };
     @thread-custom2: {
       #thread-key(@threadColor2);
-    }
+    };
     @thread-custom3: {
       #thread-key(@threadColor3);
-    }
+    };
     @thread-custom4: {
       #thread-key(@threadColor4);
-    }
+    };
     @thread-custom5: {
       #thread-key(@threadColor5);
-    }
+    };
     @thread-custom6: {
       #thread-key(@threadColor6);
-    }
+    };
     // Neutral starts above @surface1, the off colour.
-    @thread-name1: if(@threadColors = custom, @thread-custom1[@key],
-      if(@threadColors = shade, @accentColor, if(@threadColors = warm, maroon,
-      if(@threadColors = cool, teal, if(@threadColors = neutral, surface2,
-      red)))));
-    @thread-name2: if(@threadColors = custom, @thread-custom2[@key],
-      if(@threadColors = shade, @accentColor, if(@threadColors = warm, red,
-      if(@threadColors = cool, sky, if(@threadColors = neutral, overlay0,
-      peach)))));
-    @thread-name3: if(@threadColors = custom, @thread-custom3[@key],
-      if(@threadColors = shade, @accentColor, if(@threadColors = warm, peach,
-      if(@threadColors = cool, sapphire, if(@threadColors = neutral, overlay1,
-      yellow)))));
-    @thread-name4: if(@threadColors = custom, @thread-custom4[@key],
-      if(@threadColors = shade, @accentColor, if(@threadColors = warm, yellow,
-      if(@threadColors = cool, blue, if(@threadColors = neutral, overlay2,
-      green)))));
-    @thread-name5: if(@threadColors = custom, @thread-custom5[@key],
-      if(@threadColors = shade, @accentColor, if(@threadColors = warm, flamingo,
-      if(@threadColors = cool, lavender, if(@threadColors = neutral, subtext0,
-      blue)))));
-    @thread-name6: if(@threadColors = custom, @thread-custom6[@key],
-      if(@threadColors = shade, @accentColor, if(@threadColors = warm,
-      rosewater, if(@threadColors = cool, mauve, if(@threadColors = neutral,
-      subtext1, mauve)))));
-    @thread1: mix(@catppuccin[@@flavor][@@thread-name1], @surface1,
-      if(@threadColors = shade, (@thread-tint * 0.375), @thread-tint));
-    @thread2: mix(@catppuccin[@@flavor][@@thread-name2], @surface1,
-      if(@threadColors = shade, (@thread-tint * 0.5), @thread-tint));
-    @thread3: mix(@catppuccin[@@flavor][@@thread-name3], @surface1,
-      if(@threadColors = shade, (@thread-tint * 0.625), @thread-tint));
-    @thread4: mix(@catppuccin[@@flavor][@@thread-name4], @surface1,
-      if(@threadColors = shade, (@thread-tint * 0.75), @thread-tint));
-    @thread5: mix(@catppuccin[@@flavor][@@thread-name5], @surface1,
-      if(@threadColors = shade, (@thread-tint * 0.875), @thread-tint));
-    @thread6: mix(@catppuccin[@@flavor][@@thread-name6], @surface1,
-      if(@threadColors = shade, (@thread-tint * 1), @thread-tint));
+    @thread-name1: if(
+      @threadColors = custom,
+      @thread-custom1[@key],
+      if(
+        @threadColors = shade,
+        @accentColor,
+        if(
+          @threadColors = warm,
+          maroon,
+          if(
+            @threadColors = cool,
+            teal,
+            if(@threadColors = neutral, surface2, red)
+          )
+        )
+      )
+    );
+    @thread-name2: if(
+      @threadColors = custom,
+      @thread-custom2[@key],
+      if(
+        @threadColors = shade,
+        @accentColor,
+        if(
+          @threadColors = warm,
+          red,
+          if(
+            @threadColors = cool,
+            sky,
+            if(@threadColors = neutral, overlay0, peach)
+          )
+        )
+      )
+    );
+    @thread-name3: if(
+      @threadColors = custom,
+      @thread-custom3[@key],
+      if(
+        @threadColors = shade,
+        @accentColor,
+        if(
+          @threadColors = warm,
+          peach,
+          if(
+            @threadColors = cool,
+            sapphire,
+            if(@threadColors = neutral, overlay1, yellow)
+          )
+        )
+      )
+    );
+    @thread-name4: if(
+      @threadColors = custom,
+      @thread-custom4[@key],
+      if(
+        @threadColors = shade,
+        @accentColor,
+        if(
+          @threadColors = warm,
+          yellow,
+          if(
+            @threadColors = cool,
+            blue,
+            if(@threadColors = neutral, overlay2, green)
+          )
+        )
+      )
+    );
+    @thread-name5: if(
+      @threadColors = custom,
+      @thread-custom5[@key],
+      if(
+        @threadColors = shade,
+        @accentColor,
+        if(
+          @threadColors = warm,
+          flamingo,
+          if(
+            @threadColors = cool,
+            lavender,
+            if(@threadColors = neutral, subtext0, blue)
+          )
+        )
+      )
+    );
+    @thread-name6: if(
+      @threadColors = custom,
+      @thread-custom6[@key],
+      if(
+        @threadColors = shade,
+        @accentColor,
+        if(
+          @threadColors = warm,
+          rosewater,
+          if(
+            @threadColors = cool,
+            mauve,
+            if(@threadColors = neutral, subtext1, mauve)
+          )
+        )
+      )
+    );
+    @thread1: mix(
+      @catppuccin[@@flavor][@@thread-name1],
+      @surface1,
+      if(@threadColors = shade, (@thread-tint * 0.375), @thread-tint)
+    );
+    @thread2: mix(
+      @catppuccin[@@flavor][@@thread-name2],
+      @surface1,
+      if(@threadColors = shade, (@thread-tint * 0.5), @thread-tint)
+    );
+    @thread3: mix(
+      @catppuccin[@@flavor][@@thread-name3],
+      @surface1,
+      if(@threadColors = shade, (@thread-tint * 0.625), @thread-tint)
+    );
+    @thread4: mix(
+      @catppuccin[@@flavor][@@thread-name4],
+      @surface1,
+      if(@threadColors = shade, (@thread-tint * 0.75), @thread-tint)
+    );
+    @thread5: mix(
+      @catppuccin[@@flavor][@@thread-name5],
+      @surface1,
+      if(@threadColors = shade, (@thread-tint * 0.875), @thread-tint)
+    );
+    @thread6: mix(
+      @catppuccin[@@flavor][@@thread-name6],
+      @surface1,
+      if(@threadColors = shade, (@thread-tint * 1), @thread-tint)
+    );
 
     // Listing
     .link,
@@ -673,7 +846,7 @@
     }
 
     // Switch off: uncoloured flair (no/empty/default `style`) still themed.
-    & when not (@flairColors = 1) {
+    & when not(@flairColors = 1) {
       .linkflairlabel:not([style]),
       .flair:not([style]),
       .flairrichtext:not([style]),
@@ -693,7 +866,10 @@
       }
 
       // RES night mode's `!important` beats the inline fill; the border remains.
-      &.res-nightmode .flairrichtext[style*="color"]:not([style*="transparent"]):not([style*="#ffffff"]):not([style*="#edeff1"]) {
+      &.res-nightmode
+        .flairrichtext[style*="color"]:not([style*="transparent"]):not(
+          [style*="#ffffff"]
+        ):not([style*="#edeff1"]) {
         background-color: transparent !important;
         color: @text !important;
       }
@@ -781,7 +957,9 @@
 
     // Disc-and-glyph placeholders, redrawn; size reset undoes the 2x sheet.
     .thumbnail-art(@glyph) {
-      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="70" height="50" viewBox="0 0 70 50"><circle cx="35" cy="25" r="24" fill="@{surface0}"/>@{glyph}</svg>');
+      @svg: escape(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="70" height="50" viewBox="0 0 70 50"><circle cx="35" cy="25" r="24" fill="@{surface0}"/>@{glyph}</svg>'
+      );
 
       background-image: url("data:image/svg+xml,@{svg}") !important;
       background-position: 0 0 !important;
@@ -789,39 +967,51 @@
       filter: none !important;
     }
 
-    .thumbnail.default:not(:has(img)):where(:not(.crosspost-comments-preview-header *)) {
+    .thumbnail.default:not(:has(img)):where(
+      :not(.crosspost-comments-preview-header *)
+    ) {
       .thumbnail-art(
-        ~'<g fill="none" stroke="@{overlay1}" stroke-width="3"><rect x="23" y="12" width="12" height="21" rx="6"/><rect x="35" y="17" width="12" height="21" rx="6"/></g>'
+        ~'<g fill="none" stroke="@{overlay1}" stroke-width="3"><rect x="23" y="12" width="12" height="21" rx="6"/><rect x="35" y="17" width="12" height="21" rx="6"/></g>',
       );
     }
 
-    .thumbnail.self:not(:has(img)):where(:not(.crosspost-comments-preview-header *)) {
+    .thumbnail.self:not(:has(img)):where(
+      :not(.crosspost-comments-preview-header *)
+    ) {
       .thumbnail-art(
-        ~'<rect x="22" y="11" width="26" height="28" rx="2" fill="@{overlay1}"/><path fill="@{surface0}" d="M26,17h18v2H26z M26,22h18v2H26z M26,27h18v2H26z M26,32h10v2H26z"/>'
+        ~'<rect x="22" y="11" width="26" height="28" rx="2" fill="@{overlay1}"/><path fill="@{surface0}" d="M26,17h18v2H26z M26,22h18v2H26z M26,27h18v2H26z M26,32h10v2H26z"/>',
       );
     }
 
-    .thumbnail.image:not(:has(img)):where(:not(.crosspost-comments-preview-header *)) {
+    .thumbnail.image:not(:has(img)):where(
+      :not(.crosspost-comments-preview-header *)
+    ) {
       .thumbnail-art(
-        ~'<rect x="20" y="13" width="30" height="24" rx="2" fill="@{overlay1}"/><path fill="@{surface0}" d="M24,33l8,-11 5,6 4,-4 7,9z"/>'
+        ~'<rect x="20" y="13" width="30" height="24" rx="2" fill="@{overlay1}"/><path fill="@{surface0}" d="M24,33l8,-11 5,6 4,-4 7,9z"/>',
       );
     }
 
-    .thumbnail.nsfw:not(:has(img)):where(:not(.crosspost-comments-preview-header *)) {
+    .thumbnail.nsfw:not(:has(img)):where(
+      :not(.crosspost-comments-preview-header *)
+    ) {
       .thumbnail-art(
-        ~'<g fill="none" stroke="@{overlay1}" stroke-width="3"><circle cx="35" cy="25" r="11"/><path d="M27,17 43,33"/></g>'
+        ~'<g fill="none" stroke="@{overlay1}" stroke-width="3"><circle cx="35" cy="25" r="11"/><path d="M27,17 43,33"/></g>',
       );
     }
 
-    .thumbnail.spoiler:not(:has(img)):where(:not(.crosspost-comments-preview-header *)) {
+    .thumbnail.spoiler:not(:has(img)):where(
+      :not(.crosspost-comments-preview-header *)
+    ) {
       .thumbnail-art(
-        ~'<path fill="@{overlay1}" d="M32,10h6v19h-6z M32,33h6v6h-6z"/>'
+        ~'<path fill="@{overlay1}" d="M32,10h6v19h-6z M32,33h6v6h-6z"/>',
       );
     }
 
-    .thumbnail.account:not(:has(img)):where(:not(.crosspost-comments-preview-header *)) {
+    .thumbnail.account:not(:has(img)):where(
+      :not(.crosspost-comments-preview-header *)
+    ) {
       .thumbnail-art(
-        ~'<g fill="@{overlay1}"><circle cx="35" cy="19" r="7"/><path d="M22,40a13,11 0 0 1 26,0z"/></g>'
+        ~'<g fill="@{overlay1}"><circle cx="35" cy="19" r="7"/><path d="M22,40a13,11 0 0 1 26,0z"/></g>',
       );
     }
 
@@ -845,7 +1035,9 @@
     }
 
     .expando-button.collapsed {
-      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M10 5h3v13h-3zm-5 5h13v3H5z"/></svg>');
+      @svg: escape(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M10 5h3v13h-3zm-5 5h13v3H5z"/></svg>'
+      );
 
       background-image: url("data:image/svg+xml,@{svg}") !important;
       background-position: 0 0 !important;
@@ -853,7 +1045,9 @@
 
     // A mixin: `catppuccin/optimized-svgs` reads `@svg` inside a rule.
     .collapse-art() {
-      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><circle cx="11.5" cy="11.5" r="11.5" fill="@{surface0}"/><g stroke="@{text}" stroke-width="3.25" stroke-linecap="round"><line x1="7.5" y1="7.5" x2="15.5" y2="15.5"/><line x1="15.5" y1="7.5" x2="7.5" y2="15.5"/></g></svg>');
+      @svg: escape(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><circle cx="11.5" cy="11.5" r="11.5" fill="@{surface0}"/><g stroke="@{text}" stroke-width="3.25" stroke-linecap="round"><line x1="7.5" y1="7.5" x2="15.5" y2="15.5"/><line x1="15.5" y1="7.5" x2="7.5" y2="15.5"/></g></svg>'
+      );
 
       background-image: url("data:image/svg+xml,@{svg}") !important;
     }
@@ -869,32 +1063,42 @@
     }
 
     .expando-button.collapsed.image {
-      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" fill-rule="evenodd" d="m4 5 1-.5h2L8 5h1l1-1h3l2 2h2v8H4zm1 1h2v1H5zm3 3.5a3.5 3.5 0 1 0 7 0 3.5 3.5 0 1 0-7 0m1 0a2.5 2.5 0 1 0 5 0 2.5 2.5 0 1 0-5 0"/><g stroke="@{text}" stroke-width="1.5" stroke-linecap="round"><line x1="18.75" y1="16.5" x2="18.75" y2="21"/><line x1="16.5" y1="18.75" x2="21" y2="18.75"/></g></svg>');
+      @svg: escape(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" fill-rule="evenodd" d="m4 5 1-.5h2L8 5h1l1-1h3l2 2h2v8H4zm1 1h2v1H5zm3 3.5a3.5 3.5 0 1 0 7 0 3.5 3.5 0 1 0-7 0m1 0a2.5 2.5 0 1 0 5 0 2.5 2.5 0 1 0-5 0"/><g stroke="@{text}" stroke-width="1.5" stroke-linecap="round"><line x1="18.75" y1="16.5" x2="18.75" y2="21"/><line x1="16.5" y1="18.75" x2="21" y2="18.75"/></g></svg>'
+      );
 
       background-image: url("data:image/svg+xml,@{svg}") !important;
     }
 
     .expando-button.collapsed.image.gallery {
-      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" fill-rule="evenodd" d="M4 3h10v10H4zm1 1h8v3.5l-3 1.75-5 .25zm.75 2a1.25 1.25 0 1 0 2.5 0 1.25 1.25 0 1 0-2.5 0"/><path fill="none" stroke="@{text}" stroke-dasharray="1.25 .5" d="M15.5 5v9.5H6"/><g stroke="@{text}" stroke-width="1.5" stroke-linecap="round"><line x1="18.75" y1="16.5" x2="18.75" y2="21"/><line x1="16.5" y1="18.75" x2="21" y2="18.75"/></g></svg>');
+      @svg: escape(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" fill-rule="evenodd" d="M4 3h10v10H4zm1 1h8v3.5l-3 1.75-5 .25zm.75 2a1.25 1.25 0 1 0 2.5 0 1.25 1.25 0 1 0-2.5 0"/><path fill="none" stroke="@{text}" stroke-dasharray="1.25 .5" d="M15.5 5v9.5H6"/><g stroke="@{text}" stroke-width="1.5" stroke-linecap="round"><line x1="18.75" y1="16.5" x2="18.75" y2="21"/><line x1="16.5" y1="18.75" x2="21" y2="18.75"/></g></svg>'
+      );
 
       background-image: url("data:image/svg+xml,@{svg}") !important;
     }
 
     .expando-button.collapsed.video-muted {
-      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" fill-rule="evenodd" d="M4 4h11v11H4zm3 3 5 2.5L7 12z"/><g stroke="@{text}" stroke-width="1.5" stroke-linecap="round"><line x1="18.75" y1="16.5" x2="18.75" y2="21"/><line x1="16.5" y1="18.75" x2="21" y2="18.75"/></g></svg>');
+      @svg: escape(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" fill-rule="evenodd" d="M4 4h11v11H4zm3 3 5 2.5L7 12z"/><g stroke="@{text}" stroke-width="1.5" stroke-linecap="round"><line x1="18.75" y1="16.5" x2="18.75" y2="21"/><line x1="16.5" y1="18.75" x2="21" y2="18.75"/></g></svg>'
+      );
 
       background-image: url("data:image/svg+xml,@{svg}") !important;
     }
 
     .expando-button.collapsed.expando-button-requires-permission {
-      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="none" stroke="@{text}" stroke-width="2" d="M6 10h8v5H6zm1 0V8c0-4 6-4 6 0v2"/><g stroke="@{text}" stroke-width="1.5" stroke-linecap="round"><line x1="18.75" y1="16.5" x2="18.75" y2="21"/><line x1="16.5" y1="18.75" x2="21" y2="18.75"/></g></svg>');
+      @svg: escape(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="none" stroke="@{text}" stroke-width="2" d="M6 10h8v5H6zm1 0V8c0-4 6-4 6 0v2"/><g stroke="@{text}" stroke-width="1.5" stroke-linecap="round"><line x1="18.75" y1="16.5" x2="18.75" y2="21"/><line x1="16.5" y1="18.75" x2="21" y2="18.75"/></g></svg>'
+      );
 
       background-image: url("data:image/svg+xml,@{svg}") !important;
     }
 
     // Sprite tiles, so the offset is reset with the replacement.
     .expando-button.collapsed.selftext {
-      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M4 5h15v2H4zm0 4h15v2H4zm0 4h15v2H4zm0 4h9v2H4z"/></svg>');
+      @svg: escape(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="M4 5h15v2H4zm0 4h15v2H4zm0 4h15v2H4zm0 4h9v2H4z"/></svg>'
+      );
 
       background-image: url("data:image/svg+xml,@{svg}") !important;
       background-position: 0 0 !important;
@@ -902,14 +1106,18 @@
 
     // A crosspost; without this it keeps the neutral plate above.
     .expando-button.collapsed.crosspost {
-      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="none" stroke="@{text}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3.5 11.5H7L11 7h3.5M7 11.5l4 4.5h3.5"/><path fill="@{text}" d="m14.5 3.5 5 3.5-5 3.5zm0 9 5 3.5-5 3.5z"/></svg>');
+      @svg: escape(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="none" stroke="@{text}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3.5 11.5H7L11 7h3.5M7 11.5l4 4.5h3.5"/><path fill="@{text}" d="m14.5 3.5 5 3.5-5 3.5zm0 9 5 3.5-5 3.5z"/></svg>'
+      );
 
       background-image: url("data:image/svg+xml,@{svg}") !important;
       background-position: 0 0 !important;
     }
 
     .expando-button.collapsed.video {
-      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="m8 5 10 6.5L8 18z"/></svg>');
+      @svg: escape(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23"><rect width="23" height="23" rx="2.5" ry="2.5" fill="@{surface0}"/><path fill="@{text}" d="m8 5 10 6.5L8 18z"/></svg>'
+      );
 
       background-image: url("data:image/svg+xml,@{svg}") !important;
       background-position: 0 0 !important;
@@ -958,8 +1166,7 @@
     .moderator-stamp {
       background-color: if(@flavor = latte, darken(@green, 18%), @green)
         !important;
-      border-color: if(@flavor = latte, darken(@green, 18%), @green)
-        !important;
+      border-color: if(@flavor = latte, darken(@green, 18%), @green) !important;
       color: @base !important;
     }
 
@@ -1189,7 +1396,9 @@
 
     .dropdown .selected,
     .RESMacroDropdownTitle {
-      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="21" height="16" viewBox="0 0 21 16"><path fill="@{dim}" d="M5 5h11l-5.5 7z"/></svg>');
+      @svg: escape(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="21" height="16" viewBox="0 0 21 16"><path fill="@{dim}" d="M5 5h11l-5.5 7z"/></svg>'
+      );
 
       background-image: url("data:image/svg+xml,@{svg}") !important;
     }
@@ -1297,7 +1506,9 @@
       }
     }
 
-    &.res-spoilerTags .md a:is([href="/s"], [href="/spoiler"], [href="#s"], [href="#spoiler"]) {
+    &.res-spoilerTags
+      .md
+      a:is([href="/s"], [href="/spoiler"], [href="#s"], [href="#spoiler"]) {
       background-color: @surface0 !important;
       color: transparent !important;
       outline-color: @surface1 !important;
@@ -1315,8 +1526,11 @@
       color: @text !important;
 
       a {
-        color: if(@flavor = latte, darken(@blue, 25%),
-          if(@flavor = frappe, lighten(@blue, 6%), @blue)) !important;
+        color: if(
+          @flavor = latte,
+          darken(@blue, 25%),
+          if(@flavor = frappe, lighten(@blue, 6%), @blue)
+        ) !important;
       }
     }
 
@@ -1437,7 +1651,9 @@
     }
 
     .add-sr .add {
-      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15"><path fill="@{text}" d="M6 2h3v11H6zM2 6h11v3H2z"/></svg>');
+      @svg: escape(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15"><path fill="@{text}" d="M6 2h3v11H6zM2 6h11v3H2z"/></svg>'
+      );
 
       background-image: url("data:image/svg+xml,@{svg}") !important;
       background-position: 0 0 !important;
@@ -1445,7 +1661,9 @@
     }
 
     .remove-sr {
-      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 9 9"><path stroke="@{text}" stroke-width="2" d="m1 1 7 7m0-7L1 8"/></svg>');
+      @svg: escape(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 9 9"><path stroke="@{text}" stroke-width="2" d="m1 1 7 7m0-7L1 8"/></svg>'
+      );
 
       background-color: transparent !important;
       background-image: url("data:image/svg+xml,@{svg}") !important;
@@ -2424,7 +2642,9 @@
     // Reddit Enhancement Suite
     #mail.havemail,
     #NREMail.havemail {
-      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="15" height="10" viewBox="0 0 15 10"><g fill="none" stroke="@{red}"><rect x=".5" y=".5" width="14" height="9"/><path d="m.5.5 7 5.5 7-5.5"/></g></svg>');
+      @svg: escape(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="10" viewBox="0 0 15 10"><g fill="none" stroke="@{red}"><rect x=".5" y=".5" width="14" height="9"/><path d="m.5.5 7 5.5 7-5.5"/></g></svg>'
+      );
 
       background-image: url("data:image/svg+xml,@{svg}") !important;
       background-position: 0 0 !important;
@@ -2432,7 +2652,9 @@
 
     #mail.nohavemail,
     #NREMail.nohavemail {
-      @svg: escape('<svg xmlns="http://www.w3.org/2000/svg" width="15" height="10" viewBox="0 0 15 10"><g fill="none" stroke="@{dim}"><rect x=".5" y=".5" width="14" height="9"/><path d="m.5.5 7 5.5 7-5.5"/></g></svg>');
+      @svg: escape(
+        '<svg xmlns="http://www.w3.org/2000/svg" width="15" height="10" viewBox="0 0 15 10"><g fill="none" stroke="@{dim}"><rect x=".5" y=".5" width="14" height="9"/><path d="m.5.5 7 5.5 7-5.5"/></g></svg>'
+      );
 
       background-image: url("data:image/svg+xml,@{svg}") !important;
       background-position: 0 0 !important;
