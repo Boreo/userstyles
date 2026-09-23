@@ -18,7 +18,7 @@
 See [the userstyle usage instructions](https://userstyles.catppuccin.com/getting-started/usage/).
 
 > [!NOTE]
-> Subreddit stylesheets override this userstyle. Untick **allow subreddits to show me custom themes** in your Reddit preferences.
+> A subreddit's own stylesheet can show its banner and background images under this theme. Untick **allow subreddits to show me custom themes** in your Reddit preferences.
 
 ## 💝 Current Maintainer
 - [Boreo](https://github.com/Boreo)

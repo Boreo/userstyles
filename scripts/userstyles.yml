@@ -696,7 +696,7 @@ userstyles:
     categories: [discussion_forum, social_networking]
     color: red
     icon: reddit
-    note: Subreddit stylesheets override this userstyle. Untick **allow subreddits to show me custom themes** in your Reddit preferences.
+    note: A subreddit's own stylesheet can show its banner and background images under this theme. Untick **allow subreddits to show me custom themes** in your Reddit preferences.
     current-maintainers: [*Boreo]
   ollama:
     name: Ollama
